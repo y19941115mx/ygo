@@ -10,35 +10,36 @@ import (
 
 func FooController(c *framework.Context) error {
 	finish := make(chan struct{}, 1)
-	panic := make(chan interface{}, 1)
+	panicChan := make(chan interface{}, 1)
 
 	durationCtx, cancel := context.WithTimeout(c.BaseContext(), time.Duration(1*time.Second))
-
 	defer cancel()
 
+	// mu := sync.Mutex{}
 	go func() {
 		defer func() {
 			if p := recover(); p != nil {
-				panic <- p
+				panicChan <- p
 			}
 		}()
+		// Do real action
 		time.Sleep(10 * time.Second)
-		c.Json(200, "ok")
+		c.SetOkStatus().Json("ok")
+
 		finish <- struct{}{}
 	}()
-
 	select {
-	case p := <-panic:
+	case p := <-panicChan:
 		c.WriterMux().Lock()
 		defer c.WriterMux().Unlock()
 		log.Println(p)
-		c.Json(500, "panic")
+		c.SetStatus(500).Json("panic")
 	case <-finish:
 		fmt.Println("finish")
 	case <-durationCtx.Done():
 		c.WriterMux().Lock()
 		defer c.WriterMux().Unlock()
-		c.Json(500, "time out")
+		c.SetStatus(500).Json("time out")
 		c.SetHasTimeout()
 	}
 	return nil
