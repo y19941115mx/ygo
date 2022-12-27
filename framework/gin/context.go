@@ -19,6 +19,7 @@ import (
 	"sync"
 	"time"
 
+	"gitee.com/y19941115mx/ygo/framework"
 	"gitee.com/y19941115mx/ygo/framework/gin/binding"
 	"gitee.com/y19941115mx/ygo/framework/gin/render"
 	"github.com/gin-contrib/sse"
@@ -78,6 +79,8 @@ type Context struct {
 	// SameSite allows a server to define a cookie attribute making it impossible for
 	// the browser to send this cookie along with cross-site requests.
 	sameSite http.SameSite
+	// Context 中保存容器
+	container framework.Container
 }
 
 /************************************/
