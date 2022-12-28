@@ -1,6 +1,7 @@
 package console
 
 import (
+	"gitee.com/y19941115mx/ygo/app/console/command/demo"
 	"gitee.com/y19941115mx/ygo/framework"
 	"gitee.com/y19941115mx/ygo/framework/cobra"
 	"gitee.com/y19941115mx/ygo/framework/command"
@@ -29,8 +30,19 @@ func RunCommand(container framework.Container) error {
 	// 绑定框架的命令
 	command.AddKernelCommands(rootCmd)
 	// 绑定业务的命令
-	// AddAppCommand(rootCmd)
+	AddAppCommand(rootCmd)
 
 	// 执行 RootCommand
 	return rootCmd.Execute()
+}
+
+// 绑定业务的命令
+func AddAppCommand(rootCmd *cobra.Command) {
+	// rootCmd.AddCommand(demo.FooCommand)
+
+	// 每秒调用一次Foo命令
+	rootCmd.AddCronCommand("* * * * * *", demo.FooCommand)
+
+	// 启动一个分布式任务调度，调度的服务名称为init_func_for_test，每个节点每5s调用一次Foo命令，抢占到了调度任务的节点将抢占锁持续挂载2s才释放
+	//rootCmd.AddDistributedCronCommand("foo_func_for_test", "*/5 * * * * *", demo.FooCommand, 2*time.Second)
 }

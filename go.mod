@@ -41,9 +41,16 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
+	github.com/sevlyar/go-daemon v0.1.6
 	github.com/spf13/afero v1.9.2 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
+)
+
+require (
+	github.com/erikdubbelboer/gspt v0.0.0-20210805194459-ce36a5128377
+	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 )
