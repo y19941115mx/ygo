@@ -4,52 +4,25 @@
 package main
 
 import (
-	"context"
-	"log"
-	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
-
-	"gitee.com/y19941115mx/ygo/framework/gin"
-	"gitee.com/y19941115mx/ygo/framework/middleware"
+	"gitee.com/y19941115mx/ygo/app/console"
+	"gitee.com/y19941115mx/ygo/app/http"
+	"gitee.com/y19941115mx/ygo/framework"
 	"gitee.com/y19941115mx/ygo/framework/provider/app"
+	"gitee.com/y19941115mx/ygo/framework/provider/kernel"
 )
 
 func main() {
-	core := gin.New()
-	// 注册服务
-	core.Bind(&app.YgoAppProvider{})
+	// 初始化框架级别的服务容器
+	container := framework.NewYgoContainer()
+	// 绑定App服务提供者
+	container.Bind(&app.YgoAppProvider{})
+	// 后续初始化需要绑定的服务提供者...
 
-	core.Use(gin.Recovery())
-	core.Use(middleware.Cost())
-
-	// TODO 注册路由
-
-	// registerRouter(core)
-	server := &http.Server{
-		Handler: core,
-		Addr:    ":8888",
+	// 将HTTP引擎初始化,并且作为服务提供者绑定到服务容器中
+	if engine, err := http.NewHttpEngine(); err == nil {
+		container.Bind(&kernel.YgoKernelProvider{HttpEngine: engine})
 	}
 
-	// 这个goroutine是启动服务的goroutine
-	go func() {
-		server.ListenAndServe()
-	}()
-
-	// 当前的goroutine等待信号量
-	quit := make(chan os.Signal)
-	// 监控信号：SIGINT, SIGTERM, SIGQUIT
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
-	// 这里会阻塞当前goroutine等待信号
-	<-quit
-
-	// 调用Server.Shutdown graceful结束
-	timeoutCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	if err := server.Shutdown(timeoutCtx); err != nil {
-		log.Fatal("Server Shutdown:", err)
-	}
+	// 运行根 cmd
+	console.RunCommand(container)
 }

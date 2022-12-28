@@ -152,7 +152,7 @@ func New() *Engine {
 	debugPrintWARNINGNew()
 	engine := &Engine{
 		// 这里注入了 container
-		container: framework.NewHadeContainer(),
+		container: framework.NewYgoContainer(),
 		RouterGroup: RouterGroup{
 			Handlers: nil,
 			basePath: "/",

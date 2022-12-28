@@ -10,7 +10,7 @@ import (
 	"gitee.com/y19941115mx/ygo/framework/gin"
 )
 
-// recovery机制，将协程中的函数异常进行捕获
+// 统计服务，记录请求的耗时
 func Cost() gin.HandlerFunc {
 	// 使用函数回调
 	return func(c *gin.Context) {
