@@ -14,15 +14,20 @@ import (
 
 	"gitee.com/y19941115mx/ygo/framework/gin"
 	"gitee.com/y19941115mx/ygo/framework/middleware"
+	"gitee.com/y19941115mx/ygo/framework/provider/app"
 )
 
 func main() {
 	core := gin.New()
+	// 注册服务
+	core.Bind(&app.YgoAppProvider{})
 
 	core.Use(gin.Recovery())
 	core.Use(middleware.Cost())
 
-	registerRouter(core)
+	// TODO 注册路由
+
+	// registerRouter(core)
 	server := &http.Server{
 		Handler: core,
 		Addr:    ":8888",
