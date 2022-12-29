@@ -1,6 +1,8 @@
 package console
 
 import (
+	"time"
+
 	"gitee.com/y19941115mx/ygo/app/console/command/demo"
 	"gitee.com/y19941115mx/ygo/framework"
 	"gitee.com/y19941115mx/ygo/framework/cobra"
@@ -44,5 +46,5 @@ func AddAppCommand(rootCmd *cobra.Command) {
 	rootCmd.AddCronCommand("* * * * * *", demo.FooCommand)
 
 	// 启动一个分布式任务调度，调度的服务名称为init_func_for_test，每个节点每5s调用一次Foo命令，抢占到了调度任务的节点将抢占锁持续挂载2s才释放
-	//rootCmd.AddDistributedCronCommand("foo_func_for_test", "*/5 * * * * *", demo.FooCommand, 2*time.Second)
+	rootCmd.AddDistributedCronCommand("foo_func_for_test", "*/5 * * * * *", demo.FooCommand, 2*time.Second)
 }

@@ -23,4 +23,6 @@ type App interface {
 	RuntimeFolder() string
 	// TestFolder 存放测试所需要的信息
 	TestFolder() string
+	// AppID 表示当前这个app的唯一id, 可以用于分布式锁等
+	AppID() string
 }

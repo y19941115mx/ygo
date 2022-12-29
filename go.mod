@@ -52,5 +52,6 @@ require (
 
 require (
 	github.com/erikdubbelboer/gspt v0.0.0-20210805194459-ce36a5128377
+	github.com/google/uuid v1.3.0
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 // indirect
 )

@@ -8,6 +8,7 @@ import (
 	"gitee.com/y19941115mx/ygo/framework"
 	"gitee.com/y19941115mx/ygo/framework/contract"
 	"gitee.com/y19941115mx/ygo/framework/util"
+	"github.com/google/uuid"
 )
 
 type YgoApp struct {
@@ -16,6 +17,7 @@ type YgoApp struct {
 
 	container  framework.Container // 服务容器
 	baseFolder string              // 基础路径
+	appId      string              // 表示当前这个app的唯一id, 可以用于分布式锁等
 }
 
 // Version 实现版本
@@ -97,5 +99,11 @@ func NewYgoApp(params ...interface{}) (interface{}, error) {
 	// 有两个参数，一个是容器，一个是baseFolder
 	container := params[0].(framework.Container)
 	baseFolder := params[1].(string)
-	return &YgoApp{baseFolder: baseFolder, container: container}, nil
+
+	appId := uuid.New().String()
+	return &YgoApp{baseFolder: baseFolder, container: container, appId: appId}, nil
+}
+
+func (h YgoApp) AppID() string {
+	return h.appId
 }
