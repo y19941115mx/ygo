@@ -2,7 +2,6 @@ package command
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -117,7 +116,7 @@ var cronStartCommand = &cobra.Command{
 		fmt.Println("start cron job")
 		content := strconv.Itoa(os.Getpid())
 		fmt.Println("[PID]", content)
-		err := ioutil.WriteFile(serverPidFile, []byte(content), 0664)
+		err := os.WriteFile(serverPidFile, []byte(content), 0664)
 		if err != nil {
 			return err
 		}
@@ -138,12 +137,12 @@ var cronRestartCommand = &cobra.Command{
 		// GetPid
 		serverPidFile := filepath.Join(appService.RuntimeFolder(), "cron.pid")
 
-		content, err := ioutil.ReadFile(serverPidFile)
+		content, err := os.ReadFile(serverPidFile)
 		if err != nil {
 			return err
 		}
 
-		if content != nil && len(content) > 0 {
+		if len(content) > 0 {
 			pid, err := strconv.Atoi(string(content))
 			if err != nil {
 				return err
@@ -154,7 +153,7 @@ var cronRestartCommand = &cobra.Command{
 				}
 				// check process closed
 				for i := 0; i < 10; i++ {
-					if util.CheckProcessExist(pid) == false {
+					if !util.CheckProcessExist(pid) {
 						break
 					}
 					time.Sleep(1 * time.Second)
@@ -178,12 +177,12 @@ var cronStopCommand = &cobra.Command{
 		// GetPid
 		serverPidFile := filepath.Join(appService.RuntimeFolder(), "cron.pid")
 
-		content, err := ioutil.ReadFile(serverPidFile)
+		content, err := os.ReadFile(serverPidFile)
 		if err != nil {
 			return err
 		}
 
-		if content != nil && len(content) > 0 {
+		if len(content) > 0 {
 			pid, err := strconv.Atoi(string(content))
 			if err != nil {
 				return err
@@ -191,7 +190,7 @@ var cronStopCommand = &cobra.Command{
 			if err := syscall.Kill(pid, syscall.SIGTERM); err != nil {
 				return err
 			}
-			if err := ioutil.WriteFile(serverPidFile, []byte{}, 0644); err != nil {
+			if err := os.WriteFile(serverPidFile, []byte{}, 0644); err != nil {
 				return err
 			}
 			fmt.Println("stop pid:", pid)
@@ -210,12 +209,12 @@ var cronStateCommand = &cobra.Command{
 		// GetPid
 		serverPidFile := filepath.Join(appService.RuntimeFolder(), "cron.pid")
 
-		content, err := ioutil.ReadFile(serverPidFile)
+		content, err := os.ReadFile(serverPidFile)
 		if err != nil {
 			return err
 		}
 
-		if content != nil && len(content) > 0 {
+		if len(content) > 0 {
 			pid, err := strconv.Atoi(string(content))
 			if err != nil {
 				return err

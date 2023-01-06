@@ -46,7 +46,7 @@ var appStartCommand = &cobra.Command{
 		// 创建一个Server服务
 		server := &http.Server{
 			Handler: core,
-			Addr:    ":8888",
+			Addr:    ":80",
 		}
 
 		// 这个goroutine是启动服务的goroutine
@@ -55,7 +55,7 @@ var appStartCommand = &cobra.Command{
 		}()
 
 		// 当前的goroutine等待信号量
-		quit := make(chan os.Signal)
+		quit := make(chan os.Signal, 1)
 		// 监控信号：SIGINT, SIGTERM, SIGQUIT
 		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 		// 这里会阻塞当前goroutine等待信号

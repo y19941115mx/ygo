@@ -32,16 +32,14 @@ func RunCommand(container framework.Container) error {
 	// 绑定框架的命令
 	command.AddKernelCommands(rootCmd)
 	// 绑定业务的命令
-	AddAppCommand(rootCmd)
+	addAppCommand(rootCmd)
 
 	// 执行 RootCommand
 	return rootCmd.Execute()
 }
 
-// 绑定业务的命令
-func AddAppCommand(rootCmd *cobra.Command) {
-	// rootCmd.AddCommand(demo.FooCommand)
-
+// 绑定业务的运维命令
+func addAppCommand(rootCmd *cobra.Command) {
 	// 每秒调用一次Foo命令
 	rootCmd.AddCronCommand("* * * * * *", demo.FooCommand)
 

@@ -17,93 +17,125 @@ type YgoApp struct {
 
 	container  framework.Container // 服务容器
 	baseFolder string              // 基础路径
-	appId      string              // 表示当前这个app的唯一id, 可以用于分布式锁等
+	appId      string              // 表示当前这个app的唯一id, 可用于分布式锁等
+	configMap  map[string]string   // 支持配置的方式修改默认设置
 }
 
 // Version 实现版本
-func (h YgoApp) Version() string {
+func (app YgoApp) Version() string {
 	return "0.0.1"
 }
 
 // BaseFolder 表示基础目录，可以代表开发场景的目录，也可以代表运行时候的目录
-func (h YgoApp) BaseFolder() string {
-	if h.baseFolder != "" {
-		return h.baseFolder
+func (app YgoApp) BaseFolder() string {
+	if app.baseFolder != "" {
+		return app.baseFolder
 	}
 
-	// 如果没有设置，则使用参数
-	var baseFolder string
-	flag.StringVar(&baseFolder, "base_folder", "", "base_folder参数, 默认为当前路径")
-	flag.Parse()
-	if baseFolder != "" {
-		return baseFolder
-	}
-
-	// 如果参数也没有，使用默认的当前路径
+	// 如果没有设置，使用默认的当前路径
 	return util.GetExecDirectory()
 }
 
 // ConfigFolder  表示配置文件地址
-func (h YgoApp) ConfigFolder() string {
-	return filepath.Join(h.BaseFolder(), "config")
+func (app YgoApp) ConfigFolder() string {
+	if val, ok := app.configMap["config_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.BaseFolder(), "config")
 }
 
 // LogFolder 表示日志存放地址
-func (h YgoApp) LogFolder() string {
-	return filepath.Join(h.StorageFolder(), "log")
+func (app YgoApp) LogFolder() string {
+	if val, ok := app.configMap["log_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.StorageFolder(), "log")
 }
 
-func (h YgoApp) HttpFolder() string {
-	return filepath.Join(h.BaseFolder(), "http")
+func (app YgoApp) HttpFolder() string {
+	if val, ok := app.configMap["http_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.BaseFolder(), "http")
 }
 
-func (h YgoApp) ConsoleFolder() string {
-	return filepath.Join(h.BaseFolder(), "console")
+func (app YgoApp) ConsoleFolder() string {
+	if val, ok := app.configMap["console_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.BaseFolder(), "console")
 }
 
-func (h YgoApp) StorageFolder() string {
-	return filepath.Join(h.BaseFolder(), "storage")
+func (app YgoApp) StorageFolder() string {
+	if val, ok := app.configMap["storage_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.BaseFolder(), "storage")
 }
 
 // ProviderFolder 定义业务自己的服务提供者地址
-func (h YgoApp) ProviderFolder() string {
-	return filepath.Join(h.BaseFolder(), "provider")
+func (app YgoApp) ProviderFolder() string {
+	if val, ok := app.configMap["provider_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.BaseFolder(), "provider")
 }
 
 // MiddlewareFolder 定义业务自己定义的中间件
-func (h YgoApp) MiddlewareFolder() string {
-	return filepath.Join(h.HttpFolder(), "middleware")
+func (app YgoApp) MiddlewareFolder() string {
+	if val, ok := app.configMap["middleware_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.HttpFolder(), "middleware")
 }
 
 // CommandFolder 定义业务定义的命令
-func (h YgoApp) CommandFolder() string {
-	return filepath.Join(h.ConsoleFolder(), "command")
+func (app YgoApp) CommandFolder() string {
+	if val, ok := app.configMap["command_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.ConsoleFolder(), "command")
 }
 
 // RuntimeFolder 定义业务的运行中间态信息
-func (h YgoApp) RuntimeFolder() string {
-	return filepath.Join(h.StorageFolder(), "runtime")
+func (app YgoApp) RuntimeFolder() string {
+	if val, ok := app.configMap["runtime_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.StorageFolder(), "runtime")
 }
 
 // TestFolder 定义测试需要的信息
-func (h YgoApp) TestFolder() string {
-	return filepath.Join(h.BaseFolder(), "test")
+func (app YgoApp) TestFolder() string {
+	if val, ok := app.configMap["test_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.BaseFolder(), "test")
 }
 
 // NewYgoApp 初始化App
 func NewYgoApp(params ...interface{}) (interface{}, error) {
 	if len(params) != 2 {
-		return nil, errors.New("param error")
+		return nil, errors.New("app param error")
 	}
 
 	// 有两个参数，一个是容器，一个是baseFolder
 	container := params[0].(framework.Container)
 	baseFolder := params[1].(string)
-
+	// 如果没有设置，则使用参数
+	if baseFolder == "" {
+		flag.StringVar(&baseFolder, "base_folder", "", "base_folder参数, 默认为当前路径")
+		flag.Parse()
+	}
 	appId := uuid.New().String()
-	return &YgoApp{baseFolder: baseFolder, container: container, appId: appId}, nil
+	configMap := map[string]string{}
+	return &YgoApp{baseFolder: baseFolder, container: container, appId: appId, configMap: configMap}, nil
 }
 
-func (h YgoApp) AppID() string {
-	return h.appId
+func (app YgoApp) AppID() string {
+	return app.appId
+}
+
+func (app *YgoApp) LoadAppConfig(kv map[string]string) {
+	app.configMap = kv
 }

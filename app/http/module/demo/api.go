@@ -2,6 +2,7 @@ package demo
 
 import (
 	demoService "gitee.com/y19941115mx/ygo/app/provider/demo"
+	"gitee.com/y19941115mx/ygo/framework/contract"
 	"gitee.com/y19941115mx/ygo/framework/gin"
 )
 
@@ -12,10 +13,12 @@ type DemoApi struct {
 func Register(r *gin.Engine) error {
 	api := NewDemoApi()
 	r.Bind(&demoService.DemoProvider{})
+	group := r.Group("/demo")
 
-	r.GET("/demo/demo", api.Demo)
-	r.GET("/demo/demo2", api.Demo2)
-	r.POST("/demo/demo_post", api.DemoPost)
+	group.GET("/demo", api.Demo)
+	group.GET("/demo1", api.Demo1)
+	group.GET("/demo2", api.Demo2)
+	group.POST("/demo_post", api.DemoPost)
 	return nil
 }
 
@@ -35,6 +38,14 @@ func (api *DemoApi) Demo(c *gin.Context) {
 	users := api.service.GetUsers()
 	usersDTO := UserModelsToUserDTOs(users)
 	c.JSON(200, usersDTO)
+}
+
+func (api *DemoApi) Demo1(c *gin.Context) {
+	// 获取password
+	configService := c.MustMake(contract.ConfigKey).(contract.Config)
+	password := configService.GetString("database.mysql.password")
+	// 打印出来
+	c.JSON(200, password)
 }
 
 // Demo godoc

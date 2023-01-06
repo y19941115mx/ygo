@@ -9,4 +9,7 @@ func AddKernelCommands(root *cobra.Command) {
 	// cobar
 	root.AddCommand(initCronCommand())
 
+	// env
+	root.AddCommand(initEnvCommand())
+
 }

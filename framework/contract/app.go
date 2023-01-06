@@ -25,4 +25,6 @@ type App interface {
 	TestFolder() string
 	// AppID 表示当前这个app的唯一id, 可以用于分布式锁等
 	AppID() string
+	// LoadAppConfig 加载新的AppConfig，key为对应的函数转为小写下划线，比如ConfigFolder => config_folder
+	LoadAppConfig(kv map[string]string)
 }

@@ -151,7 +151,7 @@ var _ IRouter = &Engine{}
 func New() *Engine {
 	debugPrintWARNINGNew()
 	engine := &Engine{
-		// 这里注入了 container
+		// 初始化 container
 		container: framework.NewYgoContainer(),
 		RouterGroup: RouterGroup{
 			Handlers: nil,

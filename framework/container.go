@@ -36,13 +36,19 @@ type YgoContainer struct {
 	lock sync.RWMutex
 }
 
-// NewYgoContainer 创建一个服务容器
+var ins *YgoContainer
+var once sync.Once
+
+// NewYgoContainer 单例模式创建一个服务容器
 func NewYgoContainer() *YgoContainer {
-	return &YgoContainer{
-		providers: map[string]ServiceProvider{},
-		instances: map[string]interface{}{},
-		lock:      sync.RWMutex{},
-	}
+	once.Do(func() {
+		ins = &YgoContainer{
+			providers: map[string]ServiceProvider{},
+			instances: map[string]interface{}{},
+			lock:      sync.RWMutex{},
+		}
+	})
+	return ins
 }
 
 // PrintProviders 输出服务容器中注册的关键字

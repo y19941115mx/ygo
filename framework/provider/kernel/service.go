@@ -1,6 +1,7 @@
 package kernel
 
 import (
+	"errors"
 	"net/http"
 
 	"gitee.com/y19941115mx/ygo/framework/contract"
@@ -15,6 +16,9 @@ type YgoKernelService struct {
 
 // 初始化 web 引擎服务实例
 func NewYgoKernelService(params ...interface{}) (interface{}, error) {
+	if len(params) != 1 {
+		return nil, errors.New("kernel param error")
+	}
 	httpEngine := params[0].(*gin.Engine)
 	return &YgoKernelService{engine: httpEngine}, nil
 }
