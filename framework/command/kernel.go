@@ -12,4 +12,7 @@ func AddKernelCommands(root *cobra.Command) {
 	// env
 	root.AddCommand(initEnvCommand())
 
+	// config
+	root.AddCommand(initConfigCommand())
+
 }
