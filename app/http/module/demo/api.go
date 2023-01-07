@@ -35,9 +35,19 @@ func NewDemoApi() *DemoApi {
 // @Success 200 array []UserDTO
 // @Router /demo/demo [get]
 func (api *DemoApi) Demo(c *gin.Context) {
-	users := api.service.GetUsers()
-	usersDTO := UserModelsToUserDTOs(users)
-	c.JSON(200, usersDTO)
+	// users := api.service.GetUsers()
+	// usersDTO := UserModelsToUserDTOs(users)
+	// c.JSON(200, usersDTO)
+	configService := c.MustMakeConfig()
+	password := configService.GetString("database.mysql.password")
+
+	logger := c.MustMakeLog()
+	logger.Info(c, "demo test info", map[string]interface{}{
+		"api":  "demo/demo",
+		"user": "jianfengye",
+	})
+
+	c.JSON(200, password)
 }
 
 func (api *DemoApi) Demo1(c *gin.Context) {
