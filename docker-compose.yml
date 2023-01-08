@@ -3,6 +3,7 @@ services:
 
   ygo:
     image: ygo:latest
+    container_name: ygo
     build: .
     ports:
      - "8888:8888"
