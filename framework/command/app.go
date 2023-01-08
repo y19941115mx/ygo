@@ -42,11 +42,17 @@ var appStartCommand = &cobra.Command{
 		kernelService := container.MustMake(contract.KernelKey).(contract.Kernel)
 		// 从kernel服务实例中获取引擎
 		core := kernelService.HttpEngine()
+		// 默认端口 8888 如果存在配置文件则从配置文件中读取端口号
+		addr := "8888"
+		configService := container.MustMake(contract.ConfigKey).(contract.Config)
+		if configService.IsExist("app.web.port") {
+			addr = configService.GetString("app.web.port")
+		}
 
 		// 创建一个Server服务
 		server := &http.Server{
 			Handler: core,
-			Addr:    ":80",
+			Addr:    ":" + addr,
 		}
 
 		// 这个goroutine是启动服务的goroutine

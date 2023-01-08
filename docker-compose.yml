@@ -1,0 +1,8 @@
+version: '3'
+services:
+
+  ygo:
+    image: ygo:latest
+    build: .
+    ports:
+     - "8888:8888"
