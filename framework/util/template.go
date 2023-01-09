@@ -18,25 +18,25 @@ func CreateFileTemlate(folderNeedCreate bool, folderPath string, file string, tm
 		return nil
 	}
 
-	if err := os.Mkdir(folderPath, 0700); err != nil {
-		return err
+	if folderNeedCreate {
+		if err := os.Mkdir(folderPath, 0700); err != nil {
+			return err
+		}
 	}
 
 	funcs := template.FuncMap{"title": strings.ToTitle}
 
-	{
-		//  创建文件
-		filePath := filepath.Join(folderPath, file)
-		f, err := os.Create(filePath)
-		if err != nil {
-			return errors.Cause(err)
-		}
-
-		t := template.Must(template.New(file).Funcs(funcs).Parse(tmp))
-		if err := t.Execute(f, data); err != nil {
-			return errors.Cause(err)
-		}
+	//  创建文件
+	filePath := filepath.Join(folderPath, file)
+	f, err := os.Create(filePath)
+	if err != nil {
+		return errors.Cause(err)
 	}
-	fmt.Println("创建中间件成功, 文件夹地址:", filepath.Join(folderPath))
+
+	t := template.Must(template.New(file).Funcs(funcs).Parse(tmp))
+	if err := t.Execute(f, data); err != nil {
+		return errors.Cause(err)
+	}
+
 	return nil
 }
