@@ -24,7 +24,7 @@ func CreateFileTemlate(folderNeedCreate bool, folderPath string, file string, tm
 		}
 	}
 
-	funcs := template.FuncMap{"title": strings.ToTitle}
+	funcs := template.FuncMap{"title": strings.Title}
 
 	//  创建文件
 	filePath := filepath.Join(folderPath, file)

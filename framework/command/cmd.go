@@ -2,7 +2,6 @@ package command
 
 import (
 	"fmt"
-	"path/filepath"
 
 	"gitee.com/y19941115mx/ygo/framework/cobra"
 	"gitee.com/y19941115mx/ygo/framework/contract"
@@ -82,13 +81,12 @@ var cmdCreateCommand = &cobra.Command{
 
 		app := container.MustMake(contract.AppKey).(contract.App)
 		pFolder := app.CommandFolder()
-		folderPath := filepath.Join(pFolder, folder)
 
-		if err := util.CreateFileTemlate(true, folderPath, name+".go", cmdTmpl, name); err != nil {
+		if err := util.CreateFileTemlate(true, pFolder, name+".go", cmdTmpl, name); err != nil {
 			return errors.Cause(err)
 		}
 
-		fmt.Println("创建新命令行工具成功，路径:", folderPath)
+		fmt.Println("创建新命令行工具成功，路径:", pFolder)
 		fmt.Println("请记得完成后将命令行挂载到 console/kernel.go")
 		return nil
 	},

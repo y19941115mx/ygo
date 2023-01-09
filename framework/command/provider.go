@@ -101,7 +101,7 @@ var providerCreateCommand = &cobra.Command{
 		}
 
 		//  创建provider.go
-		if err := util.CreateFileTemlate(false, folderPath, "provider.go.go", providerTmp, name); err != nil {
+		if err := util.CreateFileTemlate(false, folderPath, "provider.go", providerTmp, name); err != nil {
 			return errors.Cause(err)
 		}
 
