@@ -7,7 +7,7 @@ COPY . .
 RUN go env -w GO111MODULE=on
 RUN go env -w GOPROXY=https://goproxy.cn,direct
 
-RUN go mod tidy
+RUN go mod tidy -compat=1.17
 RUN go build -o server
 
 EXPOSE 8888

@@ -64,14 +64,14 @@ func (app YgoApp) HttpFolder() string {
 	if val, ok := app.configMap["http_folder"]; ok {
 		return val
 	}
-	return filepath.Join(app.BaseFolder(), "http")
+	return filepath.Join(app.SourceFolder(), "http")
 }
 
 func (app YgoApp) ConsoleFolder() string {
 	if val, ok := app.configMap["console_folder"]; ok {
 		return val
 	}
-	return filepath.Join(app.BaseFolder(), "console")
+	return filepath.Join(app.SourceFolder(), "console")
 }
 
 func (app YgoApp) StorageFolder() string {

@@ -18,6 +18,7 @@ import (
 
 func initProviderCommand() *cobra.Command {
 	providerCommand.AddCommand(providerListCommand)
+	providerCommand.AddCommand(providerCreateCommand)
 
 	return providerCommand
 }
@@ -152,7 +153,6 @@ var providerCreateCommand = &cobra.Command{
 			}
 		}
 		fmt.Println("创建服务成功, 文件夹地址:", filepath.Join(pFolder, folder))
-		fmt.Println("请不要忘记挂载新创建的服务")
 		return nil
 	},
 }
