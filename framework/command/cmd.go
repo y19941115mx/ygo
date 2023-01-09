@@ -2,6 +2,7 @@ package command
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"gitee.com/y19941115mx/ygo/framework/cobra"
 	"gitee.com/y19941115mx/ygo/framework/contract"
@@ -55,7 +56,7 @@ var cmdCreateCommand = &cobra.Command{
 
 		fmt.Println("开始创建控制台命令...")
 		var name string
-		var folder string
+		var fileName string
 		{
 			prompt := &survey.Input{
 				Message: "请输入控制台命令名称:",
@@ -67,27 +68,27 @@ var cmdCreateCommand = &cobra.Command{
 		}
 		{
 			prompt := &survey.Input{
-				Message: "请输入文件夹名称(默认: 同控制台命令):",
+				Message: "请输入文件名称(默认: 同控制台命令):",
 			}
-			err := survey.AskOne(prompt, &folder)
+			err := survey.AskOne(prompt, &fileName)
 			if err != nil {
 				return err
 			}
 		}
 
-		if folder == "" {
-			folder = name
+		if fileName == "" {
+			fileName = name
 		}
 
 		app := container.MustMake(contract.AppKey).(contract.App)
 		pFolder := app.CommandFolder()
 
-		if err := util.CreateFileTemlate(true, pFolder, name+".go", cmdTmpl, name); err != nil {
+		if err := util.CreateFileTemlate(false, pFolder, fileName+".go", cmdTmpl, name); err != nil {
 			return errors.Cause(err)
 		}
 
-		fmt.Println("创建新命令行工具成功，路径:", pFolder)
-		fmt.Println("请记得完成后将命令行挂载到 console/kernel.go")
+		fmt.Println("创建新命令行工具成功，路径:", filepath.Join(pFolder, fileName+".go"))
+		fmt.Println("请记得完成后将命令行挂载到 " + filepath.Join(pFolder, "kernel.go"))
 		return nil
 	},
 }
@@ -101,7 +102,12 @@ import (
 	"gitee.com/y19941115mx/ygo/framework/cobra"
 )
 
-var {{.|title}}Command = &cobra.Command{
+// 初始化命令
+func init{{.|title}}Command() *cobra.Command {
+	return {{.}}Command
+}
+
+var {{.}}Command = &cobra.Command{
 	Use:   "{{.}}",
 	Short: "{{.}}",
 	RunE: func(c *cobra.Command, args []string) error {

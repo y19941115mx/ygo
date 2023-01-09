@@ -164,7 +164,7 @@ var middlewareCreateCommand = &cobra.Command{
 			return err
 		}
 
-		fmt.Println("创建中间件成功, 文件夹地址:", folderPath)
+		fmt.Println("创建中间件成功, 文件地址:" + filepath.Join(folderPath, "middleware.go"))
 		return nil
 	},
 }

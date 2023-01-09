@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -14,8 +13,7 @@ import (
 func CreateFileTemlate(folderNeedCreate bool, folderPath string, file string, tmp string, data interface{}) error {
 
 	if folderNeedCreate && Exists(folderPath) {
-		fmt.Println("目录已经存在")
-		return nil
+		return errors.New("目录已经存在")
 	}
 
 	if folderNeedCreate {
