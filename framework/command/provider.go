@@ -2,10 +2,7 @@ package command
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
-	"strings"
-	"text/template"
 
 	"gitee.com/y19941115mx/ygo/framework"
 	"gitee.com/y19941115mx/ygo/framework/cobra"
@@ -95,64 +92,25 @@ var providerCreateCommand = &cobra.Command{
 		}
 
 		app := container.MustMake(contract.AppKey).(contract.App)
-
 		pFolder := app.ProviderFolder()
-		subFolders, err := util.SubDir(pFolder)
-		if err != nil {
-			return err
-		}
-		subColl := collection.NewStrCollection(subFolders)
-		if subColl.Contains(folder) {
-			fmt.Println("目录名称已经存在")
-			return nil
+		folderPath := filepath.Join(pFolder, folder)
+
+		//  创建contract.go 需要检查目录是否存在
+		if err := util.CreateFileTemlate(true, folderPath, "contract.go", contractTmp, name); err != nil {
+			return errors.Cause(err)
 		}
 
-		// 开始创建文件夹
-		if err := os.Mkdir(filepath.Join(pFolder, folder), 0700); err != nil {
-			return err
+		//  创建provider.go
+		if err := util.CreateFileTemlate(false, folderPath, "provider.go.go", providerTmp, name); err != nil {
+			return errors.Cause(err)
 		}
-		// 创建title这个模版方法
-		funcs := template.FuncMap{"title": strings.Title}
-		{
-			//  创建contract.go
-			file := filepath.Join(pFolder, folder, "contract.go")
-			f, err := os.Create(file)
-			if err != nil {
-				return errors.Cause(err)
-			}
 
-			// 使用contractTmp模版来初始化template，并且让这个模版支持title方法，即支持{{.|title}}
-			t := template.Must(template.New("contract").Funcs(funcs).Parse(contractTmp))
-			// 将name传递进入到template中渲染，并且输出到contract.go 中
-			if err := t.Execute(f, name); err != nil {
-				return errors.Cause(err)
-			}
+		//  创建service.go
+		if err := util.CreateFileTemlate(false, folderPath, "service.go", serviceTmp, name); err != nil {
+			return errors.Cause(err)
 		}
-		{
-			// 创建provider.go
-			file := filepath.Join(pFolder, folder, "provider.go")
-			f, err := os.Create(file)
-			if err != nil {
-				return err
-			}
-			t := template.Must(template.New("provider").Funcs(funcs).Parse(providerTmp))
-			if err := t.Execute(f, name); err != nil {
-				return err
-			}
-		}
-		{
-			//  创建service.go
-			file := filepath.Join(pFolder, folder, "service.go")
-			f, err := os.Create(file)
-			if err != nil {
-				return err
-			}
-			t := template.Must(template.New("service").Funcs(funcs).Parse(serviceTmp))
-			if err := t.Execute(f, name); err != nil {
-				return err
-			}
-		}
-		fmt.Println("创建服务成功, 文件夹地址:", filepath.Join(pFolder, folder))
+
+		fmt.Println("创建服务成功, 文件夹地址:", folderPath)
 		return nil
 	},
 }

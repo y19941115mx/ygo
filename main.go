@@ -9,7 +9,6 @@ import (
 	"gitee.com/y19941115mx/ygo/framework"
 	"gitee.com/y19941115mx/ygo/framework/provider/app"
 	"gitee.com/y19941115mx/ygo/framework/provider/config"
-	"gitee.com/y19941115mx/ygo/framework/provider/distributed"
 	"gitee.com/y19941115mx/ygo/framework/provider/env"
 	"gitee.com/y19941115mx/ygo/framework/provider/kernel"
 	"gitee.com/y19941115mx/ygo/framework/provider/log"
@@ -21,8 +20,6 @@ func main() {
 	container := framework.NewYgoContainer()
 	// 绑定目录服务
 	container.Bind(&app.YgoAppProvider{})
-	// 绑定本地分布式定时任务服务
-	container.Bind(&distributed.LocalDistributedProvider{})
 	// 绑定环境变量服务
 	container.Bind(&env.YgoEnvProvider{})
 	// 绑定配置服务
