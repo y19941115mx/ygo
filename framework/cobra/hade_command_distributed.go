@@ -4,8 +4,8 @@ import (
 	"log"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework/contract"
 	"github.com/robfig/cron/v3"
+	"github.com/y19941115mx/ygo/framework/contract"
 )
 
 // AddDistributedCronCommand 实现一个分布式定时器

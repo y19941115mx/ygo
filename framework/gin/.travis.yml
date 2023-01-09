@@ -30,7 +30,7 @@ install:
   - if [[ "${GO111MODULE}" = "on" ]]; then export PATH="${GOPATH}/bin:${GOROOT}/bin:${PATH}"; fi
   - if [[ "${GO111MODULE}" = "on" ]]; then make tools; fi
 
-go_import_path: gitee.com/y19941115mx/ygo/framework/gin
+go_import_path: github.com/y19941115mx/ygo/framework/gin
 
 script:
   - make vet

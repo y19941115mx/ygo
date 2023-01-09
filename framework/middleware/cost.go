@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 // 统计服务，记录请求的耗时

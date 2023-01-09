@@ -9,8 +9,8 @@ import (
 	"syscall"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
-	"gitee.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/contract"
 )
 
 // initAppCommand 初始化app命令和其子命令

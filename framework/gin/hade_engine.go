@@ -1,6 +1,6 @@
 package gin
 
-import "gitee.com/y19941115mx/ygo/framework"
+import "github.com/y19941115mx/ygo/framework"
 
 func (engine *Engine) SetContainer(container framework.Container) {
 	engine.container = container

@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework/gin/internal/bytesconv"
-	"gitee.com/y19941115mx/ygo/framework/gin/internal/json"
+	"github.com/y19941115mx/ygo/framework/gin/internal/bytesconv"
+	"github.com/y19941115mx/ygo/framework/gin/internal/json"
 )
 
 var errUnknownType = errors.New("unknown type")

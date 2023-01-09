@@ -5,8 +5,8 @@ import (
 	"os"
 	"text/template"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
-	"gitee.com/y19941115mx/ygo/framework/cobra/cobra/tpl"
+	"github.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/cobra/cobra/tpl"
 )
 
 // Project contains name, license and paths to projects.

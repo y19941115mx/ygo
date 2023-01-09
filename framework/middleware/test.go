@@ -6,7 +6,7 @@ package middleware
 import (
 	"fmt"
 
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 func Test1() gin.HandlerFunc {

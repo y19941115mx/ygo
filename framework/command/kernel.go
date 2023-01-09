@@ -1,6 +1,6 @@
 package command
 
-import "gitee.com/y19941115mx/ygo/framework/cobra"
+import "github.com/y19941115mx/ygo/framework/cobra"
 
 func AddKernelCommands(root *cobra.Command) {
 	// app

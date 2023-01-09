@@ -16,7 +16,7 @@ package main
 import (
 	"os"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra/cobra/cmd"
+	"github.com/y19941115mx/ygo/framework/cobra/cobra/cmd"
 )
 
 func main() {

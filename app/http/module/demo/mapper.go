@@ -1,7 +1,7 @@
 package demo
 
 import (
-	demoService "gitee.com/y19941115mx/ygo/app/provider/demo"
+	demoService "github.com/y19941115mx/ygo/app/provider/demo"
 )
 
 func UserModelsToUserDTOs(models []UserModel) []UserDTO {

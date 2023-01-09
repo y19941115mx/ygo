@@ -11,7 +11,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"gitee.com/y19941115mx/ygo/framework/gin/internal/bytesconv"
+	"github.com/y19941115mx/ygo/framework/gin/internal/bytesconv"
 )
 
 var (

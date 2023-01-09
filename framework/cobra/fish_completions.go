@@ -45,7 +45,7 @@ function __%[1]s_perform_completion
 
     # Some programs may output extra empty lines after the directive.
     # Let's ignore them or else it will break completion.
-    # Ref: https://gitee.com/y19941115mx/ygo/framework/cobra/issues/1279
+    # Ref: https://github.com/y19941115mx/ygo/framework/cobra/issues/1279
     for line in $results[-1..1]
         if test (string trim -- $line) = ""
             # Found an empty line, remove it

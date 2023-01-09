@@ -4,10 +4,10 @@ import (
 	"io"
 	"strings"
 
-	"gitee.com/y19941115mx/ygo/framework"
-	"gitee.com/y19941115mx/ygo/framework/contract"
-	"gitee.com/y19941115mx/ygo/framework/provider/log/formatter"
-	services "gitee.com/y19941115mx/ygo/framework/provider/log/service"
+	"github.com/y19941115mx/ygo/framework"
+	"github.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework/provider/log/formatter"
+	services "github.com/y19941115mx/ygo/framework/provider/log/service"
 )
 
 // YgoLogServiceProvider 服务提供者

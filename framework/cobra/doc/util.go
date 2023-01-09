@@ -16,7 +16,7 @@ package doc
 import (
 	"strings"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/cobra"
 )
 
 // Test to see if we have a reason to print See Also information in docs

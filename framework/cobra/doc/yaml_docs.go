@@ -21,8 +21,8 @@ import (
 	"sort"
 	"strings"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
 	"github.com/spf13/pflag"
+	"github.com/y19941115mx/ygo/framework/cobra"
 	"gopkg.in/yaml.v2"
 )
 

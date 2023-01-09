@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/cobra"
 )
 
 func emptyRun(*cobra.Command, []string) {}

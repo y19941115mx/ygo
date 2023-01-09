@@ -3,7 +3,7 @@ package demo
 import (
 	"log"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/cobra"
 )
 
 // FooCommand 代表Foo命令

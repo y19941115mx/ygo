@@ -14,7 +14,7 @@
 package main
 
 import (
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 func main() {

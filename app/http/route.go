@@ -1,9 +1,9 @@
 package http
 
 import (
-	"gitee.com/y19941115mx/ygo/app/http/module/demo"
-	"gitee.com/y19941115mx/ygo/framework/gin"
-	"gitee.com/y19941115mx/ygo/framework/middleware"
+	"github.com/y19941115mx/ygo/app/http/module/demo"
+	"github.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/middleware"
 )
 
 // Routes 绑定业务层路由

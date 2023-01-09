@@ -9,8 +9,8 @@ import (
 	"path"
 	"strings"
 
-	"gitee.com/y19941115mx/ygo/framework"
-	"gitee.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework"
+	"github.com/y19941115mx/ygo/framework/contract"
 )
 
 // YgoEnv 是 Env 的具体实现

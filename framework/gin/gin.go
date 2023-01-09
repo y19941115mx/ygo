@@ -14,9 +14,9 @@ import (
 	"strings"
 	"sync"
 
-	"gitee.com/y19941115mx/ygo/framework"
-	"gitee.com/y19941115mx/ygo/framework/gin/internal/bytesconv"
-	"gitee.com/y19941115mx/ygo/framework/gin/render"
+	"github.com/y19941115mx/ygo/framework"
+	"github.com/y19941115mx/ygo/framework/gin/internal/bytesconv"
+	"github.com/y19941115mx/ygo/framework/gin/render"
 )
 
 const defaultMultipartMemory = 32 << 20 // 32 MB
@@ -174,7 +174,7 @@ func New() *Engine {
 		delims:                 render.Delims{Left: "{{", Right: "}}"},
 		secureJSONPrefix:       "while(1);",
 	}
-	
+
 	engine.RouterGroup.engine = engine
 	engine.pool.New = func() interface{} {
 		return engine.allocateContext()

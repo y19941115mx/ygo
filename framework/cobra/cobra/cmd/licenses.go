@@ -20,8 +20,8 @@ import (
 	"strings"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
 	"github.com/spf13/viper"
+	"github.com/y19941115mx/ygo/framework/cobra"
 )
 
 // Licenses contains all possible licenses a user can choose from.

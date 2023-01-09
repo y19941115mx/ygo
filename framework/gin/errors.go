@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"strings"
 
-	"gitee.com/y19941115mx/ygo/framework/gin/internal/json"
+	"github.com/y19941115mx/ygo/framework/gin/internal/json"
 )
 
 // ErrorType is an unsigned 64-bit error code as defined in the gin spec.

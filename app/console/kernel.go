@@ -1,10 +1,10 @@
 package console
 
 import (
-	"gitee.com/y19941115mx/ygo/app/console/command/demo"
-	"gitee.com/y19941115mx/ygo/framework"
-	"gitee.com/y19941115mx/ygo/framework/cobra"
-	"gitee.com/y19941115mx/ygo/framework/command"
+	"github.com/y19941115mx/ygo/app/console/command/demo"
+	"github.com/y19941115mx/ygo/framework"
+	"github.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/command"
 )
 
 // RunCommand  初始化根 Command 并运行

@@ -4,15 +4,15 @@
 package main
 
 import (
-	"gitee.com/y19941115mx/ygo/app/console"
-	"gitee.com/y19941115mx/ygo/app/http"
-	"gitee.com/y19941115mx/ygo/framework"
-	"gitee.com/y19941115mx/ygo/framework/provider/app"
-	"gitee.com/y19941115mx/ygo/framework/provider/config"
-	"gitee.com/y19941115mx/ygo/framework/provider/env"
-	"gitee.com/y19941115mx/ygo/framework/provider/kernel"
-	"gitee.com/y19941115mx/ygo/framework/provider/log"
-	"gitee.com/y19941115mx/ygo/framework/provider/trace"
+	"github.com/y19941115mx/ygo/app/console"
+	"github.com/y19941115mx/ygo/app/http"
+	"github.com/y19941115mx/ygo/framework"
+	"github.com/y19941115mx/ygo/framework/provider/app"
+	"github.com/y19941115mx/ygo/framework/provider/config"
+	"github.com/y19941115mx/ygo/framework/provider/env"
+	"github.com/y19941115mx/ygo/framework/provider/kernel"
+	"github.com/y19941115mx/ygo/framework/provider/log"
+	"github.com/y19941115mx/ygo/framework/provider/trace"
 )
 
 func main() {

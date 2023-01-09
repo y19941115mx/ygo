@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"gitee.com/y19941115mx/ygo/framework/contract"
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 // recovery机制，将协程中的函数异常进行捕获

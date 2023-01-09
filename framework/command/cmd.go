@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
-	"gitee.com/y19941115mx/ygo/framework/contract"
-	"gitee.com/y19941115mx/ygo/framework/util"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/pkg/errors"
+	"github.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework/util"
 )
 
 // 初始化command相关命令
@@ -99,7 +99,7 @@ var cmdTmpl string = `package {{.}}
 import (
 	"fmt"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/cobra"
 )
 
 // 初始化命令

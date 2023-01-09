@@ -8,8 +8,8 @@ import (
 	"os"
 	"testing"
 
-	"gitee.com/y19941115mx/ygo/framework/gin/binding"
 	"github.com/stretchr/testify/assert"
+	"github.com/y19941115mx/ygo/framework/gin/binding"
 )
 
 func init() {

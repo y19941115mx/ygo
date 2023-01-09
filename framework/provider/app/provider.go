@@ -1,8 +1,8 @@
 package app
 
 import (
-	"gitee.com/y19941115mx/ygo/framework"
-	"gitee.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework"
+	"github.com/y19941115mx/ygo/framework/contract"
 )
 
 type YgoAppProvider struct {

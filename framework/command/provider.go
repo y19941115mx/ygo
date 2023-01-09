@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"gitee.com/y19941115mx/ygo/framework"
-	"gitee.com/y19941115mx/ygo/framework/cobra"
-	"gitee.com/y19941115mx/ygo/framework/contract"
-	"gitee.com/y19941115mx/ygo/framework/util"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/jianfengye/collection"
 	"github.com/pkg/errors"
+	"github.com/y19941115mx/ygo/framework"
+	"github.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework/util"
 )
 
 func initProviderCommand() *cobra.Command {
@@ -128,7 +128,7 @@ type Service interface {
 var providerTmp string = `package {{.}}
 
 import (
-	"gitee.com/y19941115mx/ygo/framework"
+	"github.com/y19941115mx/ygo/framework"
 )
 
 type {{.|title}}Provider struct {
@@ -161,7 +161,7 @@ func (sp *{{.|title}}Provider) Boot(c framework.Container) error {
 
 var serviceTmp string = `package {{.}}
 
-import "gitee.com/y19941115mx/ygo/framework"
+import "github.com/y19941115mx/ygo/framework"
 
 type {{.|title}}Service struct {
 	container framework.Container

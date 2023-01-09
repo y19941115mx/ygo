@@ -17,8 +17,8 @@ import (
 	"fmt"
 	"os"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
 	"github.com/spf13/viper"
+	"github.com/y19941115mx/ygo/framework/cobra"
 )
 
 var (

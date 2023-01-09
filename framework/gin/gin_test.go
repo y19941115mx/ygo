@@ -455,27 +455,27 @@ func TestListOfRoutes(t *testing.T) {
 	assertRoutePresent(t, list, RouteInfo{
 		Method:  "GET",
 		Path:    "/favicon.ico",
-		Handler: "^(.*/vendor/)?gitee.com/y19941115mx/ygo/framework/gin.handlerTest1$",
+		Handler: "^(.*/vendor/)?github.com/y19941115mx/ygo/framework/gin.handlerTest1$",
 	})
 	assertRoutePresent(t, list, RouteInfo{
 		Method:  "GET",
 		Path:    "/",
-		Handler: "^(.*/vendor/)?gitee.com/y19941115mx/ygo/framework/gin.handlerTest1$",
+		Handler: "^(.*/vendor/)?github.com/y19941115mx/ygo/framework/gin.handlerTest1$",
 	})
 	assertRoutePresent(t, list, RouteInfo{
 		Method:  "GET",
 		Path:    "/users/",
-		Handler: "^(.*/vendor/)?gitee.com/y19941115mx/ygo/framework/gin.handlerTest2$",
+		Handler: "^(.*/vendor/)?github.com/y19941115mx/ygo/framework/gin.handlerTest2$",
 	})
 	assertRoutePresent(t, list, RouteInfo{
 		Method:  "GET",
 		Path:    "/users/:id",
-		Handler: "^(.*/vendor/)?gitee.com/y19941115mx/ygo/framework/gin.handlerTest1$",
+		Handler: "^(.*/vendor/)?github.com/y19941115mx/ygo/framework/gin.handlerTest1$",
 	})
 	assertRoutePresent(t, list, RouteInfo{
 		Method:  "POST",
 		Path:    "/users/:id",
-		Handler: "^(.*/vendor/)?gitee.com/y19941115mx/ygo/framework/gin.handlerTest2$",
+		Handler: "^(.*/vendor/)?github.com/y19941115mx/ygo/framework/gin.handlerTest2$",
 	})
 }
 

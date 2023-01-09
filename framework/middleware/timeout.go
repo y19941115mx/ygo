@@ -9,7 +9,7 @@ import (
 	"log"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 func Timeout(d time.Duration) gin.HandlerFunc {

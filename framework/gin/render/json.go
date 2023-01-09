@@ -10,8 +10,8 @@ import (
 	"html/template"
 	"net/http"
 
-	"gitee.com/y19941115mx/ygo/framework/gin/internal/bytesconv"
-	"gitee.com/y19941115mx/ygo/framework/gin/internal/json"
+	"github.com/y19941115mx/ygo/framework/gin/internal/bytesconv"
+	"github.com/y19941115mx/ygo/framework/gin/internal/json"
 )
 
 // JSON contains the given interface object.

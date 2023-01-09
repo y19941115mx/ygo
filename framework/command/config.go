@@ -3,9 +3,9 @@ package command
 import (
 	"fmt"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
-	"gitee.com/y19941115mx/ygo/framework/contract"
 	"github.com/kr/pretty"
+	"github.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/contract"
 )
 
 func initConfigCommand() *cobra.Command {

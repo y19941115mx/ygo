@@ -1,6 +1,6 @@
 package gin
 
-import "gitee.com/y19941115mx/ygo/framework/contract"
+import "github.com/y19941115mx/ygo/framework/contract"
 
 // MustMakeApp 从容器中获取App服务
 func (c *Context) MustMakeApp() contract.App {

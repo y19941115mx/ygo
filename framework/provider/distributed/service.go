@@ -8,8 +8,8 @@ import (
 	"syscall"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework"
-	"gitee.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework"
+	"github.com/y19941115mx/ygo/framework/contract"
 )
 
 // LocalDistributedService 代表hade框架的App实现

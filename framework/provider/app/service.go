@@ -5,10 +5,10 @@ import (
 	"flag"
 	"path/filepath"
 
-	"gitee.com/y19941115mx/ygo/framework"
-	"gitee.com/y19941115mx/ygo/framework/contract"
-	"gitee.com/y19941115mx/ygo/framework/util"
 	"github.com/google/uuid"
+	"github.com/y19941115mx/ygo/framework"
+	"github.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework/util"
 )
 
 type YgoApp struct {

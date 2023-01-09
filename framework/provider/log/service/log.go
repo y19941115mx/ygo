@@ -6,9 +6,9 @@ import (
 	pkgLog "log"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework"
-	"gitee.com/y19941115mx/ygo/framework/contract"
-	"gitee.com/y19941115mx/ygo/framework/provider/log/formatter"
+	"github.com/y19941115mx/ygo/framework"
+	"github.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework/provider/log/formatter"
 )
 
 type YgoLog struct {

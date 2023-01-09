@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework/contract"
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 type TraceKey string

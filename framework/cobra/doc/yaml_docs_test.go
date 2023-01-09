@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/cobra"
 )
 
 func TestGenYamlDoc(t *testing.T) {

@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework/contract"
 	"github.com/pkg/errors"
+	"github.com/y19941115mx/ygo/framework/contract"
 )
 
 func JsonFormatter(level contract.LogLevel, t time.Time, msg string, fields map[string]interface{}) ([]byte, error) {

@@ -1,9 +1,9 @@
 package demo
 
 import (
-	demoService "gitee.com/y19941115mx/ygo/app/provider/demo"
-	"gitee.com/y19941115mx/ygo/framework/contract"
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	demoService "github.com/y19941115mx/ygo/app/provider/demo"
+	"github.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 type DemoApi struct {

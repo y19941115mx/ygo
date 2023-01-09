@@ -4,10 +4,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"gitee.com/y19941115mx/ygo/framework"
-	"gitee.com/y19941115mx/ygo/framework/contract"
-	"gitee.com/y19941115mx/ygo/framework/util"
 	"github.com/pkg/errors"
+	"github.com/y19941115mx/ygo/framework"
+	"github.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework/util"
 )
 
 type YgoSingleLog struct {

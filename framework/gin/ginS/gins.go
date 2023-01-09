@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"sync"
 
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 var once sync.Once

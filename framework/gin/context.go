@@ -19,10 +19,10 @@ import (
 	"sync"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework"
-	"gitee.com/y19941115mx/ygo/framework/gin/binding"
-	"gitee.com/y19941115mx/ygo/framework/gin/render"
 	"github.com/gin-contrib/sse"
+	"github.com/y19941115mx/ygo/framework"
+	"github.com/y19941115mx/ygo/framework/gin/binding"
+	"github.com/y19941115mx/ygo/framework/gin/render"
 )
 
 // Content-Type MIME of the most common data formats.

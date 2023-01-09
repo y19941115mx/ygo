@@ -19,7 +19,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/cobra"
 )
 
 var srcPaths []string

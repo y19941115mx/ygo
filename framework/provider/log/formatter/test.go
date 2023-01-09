@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework/contract"
 )
 
 func TextFormatter(level contract.LogLevel, t time.Time, msg string, fields map[string]interface{}) ([]byte, error) {

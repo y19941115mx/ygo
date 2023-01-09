@@ -4,13 +4,13 @@
 
 [![Build Status](https://travis-ci.org/gin-gonic/gin.svg)](https://travis-ci.org/gin-gonic/gin)
 [![codecov](https://codecov.io/gh/gin-gonic/gin/branch/master/graph/badge.svg)](https://codecov.io/gh/gin-gonic/gin)
-[![Go Report Card](https://goreportcard.com/badge/gitee.com/y19941115mx/ygo/framework/gin)](https://goreportcard.com/report/gitee.com/y19941115mx/ygo/framework/gin)
-[![GoDoc](https://pkg.go.dev/badge/gitee.com/y19941115mx/ygo/framework/gin?status.svg)](https://pkg.go.dev/gitee.com/y19941115mx/ygo/framework/gin?tab=doc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/y19941115mx/ygo/framework/gin)](https://goreportcard.com/report/github.com/y19941115mx/ygo/framework/gin)
+[![GoDoc](https://pkg.go.dev/badge/github.com/y19941115mx/ygo/framework/gin?status.svg)](https://pkg.go.dev/github.com/y19941115mx/ygo/framework/gin?tab=doc)
 [![Join the chat at https://gitter.im/gin-gonic/gin](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/gin-gonic/gin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Sourcegraph](https://sourcegraph.com/gitee.com/y19941115mx/ygo/framework/gin/-/badge.svg)](https://sourcegraph.com/gitee.com/y19941115mx/ygo/framework/gin?badge)
+[![Sourcegraph](https://sourcegraph.com/github.com/y19941115mx/ygo/framework/gin/-/badge.svg)](https://sourcegraph.com/github.com/y19941115mx/ygo/framework/gin?badge)
 [![Open Source Helpers](https://www.codetriage.com/gin-gonic/gin/badges/users.svg)](https://www.codetriage.com/gin-gonic/gin)
-[![Release](https://img.shields.io/github/release/gin-gonic/gin.svg?style=flat-square)](https://gitee.com/y19941115mx/ygo/framework/gin/releases)
-[![TODOs](https://badgen.net/https/api.tickgit.com/badgen/gitee.com/y19941115mx/ygo/framework/gin)](https://www.tickgit.com/browse?repo=gitee.com/y19941115mx/ygo/framework/gin)
+[![Release](https://img.shields.io/github/release/gin-gonic/gin.svg?style=flat-square)](https://github.com/y19941115mx/ygo/framework/gin/releases)
+[![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/y19941115mx/ygo/framework/gin)](https://www.tickgit.com/browse?repo=github.com/y19941115mx/ygo/framework/gin)
 
 Gin is a web framework written in Go (Golang). It features a martini-like API with performance that is up to 40 times faster thanks to [httprouter](https://github.com/julienschmidt/httprouter). If you need performance and good productivity, you will love Gin.
 
@@ -87,13 +87,13 @@ To install Gin package, you need to install Go and set your Go workspace first.
 1. The first need [Go](https://golang.org/) installed (**version 1.12+ is required**), then you can use the below Go command to install Gin.
 
 ```sh
-$ go get -u gitee.com/y19941115mx/ygo/framework/gin
+$ go get -u github.com/y19941115mx/ygo/framework/gin
 ```
 
 2. Import it in your code:
 
 ```go
-import "gitee.com/y19941115mx/ygo/framework/gin"
+import "github.com/y19941115mx/ygo/framework/gin"
 ```
 
 3. (Optional) Import `net/http`. This is required for example if using constants such as `http.StatusOK`.
@@ -112,7 +112,7 @@ $ cat example.go
 ```go
 package main
 
-import "gitee.com/y19941115mx/ygo/framework/gin"
+import "github.com/y19941115mx/ygo/framework/gin"
 
 func main() {
 	r := gin.Default()
@@ -354,9 +354,9 @@ ids: map[b:hello a:1234]; names: map[second:tianou first:thinkerou]
 
 #### Single file
 
-References issue [#774](https://gitee.com/y19941115mx/ygo/framework/gin/issues/774) and detail [example code](https://github.com/gin-gonic/examples/tree/master/upload-file/single).
+References issue [#774](https://github.com/y19941115mx/ygo/framework/gin/issues/774) and detail [example code](https://github.com/gin-gonic/examples/tree/master/upload-file/single).
 
-`file.Filename` **SHOULD NOT** be trusted. See [`Content-Disposition` on MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition#Directives) and [#1693](https://gitee.com/y19941115mx/ygo/framework/gin/issues/1693)
+`file.Filename` **SHOULD NOT** be trusted. See [`Content-Disposition` on MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition#Directives) and [#1693](https://github.com/y19941115mx/ygo/framework/gin/issues/1693)
 
 > The filename is always optional and must not be used blindly by the application: path information should be stripped, and conversion to the server file system rules should be done.
 
@@ -763,8 +763,8 @@ import (
 	"net/http"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework/gin"
-	"gitee.com/y19941115mx/ygo/framework/gin/binding"
+	"github.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin/binding"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -822,7 +822,7 @@ See the [struct-lvl-validation example](https://github.com/gin-gonic/examples/tr
 
 ### Only Bind Query String
 
-`ShouldBindQuery` function only binds the query params and not the post data. See the [detail information](https://gitee.com/y19941115mx/ygo/framework/gin/issues/742#issuecomment-315953017).
+`ShouldBindQuery` function only binds the query params and not the post data. See the [detail information](https://github.com/y19941115mx/ygo/framework/gin/issues/742#issuecomment-315953017).
 
 ```go
 package main
@@ -830,7 +830,7 @@ package main
 import (
 	"log"
 
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 type Person struct {
@@ -858,7 +858,7 @@ func startPage(c *gin.Context) {
 
 ### Bind Query String or Post Data
 
-See the [detail information](https://gitee.com/y19941115mx/ygo/framework/gin/issues/742#issuecomment-264681292).
+See the [detail information](https://github.com/y19941115mx/ygo/framework/gin/issues/742#issuecomment-264681292).
 
 ```go
 package main
@@ -867,7 +867,7 @@ import (
 	"log"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 type Person struct {
@@ -888,7 +888,7 @@ func startPage(c *gin.Context) {
 	var person Person
 	// If `GET`, only `Form` binding engine (`query`) used.
 	// If `POST`, first checks the `content-type` for `JSON` or `XML`, then uses `Form` (`form-data`).
-	// See more at https://gitee.com/y19941115mx/ygo/framework/gin/blob/master/binding/binding.go#L48
+	// See more at https://github.com/y19941115mx/ygo/framework/gin/blob/master/binding/binding.go#L48
         if c.ShouldBind(&person) == nil {
                 log.Println(person.Name)
                 log.Println(person.Address)
@@ -908,12 +908,12 @@ $ curl -X GET "localhost:8085/testing?name=appleboy&address=xyz&birthday=1992-03
 
 ### Bind Uri
 
-See the [detail information](https://gitee.com/y19941115mx/ygo/framework/gin/issues/846).
+See the [detail information](https://github.com/y19941115mx/ygo/framework/gin/issues/846).
 
 ```go
 package main
 
-import "gitee.com/y19941115mx/ygo/framework/gin"
+import "github.com/y19941115mx/ygo/framework/gin"
 
 type Person struct {
 	ID string `uri:"id" binding:"required,uuid"`
@@ -947,7 +947,7 @@ package main
 
 import (
 	"fmt"
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 type testHeader struct {
@@ -979,7 +979,7 @@ func main() {
 
 ### Bind HTML checkboxes
 
-See the [detail information](https://gitee.com/y19941115mx/ygo/framework/gin/issues/129#issuecomment-124260092)
+See the [detail information](https://github.com/y19941115mx/ygo/framework/gin/issues/129#issuecomment-124260092)
 
 main.go
 
@@ -1386,7 +1386,7 @@ import (
     "net/http"
     "time"
 
-    "gitee.com/y19941115mx/ygo/framework/gin"
+    "github.com/y19941115mx/ygo/framework/gin"
 )
 
 func formatAsDate(t time.Time) string {
@@ -1438,7 +1438,7 @@ r.GET("/test", func(c *gin.Context) {
 })
 ```
 
-Issuing a HTTP redirect from POST. Refer to issue: [#444](https://gitee.com/y19941115mx/ygo/framework/gin/issues/444)
+Issuing a HTTP redirect from POST. Refer to issue: [#444](https://github.com/y19941115mx/ygo/framework/gin/issues/444)
 ```go
 r.POST("/test", func(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/foo")
@@ -1608,7 +1608,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/autotls"
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 func main() {
@@ -1632,7 +1632,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/autotls"
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 	"golang.org/x/crypto/acme/autocert"
 )
 
@@ -1656,7 +1656,7 @@ func main() {
 
 ### Run multiple service using Gin
 
-See the [question](https://gitee.com/y19941115mx/ygo/framework/gin/issues/346) and try the following example:
+See the [question](https://github.com/y19941115mx/ygo/framework/gin/issues/346) and try the following example:
 
 ```go
 package main
@@ -1666,7 +1666,7 @@ import (
 	"net/http"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -1749,7 +1749,7 @@ There are a few approaches you can use to perform a graceful shutdown or restart
 
 #### Third-party packages
 
-We can use [fvbock/endless](https://github.com/fvbock/endless) to replace the default `ListenAndServe`. Refer to issue [#296](https://gitee.com/y19941115mx/ygo/framework/gin/issues/296) for more details.
+We can use [fvbock/endless](https://github.com/fvbock/endless) to replace the default `ListenAndServe`. Refer to issue [#296](https://github.com/y19941115mx/ygo/framework/gin/issues/296) for more details.
 
 ```go
 router := gin.Default()
@@ -1782,7 +1782,7 @@ import (
 	"syscall"
 	"time"
 
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 func main() {
@@ -2003,7 +2003,7 @@ enough to call binding at once.
 * This feature is only needed for some formats -- `JSON`, `XML`, `MsgPack`,
 `ProtoBuf`. For other formats, `Query`, `Form`, `FormPost`, `FormMultipart`,
 can be called by `c.ShouldBind()` multiple times without any damage to
-performance (See [#1341](https://gitee.com/y19941115mx/ygo/framework/gin/pull/1341)).
+performance (See [#1341](https://github.com/y19941115mx/ygo/framework/gin/pull/1341)).
 
 ### http2 server push
 
@@ -2016,7 +2016,7 @@ import (
 	"html/template"
 	"log"
 
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 var html = template.Must(template.New("https").Parse(`
@@ -2069,7 +2069,7 @@ import (
 	"log"
 	"net/http"
 
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 func main() {
@@ -2101,7 +2101,7 @@ func main() {
 import (
     "fmt"
 
-    "gitee.com/y19941115mx/ygo/framework/gin"
+    "github.com/y19941115mx/ygo/framework/gin"
 )
 
 func main() {
@@ -2139,7 +2139,7 @@ IPv6 CIDRs.
 import (
 	"fmt"
 
-	"gitee.com/y19941115mx/ygo/framework/gin"
+	"github.com/y19941115mx/ygo/framework/gin"
 )
 
 func main() {
@@ -2206,7 +2206,7 @@ func TestPingRoute(t *testing.T) {
 
 ## Users
 
-Awesome project lists using [Gin](https://gitee.com/y19941115mx/ygo/framework/gin) web framework.
+Awesome project lists using [Gin](https://github.com/y19941115mx/ygo/framework/gin) web framework.
 
 * [gorush](https://github.com/appleboy/gorush): A push notification server written in Go.
 * [fnproject](https://github.com/fnproject/fn): The container native, cloud agnostic serverless platform.

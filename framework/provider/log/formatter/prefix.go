@@ -1,6 +1,6 @@
 package formatter
 
-import "gitee.com/y19941115mx/ygo/framework/contract"
+import "github.com/y19941115mx/ygo/framework/contract"
 
 func Prefix(level contract.LogLevel) string {
 	prefix := ""

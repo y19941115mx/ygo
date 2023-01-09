@@ -7,11 +7,11 @@ import (
 	"path"
 	"path/filepath"
 
-	"gitee.com/y19941115mx/ygo/framework/cobra"
-	"gitee.com/y19941115mx/ygo/framework/contract"
-	"gitee.com/y19941115mx/ygo/framework/util"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/go-git/go-git/v5"
+	"github.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework/util"
 )
 
 // 初始化中间件相关命令
@@ -115,7 +115,7 @@ var middlewareMigrateCommand = &cobra.Command{
 			isContain := bytes.Contains(c, []byte("github.com/gin-gonic/gin"))
 			if isContain {
 				fmt.Println("更新文件:" + path)
-				c = bytes.ReplaceAll(c, []byte("github.com/gin-gonic/gin"), []byte("github.com/gohade/hade/framework/gin"))
+				c = bytes.ReplaceAll(c, []byte("github.com/gin-gonic/gin"), []byte("github.com/y19941115mx/ygo/framework/gin"))
 				err = os.WriteFile(path, c, 0644)
 				if err != nil {
 					return err
@@ -171,7 +171,7 @@ var middlewareCreateCommand = &cobra.Command{
 
 var middlewareTmp string = `package {{.}}
 
-import "gitee.com/y19941115mx/ygo/framework/gin"
+import "github.com/y19941115mx/ygo/framework/gin"
 
 // {{.|title}}Middleware 代表中间件函数
 func {{.|title}}Middleware() gin.HandlerFunc {

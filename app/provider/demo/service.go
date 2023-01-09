@@ -1,6 +1,6 @@
 package demo
 
-import "gitee.com/y19941115mx/ygo/framework"
+import "github.com/y19941115mx/ygo/framework"
 
 type Service struct {
 	IService

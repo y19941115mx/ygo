@@ -8,7 +8,7 @@ import (
 	"io"
 	"os"
 
-	"gitee.com/y19941115mx/ygo/framework/gin/binding"
+	"github.com/y19941115mx/ygo/framework/gin/binding"
 )
 
 // EnvGinMode indicates environment name for gin mode.
