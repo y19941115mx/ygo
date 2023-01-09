@@ -36,6 +36,14 @@ func (app YgoApp) BaseFolder() string {
 	return util.GetExecDirectory()
 }
 
+// SourceFolder 定义项目源码路径
+func (app YgoApp) SourceFolder() string {
+	if val, ok := app.configMap["source_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.BaseFolder(), "app")
+}
+
 // ConfigFolder  表示配置文件地址
 func (app YgoApp) ConfigFolder() string {
 	if val, ok := app.configMap["config_folder"]; ok {
@@ -78,7 +86,7 @@ func (app YgoApp) ProviderFolder() string {
 	if val, ok := app.configMap["provider_folder"]; ok {
 		return val
 	}
-	return filepath.Join(app.BaseFolder(), "provider")
+	return filepath.Join(app.SourceFolder(), "provider")
 }
 
 // MiddlewareFolder 定义业务自己定义的中间件

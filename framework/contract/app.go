@@ -7,8 +7,10 @@ const AppKey = "ygo:app"
 type App interface {
 	// Version 定义当前版本
 	Version() string
-	//BaseFolder 定义项目基础地址
+	// BaseFolder 定义项目基础地址
 	BaseFolder() string
+	// SourceFolder 定义项目源码地址
+	SourceFolder() string
 	// ConfigFolder 定义了配置文件的路径
 	ConfigFolder() string
 	// LogFolder 定义了日志所在路径

@@ -23,6 +23,8 @@ type Container interface {
 	// 它是根据服务提供者注册的启动函数和传递的params参数实例化出来的
 	// 这个函数在需要为不同参数启动不同实例的时候非常有用
 	MakeNew(key string, params []interface{}) (interface{}, error)
+	// 列出当前容器绑定的所有服务提供者
+	NameList() []string
 }
 
 // YgoContainer 是服务容器的具体实现
@@ -160,4 +162,14 @@ func (hade *YgoContainer) make(key string, params []interface{}, forceNew bool) 
 
 	hade.instances[key] = inst
 	return inst, nil
+}
+
+// NameList 列出容器中所有服务提供者的字符串凭证
+func (ygo *YgoContainer) NameList() []string {
+	ret := []string{}
+	for _, provider := range ygo.providers {
+		name := provider.Name()
+		ret = append(ret, name)
+	}
+	return ret
 }
