@@ -16,9 +16,6 @@ todo
 
 #### docker 使用说明
 1. 执行 `docker-compose up` 命令启动项目
-2. 进入容器bin/bash `./server` 运行框架提供的命令行xxx
-
-如果有修改需要重新编译 执行 `docker-compose build` 命令重新编译项目
 
 #### 参与贡献
 

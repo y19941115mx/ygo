@@ -77,7 +77,6 @@ var middlewareMigrateCommand = &cobra.Command{
 		}
 		// step2 : 下载git到目录中
 		appService := container.MustMake(contract.AppKey).(contract.App)
-
 		middlewarePath := appService.MiddlewareFolder()
 		url := "https://github.com/gin-contrib/" + repo + ".git"
 		fmt.Println("下载中间件 gin-contrib:")
