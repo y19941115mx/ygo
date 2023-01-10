@@ -140,6 +140,14 @@ func NewYgoApp(params ...interface{}) (interface{}, error) {
 	return &YgoApp{baseFolder: baseFolder, container: container, appId: appId, configMap: configMap}, nil
 }
 
+// DeployFolder 定义测试需要的信息
+func (app YgoApp) DeployFolder() string {
+	if val, ok := app.configMap["deploy_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.BaseFolder(), "deploy")
+}
+
 func (app YgoApp) AppID() string {
 	return app.appId
 }

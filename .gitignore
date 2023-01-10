@@ -17,3 +17,4 @@ ygo.*
 storage
 build.*
 .vscode/*
+deploy/

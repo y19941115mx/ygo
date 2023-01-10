@@ -7,7 +7,7 @@ import (
 	"github.com/y19941115mx/ygo/framework"
 )
 
-const RedisKey = "hade:redis"
+const RedisKey = "ygo:redis"
 
 // RedisOption 代表初始化的时候的选项
 type RedisOption func(container framework.Container, config *RedisConfig) error

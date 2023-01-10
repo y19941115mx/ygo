@@ -29,4 +29,7 @@ func AddKernelCommands(root *cobra.Command) {
 
 	// Swagger
 	root.AddCommand(initSwaggerCommand())
+
+	// deploy
+	root.AddCommand(initDeployCommand())
 }

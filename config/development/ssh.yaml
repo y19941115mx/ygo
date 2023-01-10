@@ -1,0 +1,23 @@
+timeout: 3s
+network: tcp
+local:
+    host: localhost # ip地址
+    port: 22 # 端口
+    username: root # 用户名
+    password: "123456" # 密码
+ali:
+    network: tcp
+    host: 47.92.132.42 # ip地址
+    port: 22 # 端口
+    username: root # 用户名
+    rsa_key: "C:\Users\19608\.ssh\id_rsa"
+    known_hosts: "C:\Users\19608\.ssh/known_hosts"
+
+
+#host: localhost # ip地址
+#port: 3306 # 端口
+#username: jianfengye # 用户名
+#password: "123456789" # 密码
+#rsa_key: "~/.ssh/id_rsa"
+#timeout: 1000
+#network: tcp
