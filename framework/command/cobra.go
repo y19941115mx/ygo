@@ -5,8 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"syscall"
-	"time"
 
 	"github.com/erikdubbelboer/gspt"
 	"github.com/sevlyar/go-daemon"
@@ -20,9 +18,9 @@ var cronDaemon = false
 func initCronCommand() *cobra.Command {
 
 	cronStartCommand.Flags().BoolVarP(&cronDaemon, "daemon", "d", false, "start serve daemon")
-	cronCommand.AddCommand(cronRestartCommand)
+	// cronCommand.AddCommand(cronRestartCommand)
 	cronCommand.AddCommand(cronStateCommand)
-	cronCommand.AddCommand(cronStopCommand)
+	// cronCommand.AddCommand(cronStopCommand)
 	cronCommand.AddCommand(cronListCommand)
 	cronCommand.AddCommand(cronStartCommand)
 
@@ -127,77 +125,77 @@ var cronStartCommand = &cobra.Command{
 	},
 }
 
-var cronRestartCommand = &cobra.Command{
-	Use:   "restart",
-	Short: "重启cron常驻进程",
-	RunE: func(c *cobra.Command, args []string) error {
-		container := c.GetContainer()
-		appService := container.MustMake(contract.AppKey).(contract.App)
+// var cronRestartCommand = &cobra.Command{
+// 	Use:   "restart",
+// 	Short: "重启cron常驻进程",
+// 	RunE: func(c *cobra.Command, args []string) error {
+// 		container := c.GetContainer()
+// 		appService := container.MustMake(contract.AppKey).(contract.App)
 
-		// GetPid
-		serverPidFile := filepath.Join(appService.RuntimeFolder(), "cron.pid")
+// 		// GetPid
+// 		serverPidFile := filepath.Join(appService.RuntimeFolder(), "cron.pid")
 
-		content, err := os.ReadFile(serverPidFile)
-		if err != nil {
-			return err
-		}
+// 		content, err := os.ReadFile(serverPidFile)
+// 		if err != nil {
+// 			return err
+// 		}
 
-		if len(content) > 0 {
-			pid, err := strconv.Atoi(string(content))
-			if err != nil {
-				return err
-			}
-			if util.CheckProcessExist(pid) {
-				if err := syscall.Kill(pid, syscall.SIGTERM); err != nil {
-					return err
-				}
-				// check process closed
-				for i := 0; i < 10; i++ {
-					if !util.CheckProcessExist(pid) {
-						break
-					}
-					time.Sleep(1 * time.Second)
-				}
-				fmt.Println("kill process:" + strconv.Itoa(pid))
-			}
-		}
+// 		if len(content) > 0 {
+// 			pid, err := strconv.Atoi(string(content))
+// 			if err != nil {
+// 				return err
+// 			}
+// 			if util.CheckProcessExist(pid) {
+// 				if err := syscall.Kill(pid, syscall.SIGTERM); err != nil {
+// 					return err
+// 				}
+// 				// check process closed
+// 				for i := 0; i < 10; i++ {
+// 					if !util.CheckProcessExist(pid) {
+// 						break
+// 					}
+// 					time.Sleep(1 * time.Second)
+// 				}
+// 				fmt.Println("kill process:" + strconv.Itoa(pid))
+// 			}
+// 		}
 
-		cronDaemon = true
-		return cronStartCommand.RunE(c, args)
-	},
-}
+// 		cronDaemon = true
+// 		return cronStartCommand.RunE(c, args)
+// 	},
+// }
 
-var cronStopCommand = &cobra.Command{
-	Use:   "stop",
-	Short: "停止cron常驻进程",
-	RunE: func(c *cobra.Command, args []string) error {
-		container := c.GetContainer()
-		appService := container.MustMake(contract.AppKey).(contract.App)
+// var cronStopCommand = &cobra.Command{
+// 	Use:   "stop",
+// 	Short: "停止cron常驻进程",
+// 	RunE: func(c *cobra.Command, args []string) error {
+// 		container := c.GetContainer()
+// 		appService := container.MustMake(contract.AppKey).(contract.App)
 
-		// GetPid
-		serverPidFile := filepath.Join(appService.RuntimeFolder(), "cron.pid")
+// 		// GetPid
+// 		serverPidFile := filepath.Join(appService.RuntimeFolder(), "cron.pid")
 
-		content, err := os.ReadFile(serverPidFile)
-		if err != nil {
-			return err
-		}
+// 		content, err := os.ReadFile(serverPidFile)
+// 		if err != nil {
+// 			return err
+// 		}
 
-		if len(content) > 0 {
-			pid, err := strconv.Atoi(string(content))
-			if err != nil {
-				return err
-			}
-			if err := syscall.Kill(pid, syscall.SIGTERM); err != nil {
-				return err
-			}
-			if err := os.WriteFile(serverPidFile, []byte{}, 0644); err != nil {
-				return err
-			}
-			fmt.Println("stop pid:", pid)
-		}
-		return nil
-	},
-}
+// 		if len(content) > 0 {
+// 			pid, err := strconv.Atoi(string(content))
+// 			if err != nil {
+// 				return err
+// 			}
+// 			if err := syscall.Kill(pid, syscall.SIGTERM); err != nil {
+// 				return err
+// 			}
+// 			if err := os.WriteFile(serverPidFile, []byte{}, 0644); err != nil {
+// 				return err
+// 			}
+// 			fmt.Println("stop pid:", pid)
+// 		}
+// 		return nil
+// 	},
+// }
 
 var cronStateCommand = &cobra.Command{
 	Use:   "state",

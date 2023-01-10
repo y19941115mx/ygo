@@ -99,7 +99,11 @@ var newCommand = &cobra.Command{
 			}
 			if version == "" {
 				release, _, err = client.Repositories.GetLatestRelease(context.Background(), "y19941115mx", "ygo")
+				if err != nil || release == nil {
+					return err
+				}
 				version = release.GetTagName()
+				fmt.Println("使用ygo框架最新版本：" + version)
 			}
 		}
 		fmt.Println("====================================================")
