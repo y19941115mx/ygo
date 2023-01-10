@@ -9,4 +9,4 @@ backend:
     - rm /root/go/project/ygo || true
   post_action:
     - chmod 777 /root/go/project/ygo
-    - /root/go/project/ygo app restart
+    - cd /root/go/project && ./ygo app restart
