@@ -93,6 +93,7 @@ require (
 	github.com/AlecAivazis/survey/v2 v2.3.6
 	github.com/erikdubbelboer/gspt v0.0.0-20210805194459-ce36a5128377
 	github.com/go-git/go-git/v5 v5.5.2
+	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/google/go-github/v39 v39.2.0
 	github.com/google/uuid v1.3.0
 	github.com/jianfengye/collection v1.4.2
