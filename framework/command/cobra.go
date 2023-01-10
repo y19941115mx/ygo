@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/erikdubbelboer/gspt"
 	"github.com/sevlyar/go-daemon"
 	"github.com/y19941115mx/ygo/framework/cobra"
 	"github.com/y19941115mx/ygo/framework/contract"
@@ -105,7 +104,7 @@ var cronStartCommand = &cobra.Command{
 			// 子进程执行Cron.Run
 			defer cntxt.Release()
 			fmt.Println("daemon started")
-			gspt.SetProcTitle("ygo cron")
+			// gspt.SetProcTitle("ygo cron")
 			c.Root().Cron.Run()
 			return nil
 		}
@@ -119,7 +118,7 @@ var cronStartCommand = &cobra.Command{
 			return err
 		}
 
-		gspt.SetProcTitle("ygo cron")
+		// gspt.SetProcTitle("ygo cron")
 		c.Root().Cron.Run()
 		return nil
 	},

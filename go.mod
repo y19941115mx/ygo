@@ -10,7 +10,7 @@ require (
 	github.com/mattn/go-isatty v0.0.14
 	github.com/stretchr/testify v1.8.1
 	github.com/ugorji/go/codec v1.2.7
-	golang.org/x/net v0.2.0
+	golang.org/x/net v0.4.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -42,12 +42,14 @@ require (
 	github.com/mailru/easyjson v0.7.6 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b // indirect
+	github.com/onsi/ginkgo v1.16.5 // indirect
+	github.com/onsi/gomega v1.24.2 // indirect
 	github.com/pjbgf/sha1cd v0.2.3 // indirect
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/skeema/knownhosts v1.1.0 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
-	golang.org/x/term v0.2.0 // indirect
+	golang.org/x/term v0.3.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 )
@@ -68,7 +70,7 @@ require (
 	github.com/spf13/viper v1.14.0
 	golang.org/x/crypto v0.3.0 // indirect
 	golang.org/x/sys v0.3.0 // indirect
-	golang.org/x/text v0.4.0 // indirect
+	golang.org/x/text v0.5.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
@@ -91,7 +93,6 @@ require (
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.6
-	github.com/erikdubbelboer/gspt v0.0.0-20210805194459-ce36a5128377
 	github.com/go-git/go-git/v5 v5.5.2
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/google/go-github/v39 v39.2.0

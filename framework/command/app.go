@@ -11,7 +11,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/erikdubbelboer/gspt"
 	"github.com/sevlyar/go-daemon"
 	"github.com/y19941115mx/ygo/framework"
 	"github.com/y19941115mx/ygo/framework/cobra"
@@ -129,7 +128,7 @@ var appStartCommand = &cobra.Command{
 			defer cntxt.Release()
 			// 子进程执行真正的app启动操作
 			fmt.Println("deamon started")
-			gspt.SetProcTitle("ygo app")
+			// gspt.SetProcTitle("ygo app")
 			if err := startAppServe(server, container); err != nil {
 				fmt.Println(err)
 			}
@@ -142,7 +141,7 @@ var appStartCommand = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		gspt.SetProcTitle("ygo app")
+		// gspt.SetProcTitle("ygo app")
 
 		fmt.Println("app serve port: ", appPort)
 		if err := startAppServe(server, container); err != nil {
