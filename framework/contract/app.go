@@ -9,12 +9,14 @@ type App interface {
 	Version() string
 	// BaseFolder 定义项目基础地址
 	BaseFolder() string
-	// SourceFolder 定义项目源码地址
-	SourceFolder() string
+	// AppFolder 定义项目源码地址
+	AppFolder() string
 	// ConfigFolder 定义了配置文件的路径
 	ConfigFolder() string
 	// LogFolder 定义了日志所在路径
 	LogFolder() string
+	// HttpFolder 定义了业务自己的http路径
+	HttpFolder() string
 	// ProviderFolder 定义业务自己的服务提供者地址
 	ProviderFolder() string
 	// MiddlewareFolder 定义业务自己定义的中间件

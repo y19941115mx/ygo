@@ -9,13 +9,24 @@ todo
 
 
 #### 运行示例
-基于docker构建项目，需要安装：
+**基于docker构建项目**，
+需要安装：
 1. docker
 2. docker-compose
 
-使用说明
 
 执行 `docker-compose up` 命令启动项目
+
+**本地编译**
+
+需要安装：
+1. go环境
+2. gcc环境
+
+
+执行 `go build`
+
+
 
 #### 参与贡献
 
