@@ -22,7 +22,8 @@ todo
 需要安装：
 1. go环境
 
-执行 `go build`
+1. 执行 `go mod tidy`
+2. 执行 `go build`
 
 
 
