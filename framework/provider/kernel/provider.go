@@ -21,7 +21,6 @@ func (provider *YgoKernelProvider) Boot(c framework.Container) error {
 	if provider.HttpEngine == nil {
 		provider.HttpEngine = gin.Default()
 	}
-	provider.HttpEngine.SetContainer(c)
 	return nil
 }
 

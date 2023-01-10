@@ -4,12 +4,13 @@ go 1.17
 
 require (
 	github.com/gin-contrib/sse v0.1.0
-	github.com/go-playground/validator/v10 v10.9.0
+	github.com/go-playground/validator/v10 v10.10.0
 	github.com/golang/protobuf v1.5.2
 	github.com/json-iterator/go v1.1.12
 	github.com/mattn/go-isatty v0.0.14
 	github.com/stretchr/testify v1.8.1
-	github.com/ugorji/go/codec v1.2.6
+	github.com/ugorji/go/codec v1.2.7
+	golang.org/x/net v0.2.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -46,7 +47,6 @@ require (
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/skeema/knownhosts v1.1.0 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
-	golang.org/x/net v0.2.0 // indirect
 	golang.org/x/term v0.2.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect

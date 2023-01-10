@@ -22,3 +22,7 @@
 // @x-extension-openapi {"example": "value on a json format"}
 
 package http
+
+import (
+	_ "github.com/y19941115mx/ygo/app/http/swagger"
+)
