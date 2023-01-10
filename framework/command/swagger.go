@@ -43,6 +43,8 @@ var swaggerGenCommand = &cobra.Command{
 			Excludes: "",
 			// 输出目录
 			OutputDir: outputDir,
+			// 输出类型
+			OutputTypes: []string{"go", "json", "yaml"},
 			// 整个swagger接口的说明文档注释
 			MainAPIFile: "swagger.go",
 			// 名字的显示策略，比如首字母大写等
