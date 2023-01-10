@@ -21,7 +21,7 @@ func (provider *YgoEnvProvider) Boot(c framework.Container) error {
 
 // IsDefer define whether the service instantiate when first make or register
 func (provider *YgoEnvProvider) IsDefer() bool {
-	return true
+	return false
 }
 
 // Params define the necessary params for NewInstance

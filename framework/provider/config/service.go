@@ -3,7 +3,6 @@ package config
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -41,7 +40,7 @@ func (conf *YgoConfig) loadConfigFile(folder string, file string) error {
 		name := s[0]
 
 		// 读取文件内容
-		bf, err := ioutil.ReadFile(filepath.Join(folder, file))
+		bf, err := os.ReadFile(filepath.Join(folder, file))
 		if err != nil {
 			return err
 		}
@@ -111,7 +110,7 @@ func NewYgoConfig(params ...interface{}) (interface{}, error) {
 	}
 
 	// 读取每个文件
-	files, err := ioutil.ReadDir(envFolder)
+	files, err := os.ReadDir(envFolder)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}

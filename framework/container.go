@@ -68,10 +68,10 @@ func (hade *YgoContainer) PrintProviders() []string {
 // Bind 将服务容器和关键字做了绑定
 func (hade *YgoContainer) Bind(provider ServiceProvider) error {
 	hade.lock.Lock()
-	defer hade.lock.Unlock()
 	key := provider.Name()
 
 	hade.providers[key] = provider
+	hade.lock.Unlock()
 
 	// if provider is not defer
 	if !provider.IsDefer() {

@@ -66,9 +66,9 @@ func NewYgoEnv(params ...interface{}) (interface{}, error) {
 			if len(s) < 2 {
 				continue
 			}
-			// 保存map
-			key := string(s[0])
-			val := string(s[1])
+
+			key := string(bytes.TrimSpace(s[0]))
+			val := string(bytes.TrimSpace(s[1]))
 			ygoEnv.maps[key] = val
 		}
 	}

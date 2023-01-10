@@ -1,15 +1,14 @@
 package contract
 
 const (
+	// EnvKey 是环境变量服务字符串凭证
+	EnvKey = "ygo:env"
 	// EnvProduction 代表生产环境
 	EnvProduction = "production"
 	// EnvTesting 代表测试环境
 	EnvTesting = "testing"
 	// EnvDevelopment 代表开发环境
 	EnvDevelopment = "development"
-
-	// EnvKey 是环境变量服务字符串凭证
-	EnvKey = "ygo:env"
 )
 
 // Env 定义环境变量的获取服务

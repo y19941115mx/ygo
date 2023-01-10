@@ -5,8 +5,8 @@ remote_folder: /root/go/project/
 backend:
   goos: linux
   goarch: amd64
-#   pre_action:
-#     - rm /root/go/project/ygo || ture
+  pre_action:
+    - rm /root/go/project/ygo || true
   post_action:
     - chmod 777 /root/go/project/ygo
     - /root/go/project/ygo app restart
