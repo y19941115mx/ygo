@@ -29,7 +29,7 @@ func initDeployCommand() *cobra.Command {
 // deployCommand 一级命令，显示帮助信息
 var deployCommand = &cobra.Command{
 	Use:   "deploy",
-	Short: "部署相关命令",
+	Short: "部署项目的命令，支持回滚操作",
 	RunE: func(c *cobra.Command, args []string) error {
 		container := c.GetContainer()
 
@@ -80,12 +80,12 @@ func deployBuildBackend(c *cobra.Command, deployFolder string) error {
 
 	env := envService.AppEnv()
 
-	binFile := "hade"
+	binFile := "ygo"
 
 	// 编译前端
 	path, err := exec.LookPath("go")
 	if err != nil {
-		log.Fatalln("hade go: 请在Path路径中先安装go")
+		log.Fatalln("请在Path路径中先安装go")
 	}
 
 	// 组装命令
@@ -229,18 +229,20 @@ func deployUploadAction(deployFolder string, container framework.Container) erro
 // 上传部署文件夹
 func uploadFolderToSFTP(container framework.Container, localFolder, remoteFolder string, client *sftp.Client) error {
 	logger := container.MustMake(contract.LogKey).(contract.Log)
-	// 遍历本地文件
+	// 遍历 deploy 文件夹
 	return filepath.Walk(localFolder, func(path string, info os.FileInfo, err error) error {
-		// 获取除了folder前缀的后续文件名称
+		// 相对 deploy 文件夹的相对路径
 		relPath := strings.Replace(path, localFolder, "", 1)
 		if relPath == "" {
 			return nil
 		}
 		// 如果是遍历到了一个目录
 		if info.IsDir() {
-			logger.Info(context.Background(), "mkdir: "+filepath.Join(remoteFolder, relPath), nil)
+			dirPath := toLinuxPath(filepath.Join(remoteFolder, relPath))
+			logger.Info(context.Background(), "mkdir: "+dirPath, nil)
+
 			// 创建这个目录
-			return client.MkdirAll(filepath.Join(remoteFolder, relPath))
+			return client.MkdirAll(dirPath)
 		}
 
 		// 打开本地的文件
@@ -255,16 +257,17 @@ func uploadFolderToSFTP(container framework.Container, localFolder, remoteFolder
 			return err
 		}
 		// 打开/创建远端文件
-		f, err := client.Create(filepath.Join(remoteFolder, relPath))
+		remoteFilePath := toLinuxPath(filepath.Join(remoteFolder, relPath))
+		f, err := client.Create(remoteFilePath)
 		if err != nil {
-			return errors.New("create file " + filepath.Join(remoteFolder, relPath) + " error:" + err.Error())
+			return errors.New("create file " + remoteFilePath + " error:" + err.Error())
 		}
 		defer f.Close()
 
 		// 大于2M的文件显示进度
 		if rfStat.Size() > 2*1024*1024 {
 			logger.Info(context.Background(), "upload local file: "+filepath.Join(localFolder, relPath)+
-				" to remote file: "+filepath.Join(remoteFolder, relPath)+" start", nil)
+				" to remote file: "+remoteFilePath+" start", nil)
 			// 开启一个goroutine来不断计算进度
 			go func(localFile, remoteFile string) {
 				// 每10s计算一次
@@ -287,18 +290,18 @@ func uploadFolderToSFTP(container framework.Container, localFolder, remoteFolder
 					// 计算进度并且打印进度
 					percent := int(size * 100 / rfStat.Size())
 					logger.Info(context.Background(), "upload local file: "+filepath.Join(localFolder, relPath)+
-						" to remote file: "+filepath.Join(remoteFolder, relPath)+fmt.Sprintf(" %v%% %v/%v", percent, size, rfStat.Size()), nil)
+						" to remote file: "+remoteFile+fmt.Sprintf(" %v%% %v/%v", percent, size, rfStat.Size()), nil)
 				}
-			}(filepath.Join(localFolder, relPath), filepath.Join(remoteFolder, relPath))
+			}(filepath.Join(localFolder, relPath), remoteFilePath)
 		}
 
 		// 将本地文件并发读取到远端文件
 		if _, err := f.ReadFromWithConcurrency(rf, 10); err != nil {
-			return errors.New("Write file " + filepath.Join(remoteFolder, relPath) + " error:" + err.Error())
+			return errors.New("Write file " + remoteFilePath + " error:" + err.Error())
 		}
 		// 记录成功信息
 		logger.Info(context.Background(), "upload local file: "+filepath.Join(localFolder, relPath)+
-			" to remote file: "+filepath.Join(remoteFolder, relPath)+" finish", nil)
+			" to remote file: "+remoteFilePath+" finish", nil)
 		return nil
 	})
 }
@@ -311,7 +314,11 @@ func createDeployFolder(c framework.Container) (string, error) {
 	deployVersion := time.Now().Format("20060102150405")
 	versionFolder := filepath.Join(deployFolder, deployVersion)
 	if !util.Exists(versionFolder) {
-		return versionFolder, os.Mkdir(versionFolder, os.ModePerm)
+		return versionFolder, os.MkdirAll(versionFolder, os.ModePerm)
 	}
 	return versionFolder, nil
+}
+
+func toLinuxPath(path string) string {
+	return strings.ReplaceAll(path, "\\", "/")
 }

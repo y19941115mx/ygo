@@ -12,6 +12,7 @@ import (
 	"github.com/y19941115mx/ygo/framework/provider/env"
 	"github.com/y19941115mx/ygo/framework/provider/kernel"
 	"github.com/y19941115mx/ygo/framework/provider/log"
+	"github.com/y19941115mx/ygo/framework/provider/ssh"
 	"github.com/y19941115mx/ygo/framework/provider/trace"
 )
 
@@ -28,6 +29,8 @@ func main() {
 	container.Bind(&log.YgoLogServiceProvider{})
 	// 绑定trace全链条日志
 	container.Bind(&trace.YgoTraceProvider{})
+	// 绑定ssh服务
+	container.Bind(&ssh.SSHProvider{})
 
 	// 将HTTP引擎初始化,并且作为服务提供者绑定到服务容器中
 	if engine, err := http.NewHttpEngine(); err == nil {

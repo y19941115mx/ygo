@@ -2,6 +2,7 @@ package command
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -12,6 +13,7 @@ import (
 	"time"
 
 	"github.com/sevlyar/go-daemon"
+	"github.com/shirou/gopsutil/process"
 	"github.com/y19941115mx/ygo/framework"
 	"github.com/y19941115mx/ygo/framework/cobra"
 	"github.com/y19941115mx/ygo/framework/contract"
@@ -28,8 +30,8 @@ func initAppCommand() *cobra.Command {
 	appStartCommand.Flags().StringVarP(&appPort, "port", "p", "", "设置app启动的端口号默认为8888")
 	appCommand.AddCommand(appStartCommand)
 	appCommand.AddCommand(appStateCommand)
-	// appCommand.AddCommand(appReStartCommand)
-	// appCommand.AddCommand(appStopCommand)
+	appCommand.AddCommand(appRestartCommand)
+	appCommand.AddCommand(appStopCommand)
 	return appCommand
 }
 
@@ -152,99 +154,105 @@ var appStartCommand = &cobra.Command{
 }
 
 // 重新启动一个app服务
-// var appRestartCommand = &cobra.Command{
-//     Use:   "restart",
-//     Short: "重新启动一个app服务",
-//     RunE: func(c *cobra.Command, args []string) error {
-//         container := c.GetContainer()
-//         appService := container.MustMake(contract.AppKey).(contract.App)
+var appRestartCommand = &cobra.Command{
+	Use:   "restart",
+	Short: "重新启动一个app服务",
+	RunE: func(c *cobra.Command, args []string) error {
+		container := c.GetContainer()
+		appService := container.MustMake(contract.AppKey).(contract.App)
 
-//         // GetPid
-//         serverPidFile := filepath.Join(appService.RuntimeFolder(), "app.pid")
+		// GetPid
+		serverPidFile := filepath.Join(appService.RuntimeFolder(), "app.pid")
 
-//         content, err := os.ReadFile(serverPidFile)
-//         if err != nil {
-//             return err
-//         }
+		// 不存在pid文件 直接daemon方式启动apps
+		if !util.Exists(serverPidFile) {
+			appDaemon = true
+			return appStartCommand.RunE(c, args)
+		}
 
-//         if content != nil && len(content) != 0 {
-//             pid, err := strconv.Atoi(string(content))
-//             if err != nil {
-//                 return err
-//             }
-//             if util.CheckProcessExist(pid) {
-//                 // 杀死进程
-//                 if err := syscall.Kill(pid, syscall.SIGTERM); err != nil {
-//                     return err
-//                 }
+		content, err := os.ReadFile(serverPidFile)
+		if err != nil {
+			return err
+		}
 
-//                 // 获取closeWait
-//                 closeWait := 5
-//                 configService := container.MustMake(contract.ConfigKey).(contract.Config)
-//                 if configService.IsExist("app.close_wait") {
-//                     closeWait = configService.GetInt("app.close_wait")
-//                 }
+		if len(content) != 0 {
+			pid, err := strconv.Atoi(string(content))
+			if err != nil {
+				return err
+			}
+			if util.CheckProcessExist(pid) {
+				// 杀死进程
+				if err := killPid(pid); err != nil {
+					return err
+				}
+				// 获取closeWait
+				closeWait := 5
+				configService := container.MustMake(contract.ConfigKey).(contract.Config)
+				if configService.IsExist("app.close_wait") {
+					closeWait = configService.GetInt("app.close_wait")
+				}
 
-//                 // 确认进程已经关闭,每秒检测一次， 最多检测closeWait * 2秒
-//                 for i := 0; i < closeWait*2; i++ {
-//                     if util.CheckProcessExist(pid) == false {
-//                         break
-//                     }
-//                     time.Sleep(1 * time.Second)
-//                 }
+				// 确认进程已经关闭,每秒检测一次， 最多检测closeWait * 2秒
+				for i := 0; i < closeWait*2; i++ {
+					if !util.CheckProcessExist(pid) {
+						break
+					}
+					time.Sleep(1 * time.Second)
+				}
 
-//                 // 如果进程等待了2*closeWait之后还没结束，返回错误，不进行后续的操作
-//                 if util.CheckProcessExist(pid) == true {
-//                     fmt.Println("结束进程失败:"+strconv.Itoa(pid), "请查看原因")
-//                     return errors.New("结束进程失败")
-//                 }
-//                 if err := os.WriteFile(serverPidFile, []byte{}, 0644); err != nil {
-//                     return err
-//                 }
+				// 如果进程等待了2*closeWait之后还没结束，返回错误，不进行后续的操作
+				if util.CheckProcessExist(pid) {
+					fmt.Println("结束进程失败:"+strconv.Itoa(pid), "请查看原因")
+					return errors.New("结束进程失败")
+				}
+				if err := os.WriteFile(serverPidFile, []byte{}, 0644); err != nil {
+					return err
+				}
 
-//                 fmt.Println("结束进程成功:" + strconv.Itoa(pid))
-//             }
-//         }
+				fmt.Println("结束进程成功:" + strconv.Itoa(pid))
+			}
+		}
 
-//         appDaemon = true
-//         // 直接daemon方式启动apps
-//         return appStartCommand.RunE(c, args)
-//     },
-// }
+		appDaemon = true
+		// 直接daemon方式启动apps
+		return appStartCommand.RunE(c, args)
+	},
+}
 
-// // 停止一个已经启动的app服务
-// var appStopCommand = &cobra.Command{
-//     Use:   "stop",
-//     Short: "停止一个已经启动的app服务",
-//     RunE: func(c *cobra.Command, args []string) error {
-//         container := c.GetContainer()
-//         appService := container.MustMake(contract.AppKey).(contract.App)
+// 停止一个已经启动的app服务
+var appStopCommand = &cobra.Command{
+	Use:   "stop",
+	Short: "停止一个已经启动的app服务",
+	RunE: func(c *cobra.Command, args []string) error {
+		container := c.GetContainer()
+		appService := container.MustMake(contract.AppKey).(contract.App)
 
-//         // GetPid
-//         serverPidFile := filepath.Join(appService.RuntimeFolder(), "app.pid")
+		// GetPid
+		serverPidFile := filepath.Join(appService.RuntimeFolder(), "app.pid")
 
-//         content, err := os.ReadFile(serverPidFile)
-//         if err != nil {
-//             return err
-//         }
+		content, err := os.ReadFile(serverPidFile)
+		if err != nil {
+			return err
+		}
 
-//         if content != nil && len(content) != 0 {
-//             pid, err := strconv.Atoi(string(content))
-//             if err != nil {
-//                 return err
-//             }
-//             // 发送SIGTERM命令
-//             if err := syscall.Kill(pid, syscall.SIGTERM); err != nil {
-//                 return err
-//             }
-//             if err := os.WriteFile(serverPidFile, []byte{}, 0644); err != nil {
-//                 return err
-//             }
-//             fmt.Println("停止进程:", pid)
-//         }
-//         return nil
-//     },
-// }
+		if len(content) != 0 {
+			pid, err := strconv.Atoi(string(content))
+			if err != nil {
+				return err
+			}
+			// 杀死进程
+			if err := killPid(pid); err != nil {
+				return err
+			}
+			if err := os.WriteFile(serverPidFile, []byte{}, 0644); err != nil {
+				return err
+			}
+			fmt.Println("停止进程:", pid)
+		}
+		return nil
+	},
+}
+
 // 获取启动的app的pid
 var appStateCommand = &cobra.Command{
 	Use:   "state",
@@ -300,6 +308,19 @@ func startAppServe(server *http.Server, c framework.Container) error {
 	defer cancel()
 
 	if err := server.Shutdown(timeoutCtx); err != nil {
+		return err
+	}
+	return nil
+}
+
+func killPid(pid int) error {
+	p, err := process.NewProcess(int32(pid))
+	// 杀死进程
+	if err != nil {
+		return err
+	}
+
+	if err := p.Kill(); err != nil {
 		return err
 	}
 	return nil

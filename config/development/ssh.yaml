@@ -10,9 +10,8 @@ ali:
     host: 47.92.132.42 # ip地址
     port: 22 # 端口
     username: root # 用户名
-    rsa_key: "C:\Users\19608\.ssh\id_rsa"
-    known_hosts: "C:\Users\19608\.ssh/known_hosts"
-
+    rsa_key: C:\Users\19608\.ssh\id_rsa
+    known_hosts: C:\Users\19608\.ssh/known_hosts
 
 #host: localhost # ip地址
 #port: 3306 # 端口
