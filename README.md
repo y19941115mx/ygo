@@ -21,8 +21,6 @@ todo
 
 需要安装：
 1. go环境
-2. gcc环境
-
 
 执行 `go build`
 
