@@ -19,23 +19,6 @@ info:
   title: ygo
   version: "1.1"
 paths:
-  /demo/demo:
-    get:
-      description: 获取所有用户
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              items:
-                $ref: '#/definitions/demo.UserDTO'
-              type: array
-            type: array
-      summary: 获取所有用户
-      tags:
-      - demo
   /demo/demo2:
     get:
       description: 获取所有学生

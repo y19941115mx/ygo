@@ -16,32 +16,6 @@
     },
     "basePath": "/",
     "paths": {
-        "/demo/demo": {
-            "get": {
-                "description": "获取所有用户",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "demo"
-                ],
-                "summary": "获取所有用户",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/demo.UserDTO"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/demo/demo2": {
             "get": {
                 "description": "获取所有学生",

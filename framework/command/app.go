@@ -240,14 +240,20 @@ var appStopCommand = &cobra.Command{
 			if err != nil {
 				return err
 			}
-			// 杀死进程
-			if err := killPid(pid); err != nil {
-				return err
+
+			if util.CheckProcessExist(pid) {
+				// 杀死进程
+				if err := killPid(pid); err != nil {
+					return err
+				}
+				fmt.Println("停止进程:", pid)
+			} else {
+				fmt.Printf("停止进程失败，进程%d已关闭", pid)
 			}
+
 			if err := os.WriteFile(serverPidFile, []byte{}, 0644); err != nil {
 				return err
 			}
-			fmt.Println("停止进程:", pid)
 		}
 		return nil
 	},

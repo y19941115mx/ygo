@@ -1,8 +1,0 @@
-address: 8888
-
-
-swagger: true
-
-path:
-#  log_folder: "/home/jianfengye/hade/log/"
-#  runtime_folder: "/home/jianfengye/hade/runtime/"

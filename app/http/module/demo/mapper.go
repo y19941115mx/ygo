@@ -4,18 +4,6 @@ import (
 	demoService "github.com/y19941115mx/ygo/app/provider/demo"
 )
 
-func UserModelsToUserDTOs(models []UserModel) []UserDTO {
-	ret := []UserDTO{}
-	for _, model := range models {
-		t := UserDTO{
-			ID:   model.UserId,
-			Name: model.Name,
-		}
-		ret = append(ret, t)
-	}
-	return ret
-}
-
 func StudentsToUserDTOs(students []demoService.Student) []UserDTO {
 	ret := []UserDTO{}
 	for _, student := range students {
