@@ -15,7 +15,7 @@ func DemoRedis(c *gin.Context) {
 
 	// 初始化一个redis
 	redisService := c.MustMake(contract.RedisKey).(contract.RedisService)
-	client, err := redisService.GetClient(redis.WithConfigPath("cache.default"), redis.WithRedisConfig(func(options *contract.RedisConfig) {
+	client, err := redisService.GetClient(redis.WithConfigPath("redis.default"), redis.WithRedisConfig(func(options *contract.RedisConfig) {
 		options.MaxRetries = 3
 	}))
 	if err != nil {

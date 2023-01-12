@@ -2,7 +2,7 @@ timeout: 10s # 连接超时
 read_timeout: 2s # 读超时
 write_timeout: 2s # 写超时
 
-write:
+default:
     host: localhost # ip地址
     port: 3306 # 端口
     db: 0 #db
