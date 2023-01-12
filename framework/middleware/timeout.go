@@ -5,7 +5,6 @@ package middleware
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"time"
 
@@ -35,10 +34,10 @@ func Timeout(d time.Duration) gin.HandlerFunc {
 		// 执行业务逻辑后操作
 		select {
 		case p := <-panicChan:
-			c.ISetStatus(500).IJson("time out")
+			c.ISetStatus(500).IJson("system err")
 			log.Println(p)
 		case <-finish:
-			fmt.Println("finish")
+			return
 		case <-durationCtx.Done():
 			c.ISetStatus(500).IJson("time out")
 		}
