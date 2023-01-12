@@ -3,7 +3,7 @@ package contract
 import (
 	"fmt"
 
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"github.com/y19941115mx/ygo/framework"
 )
 
@@ -25,5 +25,5 @@ type RedisConfig struct {
 
 // UniqKey 用来唯一标识一个RedisConfig配置
 func (config *RedisConfig) UniqKey() string {
-	return fmt.Sprintf("%v_%v_%v", config.Addr, config.DB, config.Network)
+	return fmt.Sprintf("%v_%v_%v_%v", config.Addr, config.DB, config.Username, config.Network)
 }

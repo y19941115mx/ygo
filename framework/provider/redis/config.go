@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"github.com/y19941115mx/ygo/framework"
 	"github.com/y19941115mx/ygo/framework/contract"
 )
