@@ -5,6 +5,8 @@ import (
 	"github.com/y19941115mx/ygo/framework/gin"
 )
 
+type api struct{}
+
 func Register(r *gin.Engine) error {
 	r.Bind(&demoService.DemoProvider{})
 	group := r.Group("/demo")
