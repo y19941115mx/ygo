@@ -153,15 +153,15 @@ func NewYgoConfig(params ...interface{}) (interface{}, error) {
 					fileName := path[index+1:]
 
 					if ev.Op&fsnotify.Create == fsnotify.Create {
-						log.Println("创建文件 : ", ev.Name)
+						log.Println("创建配置文件 : ", ev.Name)
 						ygoConf.loadConfigFile(folder, fileName)
 					}
 					if ev.Op&fsnotify.Write == fsnotify.Write {
-						log.Println("写入文件 : ", ev.Name)
+						log.Println("修改配置文件 : ", ev.Name)
 						ygoConf.loadConfigFile(folder, fileName)
 					}
 					if ev.Op&fsnotify.Remove == fsnotify.Remove {
-						log.Println("删除文件 : ", ev.Name)
+						log.Println("删除配置文件 : ", ev.Name)
 						ygoConf.removeConfigFile(folder, fileName)
 					}
 				}

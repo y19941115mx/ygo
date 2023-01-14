@@ -81,7 +81,7 @@ func monitorBackend(container framework.Container) error {
 					fmt.Println("重新启动失败：", err.Error())
 				}
 			}
-			fmt.Println("...检测到文件更新，重启服务结束...")
+			fmt.Println("OK 重启服务成功...")
 			// 停止计时器
 			t.Stop()
 		case _, ok := <-watcher.Events:

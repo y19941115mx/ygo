@@ -18,5 +18,5 @@ func Routes(r *gin.Engine) {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 	// 动态路由定义
-	demo.Register(r)
+	demo.RegisterRoutes(r)
 }

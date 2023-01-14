@@ -5,14 +5,16 @@ import (
 	"github.com/y19941115mx/ygo/framework/gin"
 )
 
-type api struct{}
+type DemoApi struct{}
 
-func Register(r *gin.Engine) error {
+// RegisterRoutes 注册路由
+func RegisterRoutes(r *gin.Engine) error {
+	api := &DemoApi{}
 	r.Bind(&demoService.DemoProvider{})
 	group := r.Group("/demo")
 
-	group.GET("/demo", Demo)
-	group.POST("/demo_post", DemoPost)
+	group.GET("/demo", api.Demo)
+	group.POST("/demo_post", api.DemoPost)
 	return nil
 }
 
@@ -23,14 +25,14 @@ func Register(r *gin.Engine) error {
 // @Tags demo
 // @Success 200 array []UserDTO
 // @Router /demo/demo [get]
-func Demo(c *gin.Context) {
+func (api *DemoApi) Demo(c *gin.Context) {
 	demoProvider := c.MustMake(demoService.DemoKey).(demoService.IService)
 	students := demoProvider.GetAllStudent()
 	usersDTO := StudentsToUserDTOs(students)
 	c.JSON(200, usersDTO)
 }
 
-func DemoPost(c *gin.Context) {
+func (api *DemoApi) DemoPost(c *gin.Context) {
 	type Foo struct {
 		Name string
 	}

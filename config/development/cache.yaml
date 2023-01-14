@@ -1,4 +1,4 @@
-driver: redis # 连接驱动
+driver: redis # 连接驱动 支持redis 与 cache
 host: 127.0.0.1 # ip地址
 port: 6379 # 端口
 db: 0 #db

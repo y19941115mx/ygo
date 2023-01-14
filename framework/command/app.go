@@ -31,6 +31,7 @@ func initAppCommand() *cobra.Command {
 	appCommand.AddCommand(appStateCommand)
 	appCommand.AddCommand(appRestartCommand)
 	appCommand.AddCommand(appStopCommand)
+	appCommand.AddCommand(initDevCommand())
 	return appCommand
 }
 
