@@ -93,11 +93,6 @@ func NewYgoConfig(params ...interface{}) (interface{}, error) {
 	env := envService.AppEnv()
 	configFolder := appService.ConfigFolder()
 	envFolder := filepath.Join(configFolder, env)
-	// 检查文件夹是否存在
-	if _, err := os.Stat(envFolder); os.IsNotExist(err) {
-		return nil, errors.New("folder " + envFolder + " not exist: " + err.Error())
-	}
-
 	// 实例化
 	ygoConf := &YgoConfig{
 		c:        container,
@@ -107,6 +102,10 @@ func NewYgoConfig(params ...interface{}) (interface{}, error) {
 		confRaws: map[string][]byte{},
 		keyDelim: ".",
 		lock:     sync.RWMutex{},
+	}
+	// 检查配置文件夹是否存在
+	if _, err := os.Stat(envFolder); os.IsNotExist(err) {
+		return ygoConf, nil
 	}
 
 	// 读取每个文件

@@ -4,5 +4,5 @@ address: 8888
 swagger: true
 
 path:
-#  log_folder: "/home/jianfengye/hade/log/"
+#  log_folder: "/home/jianfengye/hade/log/" # 支持配置的方式指定路径
 #  runtime_folder: "/home/jianfengye/hade/runtime/"
