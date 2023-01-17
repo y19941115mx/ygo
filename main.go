@@ -8,6 +8,7 @@ import (
 	"github.com/y19941115mx/ygo/app/http"
 	"github.com/y19941115mx/ygo/framework"
 	"github.com/y19941115mx/ygo/framework/provider/app"
+	"github.com/y19941115mx/ygo/framework/provider/cache"
 	"github.com/y19941115mx/ygo/framework/provider/config"
 	"github.com/y19941115mx/ygo/framework/provider/env"
 	"github.com/y19941115mx/ygo/framework/provider/kernel"
@@ -28,6 +29,8 @@ func main() {
 	container.Bind(&config.YgoConfigProvider{})
 	// 绑定日志服务
 	container.Bind(&log.YgoLogServiceProvider{})
+	// 绑定缓存服务
+	container.Bind(&cache.CacheProvider{})
 	// 绑定trace全链条日志
 	container.Bind(&trace.YgoTraceProvider{})
 	// 绑定ssh服务

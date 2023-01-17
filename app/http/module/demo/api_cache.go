@@ -41,7 +41,7 @@ func DemoRedis(c *gin.Context) {
 }
 
 // DemoCache cache的简单例子
-func DemoCache(c *gin.Context) {
+func (api *DemoApi) DemoCache(c *gin.Context) {
 	logger := c.MustMakeLog()
 	logger.Info(c, "request start", nil)
 	// 初始化cache服务

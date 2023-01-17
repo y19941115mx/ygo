@@ -52,19 +52,32 @@ type DBConfig struct {
 
 // FormatDsn 生成dsn
 func (conf *DBConfig) FormatDsn() (string, error) {
+	var err error
+	var timeout, readTimeout, writeTimeout time.Duration
+
 	port := strconv.Itoa(conf.Port)
-	timeout, err := time.ParseDuration(conf.Timeout)
-	if err != nil {
-		timeout = 0
+
+	if conf.Timeout != "" {
+		timeout, err = time.ParseDuration(conf.Timeout)
+		if err != nil {
+			return "", err
+		}
 	}
-	readTimeout, err := time.ParseDuration(conf.ReadTimeout)
-	if err != nil {
-		readTimeout = 0
+
+	if conf.ReadTimeout != "" {
+		readTimeout, err = time.ParseDuration(conf.ReadTimeout)
+		if err != nil {
+			return "", err
+		}
 	}
-	writeTimeout, err := time.ParseDuration(conf.WriteTimeout)
-	if err != nil {
-		writeTimeout = 0
+
+	if conf.WriteTimeout != "" {
+		writeTimeout, err = time.ParseDuration(conf.WriteTimeout)
+		if err != nil {
+			return "", err
+		}
 	}
+
 	location, err := time.LoadLocation(conf.Loc)
 	if err != nil {
 		return "", err
