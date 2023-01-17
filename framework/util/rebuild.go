@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
+	"runtime"
 )
 
 func RebuildApp() error {
@@ -11,16 +12,20 @@ func RebuildApp() error {
 	if err != nil {
 		log.Fatalln("hade go: 请在Path路径中先安装go")
 	}
+	var binFile string
+	sysType := runtime.GOOS
 
-	// modCmd := exec.Command(path, "mod", "tidy", "-compat=1.17")
-	// if out, err := modCmd.CombinedOutput(); err != nil {
-	// 	fmt.Println("go mod tidy error:")
-	// 	fmt.Println(string(out))
-	// 	fmt.Println("--------------")
-	// 	return err
-	// }
+	if sysType == "linux" {
+		// LINUX系统
+		binFile = "ygo"
+	}
 
-	buildCmd := exec.Command(path, "build", "-o", "ygo")
+	if sysType == "windows" {
+		// windows系统
+		binFile = "ygo.exe"
+	}
+
+	buildCmd := exec.Command(path, "build", "-o", binFile)
 	if out, err := buildCmd.CombinedOutput(); err != nil {
 		fmt.Println("go build error:")
 		fmt.Println(string(out))

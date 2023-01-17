@@ -6,11 +6,14 @@ func AddKernelCommands(root *cobra.Command) {
 	// app
 	root.AddCommand(initAppCommand())
 
-	// cobar
+	// cron
 	root.AddCommand(initCronCommand())
 
 	// env
 	root.AddCommand(initEnvCommand())
+
+	// build
+	root.AddCommand(initBuildCommand())
 
 	// config
 	root.AddCommand(initConfigCommand())

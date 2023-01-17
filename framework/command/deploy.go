@@ -79,8 +79,11 @@ func deployBuildBackend(c *cobra.Command, deployFolder string) error {
 	logger := container.MustMake(contract.LogKey).(contract.Log)
 
 	env := envService.AppEnv()
-
 	binFile := "ygo"
+
+	if configService.GetString("deploy.backend.binFile") != "" {
+		binFile = configService.GetString("deploy.backend.binFile")
+	}
 
 	// 编译前端
 	path, err := exec.LookPath("go")

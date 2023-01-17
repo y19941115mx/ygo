@@ -5,6 +5,7 @@ remote_folder: /root/go/project/
 backend:
   goos: linux
   goarch: amd64
+  binFile: ygo
   pre_action:
     - rm /root/go/project/ygo || true
   post_action:
