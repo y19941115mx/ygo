@@ -110,7 +110,8 @@ func restartService() error {
 	}
 	// 使用命令行启动后端进程 指定端口
 	cmd := exec.Command("./ygo", "app", "start", "--port=", fmt.Sprint(devPort))
-	cmd.Stdout = os.NewFile(0, os.DevNull)
+	// cmd.Stdout = os.NewFile(0, os.DevNull)
+	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	fmt.Println("启动调试服务: ", "http://127.0.0.1:", devPort)
 	err := cmd.Start()
