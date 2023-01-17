@@ -11,7 +11,7 @@ import (
 )
 
 // DemoOrm Orm的路由方法
-func DemoOrm(c *gin.Context) {
+func (api *DemoApi) DemoOrm(c *gin.Context) {
 	logger := c.MustMakeLog()
 	logger.Info(c, "request start", nil)
 

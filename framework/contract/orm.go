@@ -55,15 +55,15 @@ func (conf *DBConfig) FormatDsn() (string, error) {
 	port := strconv.Itoa(conf.Port)
 	timeout, err := time.ParseDuration(conf.Timeout)
 	if err != nil {
-		return "", err
+		timeout = 0
 	}
 	readTimeout, err := time.ParseDuration(conf.ReadTimeout)
 	if err != nil {
-		return "", err
+		readTimeout = 0
 	}
 	writeTimeout, err := time.ParseDuration(conf.WriteTimeout)
 	if err != nil {
-		return "", err
+		writeTimeout = 0
 	}
 	location, err := time.LoadLocation(conf.Loc)
 	if err != nil {

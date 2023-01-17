@@ -14,6 +14,7 @@ func RegisterRoutes(r *gin.Engine) error {
 	group := r.Group("/demo")
 
 	group.GET("/demo", api.Demo)
+	group.GET("/demo2", api.DemoOrm)
 	group.POST("/demo_post", api.DemoPost)
 	return nil
 }

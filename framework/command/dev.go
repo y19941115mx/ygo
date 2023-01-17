@@ -20,7 +20,7 @@ var backendPid = 0
 
 // 初始化Dev命令
 func initDevCommand() *cobra.Command {
-	devCommand.Flags().IntVarP(&refreshTime, "time", "t", 1, "如果发生文件变更，等待设置的时间再进行更新, 默认2s")
+	devCommand.Flags().IntVarP(&refreshTime, "time", "t", 1, "如果发生文件变更，等待设置的时间再进行更新, 默认1s")
 	devCommand.Flags().IntVarP(&devPort, "port", "p", 8888, "启动调试模式的服务端口号，默认为8888")
 	return devCommand
 }
