@@ -30,6 +30,9 @@ var devCommand = &cobra.Command{
 	Use:   "dev",
 	Short: "启动调试模式",
 	RunE: func(c *cobra.Command, args []string) error {
+		if err := util.RebuildApp(); err != nil {
+			fmt.Println("编译失败：", err.Error())
+		}
 		go monitorBackend(c.GetContainer())
 		// 启动服务
 		if err := restartService(); err != nil {
@@ -76,12 +79,11 @@ func monitorBackend(container framework.Container) error {
 			fmt.Println("...检测到文件更新，重启服务开始...")
 			if err := util.RebuildApp(); err != nil {
 				fmt.Println("重新编译失败：", err.Error())
+			} else if err := restartService(); err != nil {
+				fmt.Println("重启服务失败：", err.Error())
 			} else {
-				if err := restartService(); err != nil {
-					fmt.Println("重新启动失败：", err.Error())
-				}
+				fmt.Println("OK 重启服务成功...")
 			}
-			fmt.Println("OK 重启服务成功...")
 			// 停止计时器
 			t.Stop()
 		case _, ok := <-watcher.Events:

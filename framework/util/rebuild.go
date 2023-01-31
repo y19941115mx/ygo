@@ -10,7 +10,7 @@ import (
 func RebuildApp() error {
 	path, err := exec.LookPath("go")
 	if err != nil {
-		log.Fatalln("hade go: 请在Path路径中先安装go")
+		log.Fatalln("ygo go: 请在Path路径中先安装go")
 	}
 	var binFile string
 	sysType := runtime.GOOS
