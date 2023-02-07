@@ -133,8 +133,6 @@ import (
 
 type {{.|title}}Provider struct {
 	framework.ServiceProvider
-
-	c framework.Container
 }
 
 func (sp *{{.|title}}Provider) Name() string {
