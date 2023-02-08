@@ -15,7 +15,6 @@ import (
 	"github.com/y19941115mx/ygo/framework/provider/log"
 	"github.com/y19941115mx/ygo/framework/provider/orm"
 	"github.com/y19941115mx/ygo/framework/provider/ssh"
-	"github.com/y19941115mx/ygo/framework/provider/trace"
 )
 
 func main() {
@@ -31,9 +30,7 @@ func main() {
 	container.Bind(&log.YgoLogServiceProvider{})
 	// 绑定缓存服务
 	container.Bind(&cache.CacheProvider{})
-	// 绑定trace全链条日志
-	container.Bind(&trace.YgoTraceProvider{})
-	// 绑定ssh服务
+	// 绑定ssh远程部署服务
 	container.Bind(&ssh.SSHProvider{})
 	// 绑定orm服务
 	container.Bind(&orm.GormProvider{})
