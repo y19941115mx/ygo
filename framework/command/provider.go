@@ -132,6 +132,7 @@ import (
 )
 
 type {{.|title}}Provider struct {
+	Service
 	framework.ServiceProvider
 }
 
