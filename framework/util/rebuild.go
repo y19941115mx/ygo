@@ -32,6 +32,6 @@ func RebuildApp() error {
 		fmt.Println("--------------")
 		return err
 	}
-	fmt.Println("重新编译成功")
+	fmt.Println("本地编译成功")
 	return nil
 }
