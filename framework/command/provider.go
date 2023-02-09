@@ -132,7 +132,6 @@ import (
 )
 
 type {{.|title}}Provider struct {
-	Service
 	framework.ServiceProvider
 }
 
@@ -163,6 +162,7 @@ var serviceTmp string = `package {{.}}
 import "github.com/y19941115mx/ygo/framework"
 
 type {{.|title}}Service struct {
+	Service
 	container framework.Container
 }
 

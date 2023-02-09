@@ -74,6 +74,25 @@ func (t *YgoTraceService) NewTrace() *contract.TraceContext {
 	return tc
 }
 
+// GetTrace By Http
+func (t *YgoTraceService) ExtractHTTP(req *http.Request) *contract.TraceContext {
+	tc := &contract.TraceContext{}
+	tc.TraceID = req.Header.Get(contract.TraceKeyTraceID)
+	tc.ParentID = req.Header.Get(contract.TraceKeySpanID)
+	tc.SpanID = req.Header.Get(contract.TraceKeyCspanID)
+	tc.CspanID = ""
+
+	if tc.TraceID == "" {
+		tc.TraceID = t.idService.NewID()
+	}
+
+	if tc.SpanID == "" {
+		tc.SpanID = t.idService.NewID()
+	}
+
+	return tc
+}
+
 // ChildSpan instance a sub trace with new span id
 func (t *YgoTraceService) StartSpan(tc *contract.TraceContext) *contract.TraceContext {
 	var childSpanID string
@@ -92,25 +111,6 @@ func (t *YgoTraceService) StartSpan(tc *contract.TraceContext) *contract.TraceCo
 		},
 	}
 	return childSpan
-}
-
-// GetTrace By Http
-func (t *YgoTraceService) ExtractHTTP(req *http.Request) *contract.TraceContext {
-	tc := &contract.TraceContext{}
-	tc.TraceID = req.Header.Get(contract.TraceKeyTraceID)
-	tc.ParentID = req.Header.Get(contract.TraceKeySpanID)
-	tc.SpanID = req.Header.Get(contract.TraceKeyCspanID)
-	tc.CspanID = ""
-
-	if tc.TraceID == "" {
-		tc.TraceID = t.idService.NewID()
-	}
-
-	if tc.SpanID == "" {
-		tc.SpanID = t.idService.NewID()
-	}
-
-	return tc
 }
 
 // Set Trace to Http

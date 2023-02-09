@@ -155,6 +155,9 @@ var middlewareCreateCommand = &cobra.Command{
 			if err != nil {
 				return err
 			}
+			if folder == "" {
+				folder = name
+			}
 		}
 
 		app := container.MustMake(contract.AppKey).(contract.App)

@@ -79,6 +79,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.10.0 // indirect
 	golang.org/x/term v0.3.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 )
 
@@ -124,6 +125,7 @@ require (
 	github.com/go-git/go-git/v5 v5.5.2
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.7.0
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/go-github/v39 v39.2.0
 	github.com/google/uuid v1.3.0
 	github.com/jianfengye/collection v1.4.2
@@ -133,6 +135,7 @@ require (
 	github.com/pkg/sftp v1.13.5
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/swaggo/swag v1.8.9
+	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gorm.io/driver/clickhouse v0.5.0
 	gorm.io/driver/mysql v1.4.5
 	gorm.io/driver/postgres v1.4.6
