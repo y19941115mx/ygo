@@ -1,7 +1,6 @@
 package jwt
 
 import (
-	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -63,20 +62,20 @@ func JwtMiddleware() gin.HandlerFunc {
 			return
 		}
 		// 按空格分割
-		parts := strings.Split(authHeader, jwtConfigMap["auth_header_separator"])
-		if len(parts) != 3 {
-			err = utils.BusinessError{
-				Code: utils.ERROR_TOKEN_TYPE_WRONG,
-			}
-			utils.FailWithError(err, c)
-			c.Abort()
-			return
-		}
+		// parts := strings.Split(authHeader, jwtConfigMap["auth_header_separator"])
+		// if len(parts) != 3 {
+		// 	err = utils.BusinessError{
+		// 		Code: utils.ERROR_TOKEN_TYPE_WRONG,
+		// 	}
+		// 	utils.FailWithError(err, c)
+		// 	c.Abort()
+		// 	return
+		// }
 
 		getToken, claims, err := parseToken(jwtConfigMap["secret_signature"], authHeader)
 		if getToken.Valid {
-			m := claims.UserId
-			c.Set("userId", m)
+			primarykey := claims.UserId
+			c.Set(jwtConfigMap["session_key"], primarykey)
 			c.Next()
 		} else if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&(jwt.ValidationErrorExpired|jwt.ValidationErrorNotValidYet) != 0 {

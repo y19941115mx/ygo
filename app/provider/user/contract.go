@@ -26,7 +26,7 @@ type Service interface {
 	Login(ctx context.Context, user *User) (*User, error)
 
 	// GetUser 获取用户信息
-	GetUser(ctx context.Context, userID int64) (*User, error)
+	GetUser(ctx context.Context, userID uint) (*User, error)
 
 	// GetLoginUser 获取登录的用户信息
 	GetLoginUser(ctx context.Context) (*User, error)

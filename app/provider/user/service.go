@@ -165,3 +165,22 @@ func (u *UserService) Login(ctx context.Context, user *User) (*User, error) {
 	userDB.Token = token
 	return userDB, nil
 }
+
+func (u *UserService) GetUser(ctx context.Context, userID uint) (*User, error) {
+	ormService := u.container.MustMake(contract.ORMKey).(contract.ORMService)
+	db, err := ormService.GetDB()
+	if err != nil {
+		return nil, err
+	}
+	user := &User{}
+	if err := db.WithContext(ctx).First(user, userID).Error; err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
+func (u *UserService) GetLoginUser(ctx context.Context) (*User, error) {
+	sessionKey := u.configer.GetString("app.jwt.session_key")
+	userid, _ := ctx.(*gin.Context).Get(sessionKey)
+	return u.GetUser(ctx, userid.(uint))
+}

@@ -29,11 +29,9 @@ var codeMsg = map[int]string{
 	ERROR_PASSWORD_WRONG:       "用户名或密码错误",
 	ERROR_ABNORMAL_PERMISSIONS: "用户权限异常",
 
-	ERROR_TOKEN_NOT_EXIST:  "TOKEN不存在",
-	ERROR_TOKEN_TYPE_WRONG: "TOKEN格式错误",
-
-	ERROR_TOKEN_WRONG:  "TOKEN不正确,请重新登陆",
-	ERROR_TOKEN_EXPIRE: "TOKEN已过期,请重新登陆",
+	ERROR_TOKEN_NOT_EXIST: "TOKEN不存在",
+	ERROR_TOKEN_WRONG:     "TOKEN不正确,请重新登陆",
+	ERROR_TOKEN_EXPIRE:    "TOKEN已过期,请重新登陆",
 }
 
 func getErrMsg(code int) string {
