@@ -1,7 +1,6 @@
 package http
 
 import (
-	"github.com/y19941115mx/ygo/app/http/module/demo"
 	"github.com/y19941115mx/ygo/app/http/module/user"
 	"github.com/y19941115mx/ygo/framework/contract"
 	"github.com/y19941115mx/ygo/framework/gin"
@@ -19,6 +18,5 @@ func Routes(r *gin.Engine) {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 	// 动态路由定义
-	demo.RegisterRoutes(r)
 	user.RegisterRoutes(r)
 }
