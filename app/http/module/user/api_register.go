@@ -2,8 +2,8 @@ package user
 
 import (
 	"fmt"
-	"time"
 
+	"github.com/y19941115mx/ygo/app/http/httputil"
 	provider "github.com/y19941115mx/ygo/app/provider/user"
 	"github.com/y19941115mx/ygo/framework/gin"
 )
@@ -21,45 +21,37 @@ type registerParam struct {
 // @Produce  json
 // @Tags user
 // @Param registerParam body registerParam true "注册参数"
-// @Success 200 string Message "注册成功"
+// @Success 200 {object} httputil.Response
+// @Failure 200  {object}  httputil.HTTPError
 // @Router /user/register [post]
 func (api *UserApi) Register(c *gin.Context) {
 	userService := c.MustMake(provider.UserKey).(provider.Service)
 	logger := c.MustMakeLog()
 
-	// 验证参数
 	param := &registerParam{}
-	if err := c.ShouldBind(param); err != nil {
-		c.ISetStatus(400).IText("参数错误 ")
+	if valid := httputil.ValidateParameter(c, param); !valid {
 		return
 	}
 
-	// 登录
-	model := &provider.User{
-		UserName:  param.UserName,
-		Password:  param.Password,
-		Email:     param.Email,
-		CreatedAt: time.Now(),
-	}
 	// 注册
-	userWithToken, err := userService.Register(c, model)
+	model := &provider.User{
+		UserName: param.UserName,
+		Password: param.Password,
+		Email:    param.Email,
+	}
+	userWithCaptcha, err := userService.Register(c, model)
 	if err != nil {
 		logger.Error(c, err.Error(), map[string]interface{}{
 			"stack": fmt.Sprintf("%+v", err),
 		})
-		c.ISetStatus(500).IText(err.Error())
-		return
-	}
-	if userWithToken == nil {
-		c.ISetStatus(500).IText("注册失败")
+		httputil.FailWithError(c, err)
 		return
 	}
 
-	if err := userService.SendRegisterMail(c, userWithToken); err != nil {
-
-		c.ISetStatus(500).IText("发送电子邮件失败")
+	if err := userService.SendRegisterMail(c, userWithCaptcha); err != nil {
+		httputil.FailWithError(c, err)
 		return
 	}
 
-	c.ISetOkStatus().IText("注册成功，请前往邮箱查看邮件")
+	httputil.Ok(c)
 }

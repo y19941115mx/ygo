@@ -1,4 +1,4 @@
-package utils
+package httputil
 
 type BusinessError struct {
 	Code int
@@ -19,6 +19,9 @@ const (
 	ERROR_TOKEN_WRONG     = 2002
 	ERROR_TOKEN_EXPIRE    = 2003
 
+	// code= 300x... 参数验证错误
+	ERROR_PARAMETER_VALIDATION = 3001
+
 	// code= xxx... 其他业务模块的错误
 
 )
@@ -28,9 +31,10 @@ var codeMsg = map[int]string{
 	ERROR_PASSWORD_WRONG:       "用户名或密码错误",
 	ERROR_ABNORMAL_PERMISSIONS: "用户权限异常",
 
-	ERROR_TOKEN_NOT_EXIST: "TOKEN不存在",
-	ERROR_TOKEN_WRONG:     "TOKEN不正确,请重新登陆",
-	ERROR_TOKEN_EXPIRE:    "TOKEN已过期,请重新登陆",
+	ERROR_TOKEN_NOT_EXIST:      "TOKEN不存在",
+	ERROR_TOKEN_WRONG:          "TOKEN不正确,请重新登陆",
+	ERROR_TOKEN_EXPIRE:         "TOKEN已过期,请重新登陆",
+	ERROR_PARAMETER_VALIDATION: "参数验证错误",
 }
 
 func getErrMsg(code int) string {

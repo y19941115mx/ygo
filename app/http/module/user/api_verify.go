@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/y19941115mx/ygo/app/http/httputil"
 	provider "github.com/y19941115mx/ygo/app/provider/user"
 	"github.com/y19941115mx/ygo/framework/gin"
 )
@@ -12,28 +13,25 @@ import (
 // @Produce  json
 // @Tags user
 // @Param captcha query string true "注册的验证码"
-// @Success 200 {string} Message "注册成功，请进入登录页面"
+// @Success 200 {object} httputil.Response
+// @Failure 200  {object}  httputil.HTTPError
 // @Router /user/register/verify [get]
 func (api *UserApi) Verify(c *gin.Context) {
 	// 验证参数
 	userService := c.MustMake(provider.UserKey).(provider.Service)
 	captcha := c.Query("captcha")
 	if captcha == "" {
-		c.ISetStatus(400).IText("参数错误")
+		err := httputil.BusinessError{Code: httputil.ERROR_PARAMETER_VALIDATION}
+		httputil.FailWithError(c, err)
 		return
 	}
 
-	verified, err := userService.VerifyRegister(c, captcha)
+	err := userService.VerifyRegister(c, captcha)
 	if err != nil {
-		c.ISetStatus(500).IText(err.Error())
-		return
-	}
-
-	if !verified {
-		c.ISetStatus(500).IText("验证错误")
+		httputil.FailWithError(c, err)
 		return
 	}
 
 	// 输出
-	c.IRedirect("/#/login").IText("注册成功，请进入登录页面")
+	httputil.Ok(c)
 }

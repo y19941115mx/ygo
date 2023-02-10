@@ -20,7 +20,7 @@ type Service interface {
 	// 参数：user必填： username, password, email, token
 	SendRegisterMail(ctx context.Context, user *User) error
 	// VerifyRegister 注册用户，验证注册信息, 返回验证是否成功
-	VerifyRegister(ctx context.Context, captcha string) (bool, error)
+	VerifyRegister(ctx context.Context, captcha string) error
 
 	// Login 登录相关，使用用户名密码登录，获取完成User信息
 	Login(ctx context.Context, user *User) (*User, error)

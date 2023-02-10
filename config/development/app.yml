@@ -9,10 +9,10 @@ path:
 #  runtime_folder: "/home/jianfengye/hade/runtime/"
 
 jwt:
-    token_expire_duration: "24h"
     secret_signature: "ygo_secret"
+    issuer: "ygo"
+    token_expire_duration: "24h"
     auth_header_key: "authHeader"
-    issuer: "admin"
     session_key: "userId"
 
 smtp:

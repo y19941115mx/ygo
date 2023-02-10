@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/y19941115mx/ygo/app/http/utils"
+	"github.com/y19941115mx/ygo/app/http/httputil"
 	"github.com/y19941115mx/ygo/framework/gin"
 )
 
@@ -54,23 +54,13 @@ func JwtMiddleware() gin.HandlerFunc {
 
 		var err error // 异常信息
 		if authHeader == "" {
-			err = utils.BusinessError{
-				Code: utils.ERROR_TOKEN_NOT_EXIST,
+			err = httputil.BusinessError{
+				Code: httputil.ERROR_TOKEN_NOT_EXIST,
 			}
-			utils.FailWithError(err, c)
+			httputil.FailWithError(c, err)
 			c.Abort()
 			return
 		}
-		// 按空格分割
-		// parts := strings.Split(authHeader, jwtConfigMap["auth_header_separator"])
-		// if len(parts) != 3 {
-		// 	err = utils.BusinessError{
-		// 		Code: utils.ERROR_TOKEN_TYPE_WRONG,
-		// 	}
-		// 	utils.FailWithError(err, c)
-		// 	c.Abort()
-		// 	return
-		// }
 
 		getToken, claims, err := parseToken(jwtConfigMap["secret_signature"], authHeader)
 		if getToken.Valid {
@@ -80,16 +70,16 @@ func JwtMiddleware() gin.HandlerFunc {
 		} else if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&(jwt.ValidationErrorExpired|jwt.ValidationErrorNotValidYet) != 0 {
 				// token已过期
-				err = utils.BusinessError{
-					Code: utils.ERROR_TOKEN_EXPIRE,
+				err = httputil.BusinessError{
+					Code: httputil.ERROR_TOKEN_EXPIRE,
 				}
 			} else {
 				// 错误的token
-				err = utils.BusinessError{
-					Code: utils.ERROR_TOKEN_WRONG,
+				err = httputil.BusinessError{
+					Code: httputil.ERROR_TOKEN_WRONG,
 				}
 			}
-			utils.FailWithError(err, c)
+			httputil.FailWithError(c, err)
 			c.Abort()
 		}
 	}

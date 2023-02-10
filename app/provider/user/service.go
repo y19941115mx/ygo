@@ -25,8 +25,9 @@ type UserService struct {
 	cache     contract.CacheService
 }
 
+//生成随机验证码
 func genCaptcha(n int) string {
-	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"
+	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	b := make([]byte, n)
 	for i := range b {
 		b[i] = letterBytes[rand.Intn(len(letterBytes))]
@@ -34,51 +35,59 @@ func genCaptcha(n int) string {
 	return string(b)
 }
 
+//验证注册用户的合法性：邮箱，用户名唯一
+func (u *UserService) isRegisterUserValid(user *User) error {
+	userDB := &User{}
+	if u.db.Where(&User{Email: user.Email}).First(userDB).Error != gorm.ErrRecordNotFound {
+		return errors.New("邮箱已注册用户，不能重复注册")
+	}
+	if u.db.Where(&User{UserName: user.UserName}).First(userDB).Error != gorm.ErrRecordNotFound {
+		return errors.New("用户名已经被注册，请换一个用户名")
+	}
+	return nil
+}
+
 func NewUserService(params ...interface{}) (interface{}, error) {
 	container := params[0].(framework.Container)
 	logger := container.MustMake(contract.LogKey).(contract.Log)
 	configer := container.MustMake(contract.ConfigKey).(contract.Config)
-	db, err := container.MustMake(contract.ORMKey).(contract.ORMService).GetDB()
 	cache := container.MustMake(contract.CacheKey).(contract.CacheService)
+	db, err := container.MustMake(contract.ORMKey).(contract.ORMService).GetDB()
+
 	if err != nil {
 		return nil, err
 	}
+
+	if err = db.AutoMigrate(&User{}); err != nil {
+		return nil, err
+	}
+
 	return &UserService{container: container, logger: logger, configer: configer, db: db, cache: cache}, nil
 }
 
 func (u *UserService) Register(ctx context.Context, user *User) (*User, error) {
-	// 判断邮箱是否已经注册了
-	userDB := &User{}
-	if u.db.Where(&User{Email: user.Email}).First(userDB).Error != gorm.ErrRecordNotFound {
-		return nil, errors.New("邮箱已注册用户，不能重复注册")
-	}
-	if u.db.Where(&User{UserName: user.UserName}).First(userDB).Error != gorm.ErrRecordNotFound {
-		return nil, errors.New("用户名已经被注册，请换一个用户名")
+	if err := u.isRegisterUserValid(user); err != nil {
+		return nil, err
 	}
 
 	user.Captcha = genCaptcha(10)
 
-	// 将请求注册写入缓存，保存一天
-	cacheService := u.container.MustMake(contract.CacheKey).(contract.CacheService)
-
+	// 将请求注册写入缓存，保存一小时
 	key := fmt.Sprintf("user:register:%v", user.Captcha)
-	if err := cacheService.SetObj(ctx, key, user, 24*time.Hour); err != nil {
+	if err := u.cache.SetObj(ctx, key, user, 1*time.Hour); err != nil {
 		return nil, err
 	}
 	return user, nil
 }
 
 func (u *UserService) SendRegisterMail(ctx context.Context, user *User) error {
-	logger := u.container.MustMake(contract.LogKey).(contract.Log)
-	configer := u.container.MustMake(contract.ConfigKey).(contract.Config)
-
 	// 配置服务中获取发送邮件需要的参数
-	host := configer.GetString("app.smtp.host")
-	port := configer.GetInt("app.smtp.port")
-	username := configer.GetString("app.smtp.username")
-	password := configer.GetString("app.smtp.password")
-	from := configer.GetString("app.smtp.from")
-	domain := configer.GetString("app.domain")
+	host := u.configer.GetString("app.smtp.host")
+	port := u.configer.GetInt("app.smtp.port")
+	username := u.configer.GetString("app.smtp.username")
+	password := u.configer.GetString("app.smtp.password")
+	from := u.configer.GetString("app.smtp.from")
+	domain := u.configer.GetString("app.domain")
 
 	// 实例化gomail
 	d := gomail.NewDialer(host, port, username, password)
@@ -93,7 +102,7 @@ func (u *UserService) SendRegisterMail(ctx context.Context, user *User) error {
 
 	// 发送电子邮件
 	if err := d.DialAndSend(m); err != nil {
-		logger.Error(ctx, "send email error", map[string]interface{}{
+		u.logger.Error(ctx, "send email error", map[string]interface{}{
 			"err":     err,
 			"message": m,
 		})
@@ -102,38 +111,30 @@ func (u *UserService) SendRegisterMail(ctx context.Context, user *User) error {
 	return nil
 }
 
-func (u *UserService) VerifyRegister(ctx context.Context, captcha string) (bool, error) {
+func (u *UserService) VerifyRegister(ctx context.Context, captcha string) error {
 	//验证token
 	key := fmt.Sprintf("user:register:%v", captcha)
 	user := &User{}
 	if err := u.cache.GetObj(ctx, key, user); err != nil {
-		return false, err
-	}
-	if user.Captcha != captcha {
-		return false, nil
+		return err
 	}
 
-	//验证邮箱，用户名的唯一
-	userDB := &User{}
-	if u.db.Where(&User{Email: user.Email}).First(userDB).Error != gorm.ErrRecordNotFound {
-		return false, errors.New("邮箱已注册用户，不能重复注册")
-	}
-	if u.db.Where(&User{UserName: user.UserName}).First(userDB).Error != gorm.ErrRecordNotFound {
-		return false, errors.New("用户名已经被注册，请换一个用户名")
+	if err := u.isRegisterUserValid(user); err != nil {
+		return err
 	}
 
 	// 验证成功将密码存储数据库之前需要加密，不能原文存储进入数据库
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
 	if err != nil {
-		return false, err
+		return err
 	}
 	user.Password = string(hash)
 
 	// 具体在数据库创建用户
 	if err := u.db.Create(user).Error; err != nil {
-		return false, err
+		return err
 	}
-	return true, nil
+	return nil
 }
 
 func (u *UserService) Login(ctx context.Context, user *User) (*User, error) {
