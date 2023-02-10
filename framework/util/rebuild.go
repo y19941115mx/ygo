@@ -12,13 +12,8 @@ func RebuildApp() error {
 	if err != nil {
 		log.Fatalln("ygo go: 请在Path路径中先安装go")
 	}
-	var binFile string
+	binFile := "ygo"
 	sysType := runtime.GOOS
-
-	if sysType == "linux" {
-		// LINUX系统
-		binFile = "ygo"
-	}
 
 	if sysType == "windows" {
 		// windows系统
