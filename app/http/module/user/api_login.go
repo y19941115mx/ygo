@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/y19941115mx/ygo/app/http/httputil"
 	provider "github.com/y19941115mx/ygo/app/provider/user"
 	"github.com/y19941115mx/ygo/framework/gin"
 )
@@ -10,6 +11,11 @@ type loginParam struct {
 	Password string `json:"password" binding:"required,gte=6"`
 }
 
+type LoginResponse struct {
+	httputil.Meta
+	Data string `json:"data" example:"token"`
+}
+
 // Login 代表登录
 // @Summary 用户登录
 // @Description 用户登录接口
@@ -17,15 +23,15 @@ type loginParam struct {
 // @Produce  json
 // @Tags user
 // @Param loginParam body loginParam  true "login with param"
-// @Success 200 string Token "token"
+// @Success 200 {object} LoginResponse
+// @Failure 200  {object}  httputil.HTTPError
 // @Router /user/login [post]
 func (api *UserApi) Login(c *gin.Context) {
 	// 验证参数
 	userService := c.MustMake(provider.UserKey).(provider.Service)
 
 	param := &loginParam{}
-	if err := c.ShouldBind(param); err != nil {
-		c.ISetStatus(400).IText("参数错误")
+	if valid := httputil.ValidateParameter(c, param); !valid {
 		return
 	}
 
@@ -36,14 +42,9 @@ func (api *UserApi) Login(c *gin.Context) {
 	}
 	userWithToken, err := userService.Login(c, model)
 	if err != nil {
-		c.ISetStatus(500).IText(err.Error())
+		httputil.FailWithError(c, err)
 		return
 	}
-	if userWithToken == nil {
-		c.ISetStatus(500).IText("用户不存在")
-		return
-	}
-
 	// 输出
-	c.ISetOkStatus().IText(userWithToken.Token)
+	httputil.OkWithData(c, userWithToken.Token)
 }
