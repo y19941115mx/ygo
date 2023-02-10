@@ -144,7 +144,7 @@ func (sp *{{.|title}}Provider) Register(c framework.Container) framework.NewInst
 }
 
 func (sp *{{.|title}}Provider) IsDefer() bool {
-	return false
+	return ture 
 }
 
 func (sp *{{.|title}}Provider) Params(c framework.Container) []interface{} {

@@ -1,0 +1,2 @@
+driver: sqlite # 连接驱动
+dsn: "file::memory:?cache=shared" # 在内存中创建一个sqlite数据库

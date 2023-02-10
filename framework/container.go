@@ -54,9 +54,9 @@ func NewYgoContainer() *YgoContainer {
 }
 
 // PrintProviders 输出服务容器中注册的关键字
-func (hade *YgoContainer) PrintProviders() []string {
+func (ygo *YgoContainer) PrintProviders() []string {
 	ret := []string{}
-	for _, provider := range hade.providers {
+	for _, provider := range ygo.providers {
 		name := provider.Name()
 
 		line := fmt.Sprint(name)
@@ -66,68 +66,68 @@ func (hade *YgoContainer) PrintProviders() []string {
 }
 
 // Bind 将服务容器和关键字做了绑定
-func (hade *YgoContainer) Bind(provider ServiceProvider) error {
-	hade.lock.Lock()
+func (ygo *YgoContainer) Bind(provider ServiceProvider) error {
+	ygo.lock.Lock()
 	key := provider.Name()
 
-	hade.providers[key] = provider
-	hade.lock.Unlock()
+	ygo.providers[key] = provider
+	ygo.lock.Unlock()
 
 	// if provider is not defer
 	if !provider.IsDefer() {
-		if err := provider.Boot(hade); err != nil {
+		if err := provider.Boot(ygo); err != nil {
 			return err
 		}
 		// 实例化方法
-		params := provider.Params(hade)
-		method := provider.Register(hade)
+		params := provider.Params(ygo)
+		method := provider.Register(ygo)
 		instance, err := method(params...)
 		if err != nil {
 			return errors.New(err.Error())
 		}
-		hade.instances[key] = instance
+		ygo.instances[key] = instance
 	}
 	return nil
 }
 
-func (hade *YgoContainer) IsBind(key string) bool {
-	return hade.findServiceProvider(key) != nil
+func (ygo *YgoContainer) IsBind(key string) bool {
+	return ygo.findServiceProvider(key) != nil
 }
 
-func (hade *YgoContainer) findServiceProvider(key string) ServiceProvider {
-	hade.lock.RLock()
-	defer hade.lock.RUnlock()
-	if sp, ok := hade.providers[key]; ok {
+func (ygo *YgoContainer) findServiceProvider(key string) ServiceProvider {
+	ygo.lock.RLock()
+	defer ygo.lock.RUnlock()
+	if sp, ok := ygo.providers[key]; ok {
 		return sp
 	}
 	return nil
 }
 
-func (hade *YgoContainer) Make(key string) (interface{}, error) {
-	return hade.make(key, nil, false)
+func (ygo *YgoContainer) Make(key string) (interface{}, error) {
+	return ygo.make(key, nil, false)
 }
 
-func (hade *YgoContainer) MustMake(key string) interface{} {
-	serv, err := hade.make(key, nil, false)
+func (ygo *YgoContainer) MustMake(key string) interface{} {
+	serv, err := ygo.make(key, nil, false)
 	if err != nil {
 		panic(err)
 	}
 	return serv
 }
 
-func (hade *YgoContainer) MakeNew(key string, params []interface{}) (interface{}, error) {
-	return hade.make(key, params, true)
+func (ygo *YgoContainer) MakeNew(key string, params []interface{}) (interface{}, error) {
+	return ygo.make(key, params, true)
 }
 
-func (hade *YgoContainer) newInstance(sp ServiceProvider, params []interface{}) (interface{}, error) {
+func (ygo *YgoContainer) newInstance(sp ServiceProvider, params []interface{}) (interface{}, error) {
 	// force new a
-	if err := sp.Boot(hade); err != nil {
+	if err := sp.Boot(ygo); err != nil {
 		return nil, err
 	}
 	if params == nil {
-		params = sp.Params(hade)
+		params = sp.Params(ygo)
 	}
-	method := sp.Register(hade)
+	method := sp.Register(ygo)
 	ins, err := method(params...)
 	if err != nil {
 		return nil, errors.New(err.Error())
@@ -136,31 +136,31 @@ func (hade *YgoContainer) newInstance(sp ServiceProvider, params []interface{}) 
 }
 
 // 真正的实例化一个服务
-func (hade *YgoContainer) make(key string, params []interface{}, forceNew bool) (interface{}, error) {
-	hade.lock.RLock()
-	defer hade.lock.RUnlock()
+func (ygo *YgoContainer) make(key string, params []interface{}, forceNew bool) (interface{}, error) {
+	ygo.lock.RLock()
+	defer ygo.lock.RUnlock()
 	// 查询是否已经注册了这个服务提供者，如果没有注册，则返回错误
-	sp := hade.findServiceProvider(key)
+	sp := ygo.findServiceProvider(key)
 	if sp == nil {
 		return nil, errors.New("contract " + key + " have not register")
 	}
 
 	if forceNew {
-		return hade.newInstance(sp, params)
+		return ygo.newInstance(sp, params)
 	}
 
 	// 不需要强制重新实例化，如果容器中已经实例化了，那么就直接使用容器中的实例
-	if ins, ok := hade.instances[key]; ok {
+	if ins, ok := ygo.instances[key]; ok {
 		return ins, nil
 	}
 
 	// 容器中还未实例化，则进行一次实例化
-	inst, err := hade.newInstance(sp, nil)
+	inst, err := ygo.newInstance(sp, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	hade.instances[key] = inst
+	ygo.instances[key] = inst
 	return inst, nil
 }
 

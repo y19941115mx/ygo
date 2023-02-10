@@ -1,0 +1,14 @@
+swagger: true
+
+domain: "http://47.92.132.42:8888/"
+
+path:
+#  log_folder: "/home/jianfengye/hade/log/" # 支持配置的方式指定路径
+#  runtime_folder: "/home/jianfengye/hade/runtime/"
+
+jwt:
+    secret_signature: "ygo_secret"
+    issuer: "ygo"
+    token_expire_duration: "24h"
+    auth_header_key: "authHeader"
+    session_key: "userId"
