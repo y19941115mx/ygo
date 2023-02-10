@@ -138,14 +138,8 @@ func (u *UserService) VerifyRegister(ctx context.Context, captcha string) error 
 }
 
 func (u *UserService) Login(ctx context.Context, user *User) (*User, error) {
-	ormService := u.container.MustMake(contract.ORMKey).(contract.ORMService)
-	db, err := ormService.GetDB()
-	if err != nil {
-		return nil, err
-	}
-
 	userDB := &User{}
-	if err := db.Where("username=?", user.UserName).First(userDB).Error; err != nil {
+	if err := u.db.Where("username=?", user.UserName).First(userDB).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, nil
 		}
@@ -158,7 +152,8 @@ func (u *UserService) Login(ctx context.Context, user *User) (*User, error) {
 
 	userDB.Password = ""
 	// 生成 token
-	token, err := jwt.GenerateToken(ctx.(*gin.Context), userDB.ID)
+	jwtConfigMap := u.configer.GetStringMapString("app.jwt")
+	token, err := jwt.GenerateToken(jwtConfigMap, userDB.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -168,13 +163,8 @@ func (u *UserService) Login(ctx context.Context, user *User) (*User, error) {
 }
 
 func (u *UserService) GetUser(ctx context.Context, userID uint) (*User, error) {
-	ormService := u.container.MustMake(contract.ORMKey).(contract.ORMService)
-	db, err := ormService.GetDB()
-	if err != nil {
-		return nil, err
-	}
 	user := &User{}
-	if err := db.WithContext(ctx).First(user, userID).Error; err != nil {
+	if err := u.db.WithContext(ctx).First(user, userID).Error; err != nil {
 		return nil, err
 	}
 	return user, nil

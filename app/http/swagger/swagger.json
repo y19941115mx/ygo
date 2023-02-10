@@ -16,27 +16,124 @@
     },
     "basePath": "/",
     "paths": {
-        "/demo/demo2": {
-            "get": {
-                "description": "获取所有学生",
+        "/user/login": {
+            "post": {
+                "description": "用户登录接口",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "demo"
+                    "user"
                 ],
-                "summary": "获取所有学生",
+                "summary": "用户登录",
+                "parameters": [
+                    {
+                        "description": "login with param",
+                        "name": "loginParam",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.loginParam"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/demo.UserDTO"
-                                }
-                            }
+                            "$ref": "#/definitions/user.LoginResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/register": {
+            "post": {
+                "description": "用户注册接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "用户注册",
+                "parameters": [
+                    {
+                        "description": "注册参数",
+                        "name": "registerParam",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.registerParam"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/httputil.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/register/verify": {
+            "get": {
+                "description": "使用token验证用户注册信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "验证注册信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "注册的验证码",
+                        "name": "captcha",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/httputil.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/userinfo": {
+            "get": {
+                "description": "获取登录用户信息接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "获取登录用户信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/httputil.HTTPError"
                         }
                     }
                 }
@@ -44,13 +141,113 @@
         }
     },
     "definitions": {
-        "demo.UserDTO": {
+        "httputil.HTTPError": {
             "type": "object",
             "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 500
+                },
+                "msg": {
+                    "type": "string",
+                    "example": "操作失败"
+                }
+            }
+        },
+        "httputil.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 200
+                },
+                "data": {},
+                "msg": {
+                    "type": "string",
+                    "example": "操作成功"
+                }
+            }
+        },
+        "user.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 200
+                },
+                "data": {
+                    "type": "string",
+                    "example": "token"
+                },
+                "msg": {
+                    "type": "string",
+                    "example": "操作成功"
+                }
+            }
+        },
+        "user.UserDTO": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
-                "name": {
+                "user_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.UserResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "example": 200
+                },
+                "data": {
+                    "$ref": "#/definitions/user.UserDTO"
+                },
+                "msg": {
+                    "type": "string",
+                    "example": "操作成功"
+                }
+            }
+        },
+        "user.loginParam": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "minLength": 6
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.registerParam": {
+            "type": "object",
+            "required": [
+                "email",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "minLength": 6
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 6
+                },
+                "username": {
                     "type": "string"
                 }
             }

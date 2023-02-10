@@ -13,10 +13,7 @@ type MyClaims struct {
 	jwt.StandardClaims
 }
 
-func GenerateToken(c *gin.Context, userId uint) (string, error) {
-	configer := c.MustMakeConfig()
-
-	jwtConfigMap := configer.GetStringMapString("app.jwt")
+func GenerateToken(jwtConfigMap map[string]string, userId uint) (string, error) {
 	tokenExpireDuration, err := time.ParseDuration(jwtConfigMap["token_expire_duration"])
 	if err != nil {
 		return "", err
@@ -33,7 +30,7 @@ func GenerateToken(c *gin.Context, userId uint) (string, error) {
 	// 使用指定的签名方法创建签名对象
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	// 使用指定的secret签名并获得完整的编码后的字符串token
-	return token.SignedString(jwtConfigMap["secret_signature"])
+	return token.SignedString([]byte(jwtConfigMap["secret_signature"]))
 }
 
 func parseToken(secret string, tokenString string) (*jwt.Token, *MyClaims, error) {

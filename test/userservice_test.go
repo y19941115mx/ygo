@@ -25,9 +25,6 @@ func Test_UserRegisterLogin(t *testing.T) {
 	if err := db.AutoMigrate(&provider.User{}); err != nil {
 		t.Fatal(err)
 	}
-	if err := db.Exec("truncate table users").Error; err != nil {
-		t.Fatal(err)
-	}
 
 	tmp, err := provider.NewUserService(container)
 	if err != nil {
@@ -39,15 +36,15 @@ func Test_UserRegisterLogin(t *testing.T) {
 	user1 := &provider.User{
 		UserName: "jianfengye",
 		Password: "123456",
-		Email:    "jianfengye110@gmail.com",
+		Email:    "1960892068@qq.com",
 	}
 
-	Convey("正常流程", t, func() {
+	Convey("正常注册登录流程", t, func() {
 
 		Convey("注册用户", func() {
-			userWithToken, err := us.Register(ctx, user1)
+			userWithCaptcha, err := us.Register(ctx, user1)
 			So(err, ShouldBeNil)
-			user1.Token = userWithToken.Token
+			user1.Captcha = userWithCaptcha.Captcha
 		})
 
 		Convey("发送邮件", func() {
@@ -66,10 +63,10 @@ func Test_UserRegisterLogin(t *testing.T) {
 		})
 
 		Convey("用户登录", func() {
-			userDB, err := us.Login(ctx, user1)
+			userWithToken, err := us.Login(ctx, user1)
 			So(err, ShouldBeNil)
-			So(userDB, ShouldNotBeNil)
-			user1.Token = userDB.Token
+			So(userWithToken, ShouldNotBeNil)
+			user1.Token = userWithToken.Token
 		})
 	})
 }

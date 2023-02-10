@@ -1,11 +1,81 @@
 basePath: /
 definitions:
-  demo.UserDTO:
+  httputil.HTTPError:
     properties:
+      code:
+        example: 500
+        type: integer
+      msg:
+        example: 操作失败
+        type: string
+    type: object
+  httputil.Response:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data: {}
+      msg:
+        example: 操作成功
+        type: string
+    type: object
+  user.LoginResponse:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        example: token
+        type: string
+      msg:
+        example: 操作成功
+        type: string
+    type: object
+  user.UserDTO:
+    properties:
+      created_at:
+        type: string
       id:
         type: integer
-      name:
+      user_name:
         type: string
+    type: object
+  user.UserResponse:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        $ref: '#/definitions/user.UserDTO'
+      msg:
+        example: 操作成功
+        type: string
+    type: object
+  user.loginParam:
+    properties:
+      password:
+        minLength: 6
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  user.registerParam:
+    properties:
+      email:
+        minLength: 6
+        type: string
+      password:
+        minLength: 6
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
     type: object
 info:
   contact:
@@ -19,23 +89,86 @@ info:
   title: ygo
   version: "1.1"
 paths:
-  /demo/demo2:
-    get:
-      description: 获取所有学生
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: 用户登录接口
+      parameters:
+      - description: login with param
+        in: body
+        name: loginParam
+        required: true
+        schema:
+          $ref: '#/definitions/user.loginParam'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              items:
-                $ref: '#/definitions/demo.UserDTO'
-              type: array
-            type: array
-      summary: 获取所有学生
+            $ref: '#/definitions/user.LoginResponse'
+      summary: 用户登录
       tags:
-      - demo
+      - user
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: 用户注册接口
+      parameters:
+      - description: 注册参数
+        in: body
+        name: registerParam
+        required: true
+        schema:
+          $ref: '#/definitions/user.registerParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: 用户注册
+      tags:
+      - user
+  /user/register/verify:
+    get:
+      consumes:
+      - application/json
+      description: 使用token验证用户注册信息
+      parameters:
+      - description: 注册的验证码
+        in: query
+        name: captcha
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: 验证注册信息
+      tags:
+      - user
+  /user/userinfo:
+    get:
+      consumes:
+      - application/json
+      description: 获取登录用户信息接口
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: 获取登录用户信息
+      tags:
+      - user
 securityDefinitions:
   ApiKeyAuth:
     in: header

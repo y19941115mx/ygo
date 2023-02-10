@@ -12,3 +12,10 @@ jwt:
     token_expire_duration: "24h"
     auth_header_key: "authHeader"
     session_key: "userId"
+
+smtp:
+    host: "smtp.126.com" # 需要开启smtp能力的邮箱服务
+    port: 25
+    from: "jianfengye110@126.com"
+    username: "jianfengye110"
+    password: "123456"

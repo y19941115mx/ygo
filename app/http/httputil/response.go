@@ -12,8 +12,8 @@ type Response struct {
 }
 
 type Meta struct {
-	Msg  string `json:"msg" example:"200"`
-	Code int    `json:"code" example:"操作成功"`
+	Msg  string `json:"msg" example:"操作成功"`
+	Code int    `json:"code" example:"200"`
 }
 
 // HTTPError example

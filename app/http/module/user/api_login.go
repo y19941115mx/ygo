@@ -17,7 +17,7 @@ type LoginResponse struct {
 }
 
 // Login 代表登录
-// @Summary 用户登录
+// @Summary 登录
 // @Description 用户登录接口
 // @Accept  json
 // @Produce  json
