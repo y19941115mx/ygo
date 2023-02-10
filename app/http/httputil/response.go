@@ -27,7 +27,14 @@ const (
 	SUCCESS = 200
 )
 
-func result(c *gin.Context, code int, data interface{}, msg string) {
+func successResult(c *gin.Context, code int, data interface{}, msg string) {
+	c.JSON(http.StatusOK, Response{
+		data,
+		Meta{Code: code, Msg: msg},
+	})
+}
+
+func failResult(c *gin.Context, code int, data interface{}, msg string) {
 	c.JSON(http.StatusOK, Response{
 		data,
 		Meta{Code: code, Msg: msg},
@@ -35,24 +42,24 @@ func result(c *gin.Context, code int, data interface{}, msg string) {
 }
 
 func Ok(c *gin.Context) {
-	result(c, SUCCESS, map[string]interface{}{}, "操作成功")
+	successResult(c, SUCCESS, map[string]interface{}{}, "操作成功")
 }
 
 func OkWithData(c *gin.Context, data interface{}) {
-	result(c, SUCCESS, data, "操作成功")
+	successResult(c, SUCCESS, data, "操作成功")
 }
 
 func Fail(c *gin.Context) {
-	result(c, ERROR, map[string]interface{}{}, "操作失败")
+	failResult(c, ERROR, map[string]interface{}{}, "操作失败")
 }
 
 // 统一异常处理
 func FailWithError(c *gin.Context, err error) {
 	businessErr, ok := err.(BusinessError)
 	if ok {
-		result(c, businessErr.Code, map[string]interface{}{}, businessErr.Error())
+		failResult(c, businessErr.Code, map[string]interface{}{}, businessErr.Error())
 	} else {
-		result(c, ERROR, map[string]interface{}{}, err.Error())
+		failResult(c, ERROR, map[string]interface{}{}, err.Error())
 	}
 }
 

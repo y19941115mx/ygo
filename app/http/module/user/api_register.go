@@ -22,7 +22,7 @@ type registerParam struct {
 // @Tags user
 // @Param registerParam body registerParam true "注册参数"
 // @Success 200 {object} httputil.Response
-// @Failure 200  {object}  httputil.HTTPError
+// @Failure 500  {object}  httputil.HTTPError
 // @Router /user/register [post]
 func (api *UserApi) Register(c *gin.Context) {
 	userService := c.MustMake(provider.UserKey).(provider.Service)

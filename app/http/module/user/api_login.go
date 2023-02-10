@@ -17,14 +17,14 @@ type LoginResponse struct {
 }
 
 // Login 代表登录
-// @Summary 登录
+// @Summary 用户登录
 // @Description 用户登录接口
 // @Accept  json
 // @Produce  json
 // @Tags user
 // @Param loginParam body loginParam  true "login with param"
 // @Success 200 {object} LoginResponse
-// @Failure 200  {object}  httputil.HTTPError
+// @Failure 500  {object}  httputil.HTTPError
 // @Router /user/login [post]
 func (api *UserApi) Login(c *gin.Context) {
 	// 验证参数

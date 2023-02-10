@@ -14,7 +14,7 @@ import (
 // @Tags user
 // @Param captcha query string true "注册的验证码"
 // @Success 200 {object} httputil.Response
-// @Failure 200  {object}  httputil.HTTPError
+// @Failure 500  {object}  httputil.HTTPError
 // @Router /user/register/verify [get]
 func (api *UserApi) Verify(c *gin.Context) {
 	// 验证参数

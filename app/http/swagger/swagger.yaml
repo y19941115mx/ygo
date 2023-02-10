@@ -108,6 +108,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/user.LoginResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
       summary: 用户登录
       tags:
       - user
@@ -128,6 +132,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/httputil.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/httputil.HTTPError'
       summary: 用户注册
@@ -150,6 +158,10 @@ paths:
         "200":
           description: OK
           schema:
+            $ref: '#/definitions/httputil.Response'
+        "500":
+          description: Internal Server Error
+          schema:
             $ref: '#/definitions/httputil.HTTPError'
       summary: 验证注册信息
       tags:
@@ -165,8 +177,12 @@ paths:
         "200":
           description: OK
           schema:
+            $ref: '#/definitions/user.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
             $ref: '#/definitions/httputil.HTTPError'
-      summary: 获取登录用户信息
+      summary: 登录用户信息
       tags:
       - user
 securityDefinitions:

@@ -12,13 +12,13 @@ type UserResponse struct {
 }
 
 // UserInfo 获取登录用户信息
-// @Summary 获取登录用户信息
+// @Summary 登录用户信息
 // @Description 获取登录用户信息接口
 // @Accept  json
 // @Produce  json
 // @Tags user
 // @Success 200 {object} UserResponse
-// @Failure 200  {object}  httputil.HTTPError
+// @Failure 500  {object}  httputil.HTTPError
 // @Router /user/userinfo [get]
 func (api *UserApi) UserInfo(c *gin.Context) {
 	userService := c.MustMake(provider.UserKey).(provider.Service)

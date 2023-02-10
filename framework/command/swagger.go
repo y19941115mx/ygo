@@ -7,6 +7,7 @@ import (
 	"github.com/swaggo/swag/gen"
 	"github.com/y19941115mx/ygo/framework/cobra"
 	"github.com/y19941115mx/ygo/framework/contract"
+	"github.com/y19941115mx/ygo/framework/util"
 )
 
 func initSwaggerCommand() *cobra.Command {
@@ -29,7 +30,7 @@ var swaggerCommand = &cobra.Command{
 var swaggerGenCommand = &cobra.Command{
 	Use:   "gen",
 	Short: "生成对应的swagger文件, contain swagger.yaml, doc.go",
-	Run: func(c *cobra.Command, args []string) {
+	RunE: func(c *cobra.Command, args []string) error {
 		container := c.GetContainer()
 		appService := container.MustMake(contract.AppKey).(contract.App)
 
@@ -64,5 +65,7 @@ var swaggerGenCommand = &cobra.Command{
 		if err != nil {
 			fmt.Println(err)
 		}
+		return util.RebuildApp()
+
 	},
 }
