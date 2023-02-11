@@ -48,7 +48,7 @@ go install
 ```
 ygo app start 
 ```
-访问浏览器即可查看效果：
+访问浏览器 `127.0.0.1:8888/swagger/index.html` 即可查看效果：
 
 ![](framework/doc/demo2.png)
 
