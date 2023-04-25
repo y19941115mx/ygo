@@ -49,12 +49,17 @@ func (api *UserApi) Register(c *gin.Context) {
 		return
 	}
 
+	if userWithCaptcha.UserName == "admin" {
+		httputil.OkWithData(c, userWithCaptcha)
+		return
+	}
+
 	if err := userService.SendRegisterMail(c, userWithCaptcha); err != nil {
 		httputil.FailWithError(c, err)
 		return
 	}
 
-	httputil.OkWithData(c, userWithCaptcha)
+	httputil.Ok(c)
 }
 
 // Register 添加测试用户
@@ -86,9 +91,9 @@ func (api *UserApi) RegisterMockUser(c *gin.Context) {
 
 	// 调用验证接口
 	url = fmt.Sprintf(":%d/user/register-verify", port)
-	u := rsp.Data.(provider.User)
+	u := rsp.Data.(map[string]interface{})
 	// 调用注册接口
-	err = gout.GET(url).SetQuery(gout.H{"captcha": u.Captcha}).Do()
+	err = gout.GET(url).SetQuery(gout.H{"captcha": u["Captcha"]}).Do()
 	if err != nil {
 		httputil.Fail(c)
 		return
