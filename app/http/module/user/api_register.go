@@ -62,9 +62,9 @@ func (api *UserApi) Register(c *gin.Context) {
 	httputil.Ok(c)
 }
 
-// Register 添加测试用户
-// @Summary 添加测试用户
-// @Description 添加测试用户 用户名：admin 密码：admin123 邮箱：admin@123.com
+// Register 添加管理员用户
+// @Summary 添加管理员用户
+// @Description 添加管理员用户 用户名：admin 密码：admin123 邮箱：admin@123.com
 // @Accept  json
 // @Produce  json
 // @Tags user

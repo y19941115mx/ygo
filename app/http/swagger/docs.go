@@ -66,7 +66,7 @@ const docTemplate = `{
         },
         "/user/mock-test-user": {
             "get": {
-                "description": "添加测试用户 用户名：admin 密码：admin123 邮箱：admin@123.com",
+                "description": "添加管理员用户 用户名：admin 密码：admin123 邮箱：admin@123.com",
                 "consumes": [
                     "application/json"
                 ],
@@ -76,7 +76,7 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "添加测试用户",
+                "summary": "添加管理员用户",
                 "responses": {
                     "200": {
                         "description": "OK",

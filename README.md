@@ -20,12 +20,13 @@ https://siage.yuque.com/vqda7p/imrgoz/fi2omculcg1np5gn?singleDoc# 《Ygo框架�
 
 # 快速入门
 
-本地编译环境依赖：
+## 编译安装
+
+编译环境依赖：
 1. go 开发环境
 2. gcc 开发环境
-## 安装
 
-远程安装
+远程编译安装
 ```
 go install github.com/y19941115mx/ygo@latest 
 ```
@@ -37,19 +38,18 @@ go install
 ```
 ## 使用
 
-如果本地编译环境通过，运行 `ygo` 命令，即可直接查看框架命令的使用介绍
+如果编译安装成功，运行 `ygo` 命令，即可直接查看框架命令的使用介绍
 
 ![](framework/doc/demo1.png)
 
-如本地编译失败，请到 [release页面](https://github.com/y19941115mx/ygo/releases) 下载对应操作系统的可执行文件，并自行配置系统的环境变量
+如本地编译失败，请到 [release页面](https://github.com/y19941115mx/ygo/releases) 下载对应操作系统的可执行文件，并将可执行文件的路径添加到系统的环境变量中
 
 ## 运行
 
-访问demo的接口文档
 ```
-ygo app start 
+go run main.go app start 
 ```
-访问浏览器 `127.0.0.1:8888/swagger/index.html` 即可查看效果：
+访问浏览器 `127.0.0.1:8888/swagger/index.html` 即可访问demo的接口文档：
 
 ![](framework/doc/demo2.png)
 
