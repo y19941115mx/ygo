@@ -31,7 +31,7 @@ func (api *UserApi) Login(c *gin.Context) {
 	userService := c.MustMake(provider.UserKey).(provider.Service)
 
 	param := &loginParam{}
-	if valid := httputil.ValidateParameter(c, param); !valid {
+	if valid := httputil.ValidateBind(c, param); !valid {
 		return
 	}
 

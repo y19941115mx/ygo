@@ -3,6 +3,7 @@ package user
 import (
 	"fmt"
 
+	"github.com/guonaihong/gout"
 	"github.com/y19941115mx/ygo/app/http/httputil"
 	provider "github.com/y19941115mx/ygo/app/provider/user"
 	"github.com/y19941115mx/ygo/framework/gin"
@@ -29,7 +30,7 @@ func (api *UserApi) Register(c *gin.Context) {
 	logger := c.MustMakeLog()
 
 	param := &registerParam{}
-	if valid := httputil.ValidateParameter(c, param); !valid {
+	if valid := httputil.ValidateBind(c, param); !valid {
 		return
 	}
 
@@ -50,6 +51,46 @@ func (api *UserApi) Register(c *gin.Context) {
 
 	if err := userService.SendRegisterMail(c, userWithCaptcha); err != nil {
 		httputil.FailWithError(c, err)
+		return
+	}
+
+	httputil.OkWithData(c, userWithCaptcha)
+}
+
+// Register 添加测试用户
+// @Summary 添加测试用户
+// @Description 添加测试用户 用户名：admin 密码：admin123 邮箱：admin@123.com
+// @Accept  json
+// @Produce  json
+// @Tags user
+// @Success 200 {object} httputil.Response
+// @Failure 500  {object}  httputil.HTTPError
+// @Router /user/mock-test-user [get]
+func (api *UserApi) RegisterMockUser(c *gin.Context) {
+	config := c.MustMakeConfig()
+	port := config.GetInt("app.address")
+	param := &registerParam{
+		UserName: "admin",
+		Password: "admin123",
+		Email:    "admin@123.com",
+	}
+	rsp := &httputil.Response{}
+
+	url := fmt.Sprintf(":%d/user/register", port)
+	// 调用注册接口
+	err := gout.POST(url).SetJSON(param).BindJSON(rsp).Do()
+	if err != nil {
+		httputil.Fail(c)
+		return
+	}
+
+	// 调用验证接口
+	url = fmt.Sprintf(":%d/user/register-verify", port)
+	u := rsp.Data.(provider.User)
+	// 调用注册接口
+	err = gout.GET(url).SetQuery(gout.H{"captcha": u.Captcha}).Do()
+	if err != nil {
+		httputil.Fail(c)
 		return
 	}
 

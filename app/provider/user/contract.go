@@ -44,12 +44,12 @@ type User struct {
 	Token   string `gorm:"-"` // 用户token
 }
 
-// MarshalBinary 实现BinaryMarshaler 接口
+// 使用到缓存功能 需要实现BinaryMarshaler接口
 func (b *User) MarshalBinary() ([]byte, error) {
 	return json.Marshal(b)
 }
 
-// UnmarshalBinary 实现 BinaryUnMarshaler 接口
+// 使用到缓存功能 需要实现 BinaryUnMarshaler接口
 func (b *User) UnmarshalBinary(bt []byte) error {
 	return json.Unmarshal(bt, b)
 }

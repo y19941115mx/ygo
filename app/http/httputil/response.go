@@ -1,8 +1,6 @@
 package httputil
 
 import (
-	"net/http"
-
 	"github.com/y19941115mx/ygo/framework/gin"
 )
 
@@ -28,14 +26,14 @@ const (
 )
 
 func successResult(c *gin.Context, code int, data interface{}, msg string) {
-	c.JSON(http.StatusOK, Response{
+	c.JSON(SUCCESS, Response{
 		data,
 		Meta{Code: code, Msg: msg},
 	})
 }
 
 func failResult(c *gin.Context, code int, data interface{}, msg string) {
-	c.JSON(http.StatusOK, Response{
+	c.JSON(ERROR, Response{
 		data,
 		Meta{Code: code, Msg: msg},
 	})
@@ -63,8 +61,8 @@ func FailWithError(c *gin.Context, err error) {
 	}
 }
 
-// 验证参数
-func ValidateParameter(c *gin.Context, param interface{}) bool {
+// bind请求体并进行参数验证
+func ValidateBind(c *gin.Context, param interface{}) bool {
 	if err := c.ShouldBind(param); err != nil {
 		err = BusinessError{Code: ERROR_PARAMETER_VALIDATION}
 		FailWithError(c, err)
