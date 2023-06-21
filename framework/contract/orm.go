@@ -94,6 +94,7 @@ func (conf *DBConfig) FormatDsn() (string, error) {
 		ReadTimeout:  readTimeout,
 		WriteTimeout: writeTimeout,
 		ParseTime:    conf.ParseTime,
+		AllowNativePasswords: true,
 	}
 	return driverConf.FormatDSN(), nil
 }
