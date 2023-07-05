@@ -156,14 +156,16 @@ var newCommand = &cobra.Command{
 		fmt.Println("删除framework目录")
 
 		filepath.Walk(folder, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+
 			if info.IsDir() {
 				return nil
 			}
 
-			c, err := os.ReadFile(path)
-			if err != nil {
-				return err
-			}
+			c, _ := os.ReadFile(path)
+
 			// 修改 go.mod 文件  修改 module 名称  增加对框架的引用
 			if path == filepath.Join(folder, "go.mod") {
 				fmt.Println("更新文件:" + path)
@@ -188,6 +190,7 @@ var newCommand = &cobra.Command{
 
 			return nil
 		})
+
 		fmt.Println("创建应用结束")
 		fmt.Println("目录：", folder)
 		fmt.Println("====================================================")

@@ -234,6 +234,9 @@ func uploadFolderToSFTP(container framework.Container, localFolder, remoteFolder
 	logger := container.MustMake(contract.LogKey).(contract.Log)
 	// 遍历 deploy 文件夹
 	return filepath.Walk(localFolder, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
 		// 相对 deploy 文件夹的相对路径
 		relPath := strings.Replace(path, localFolder, "", 1)
 		if relPath == "" {
@@ -249,16 +252,13 @@ func uploadFolderToSFTP(container framework.Container, localFolder, remoteFolder
 		}
 
 		// 打开本地的文件
-		rf, err := os.Open(filepath.Join(localFolder, relPath))
-		if err != nil {
+		rf, readErr := os.Open(filepath.Join(localFolder, relPath))
+		if readErr != nil {
 			return errors.New("read file " + filepath.Join(localFolder, relPath) + " error:" + err.Error())
 		}
 		defer rf.Close()
 		// 检查文件大小
-		rfStat, err := rf.Stat()
-		if err != nil {
-			return err
-		}
+		rfStat, _ := rf.Stat()
 		// 打开/创建远端文件
 		remoteFilePath := toLinuxPath(filepath.Join(remoteFolder, relPath))
 		f, err := client.Create(remoteFilePath)

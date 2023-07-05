@@ -100,6 +100,10 @@ var middlewareMigrateCommand = &cobra.Command{
 
 		// step4 : 替换关键词
 		filepath.Walk(repoFolder, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+
 			if info.IsDir() {
 				return nil
 			}
@@ -108,10 +112,8 @@ var middlewareMigrateCommand = &cobra.Command{
 				return nil
 			}
 
-			c, err := os.ReadFile(path)
-			if err != nil {
-				return err
-			}
+			c, _ := os.ReadFile(path)
+
 			isContain := bytes.Contains(c, []byte("github.com/gin-gonic/gin"))
 			if isContain {
 				fmt.Println("更新文件:" + path)

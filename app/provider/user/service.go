@@ -26,7 +26,7 @@ type UserService struct {
 	cache     contract.CacheService
 }
 
-//生成随机验证码
+// 生成随机验证码
 func genCaptcha(n int) string {
 	const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	b := make([]byte, n)
@@ -36,7 +36,7 @@ func genCaptcha(n int) string {
 	return string(b)
 }
 
-//验证注册用户的合法性：邮箱，用户名唯一
+// 验证注册用户的合法性：邮箱，用户名唯一
 func (u *UserService) isRegisterUserValid(user *User) error {
 	userDB := &User{}
 	if u.db.Where(&User{Email: user.Email}).First(userDB).Error != gorm.ErrRecordNotFound {
@@ -97,7 +97,7 @@ func (u *UserService) SendRegisterMail(ctx context.Context, user *User) error {
 	m := gomail.NewMessage()
 	m.SetHeader("From", from)
 	m.SetAddressHeader("To", user.Email, user.UserName)
-	m.SetHeader("Subject", "感谢您注册我们的hadecast")
+	m.SetHeader("Subject", "感谢您注册我们的平台")
 	link := fmt.Sprintf("%v/user/register/verify?captcha=%v", domain, user.Captcha)
 	m.SetBody("text/html", fmt.Sprintf("请点击下面的链接完成注册：%s", link))
 
