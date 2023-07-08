@@ -11,7 +11,6 @@ import (
 	"github.com/y19941115mx/ygo/framework"
 	"github.com/y19941115mx/ygo/framework/contract"
 	"github.com/y19941115mx/ygo/framework/gin"
-	"github.com/y19941115mx/ygo/framework/provider/orm"
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/gomail.v2"
 	"gorm.io/gorm"
@@ -53,7 +52,7 @@ func NewUserService(params ...interface{}) (interface{}, error) {
 	logger := container.MustMake(contract.LogKey).(contract.Log)
 	configer := container.MustMake(contract.ConfigKey).(contract.Config)
 	cache := container.MustMake(contract.CacheKey).(contract.CacheService)
-	db, err := container.MustMake(contract.ORMKey).(contract.ORMService).GetDB(orm.WithConfigPath("database.default"))
+	db, err := container.MustMake(contract.ORMKey).(contract.ORMService).GetDB()
 
 	if err != nil {
 		return nil, err

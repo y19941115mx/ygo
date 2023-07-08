@@ -16,35 +16,28 @@ import (
 // YgoEnv 是 Env 的具体实现
 type YgoEnv struct {
 	contract.Env
-	folder string            // 代表.env所在的目录
 	maps   map[string]string // 保存所有的环境变量
+	IsTest bool              // 代表是否为本地测试环境
 }
 
-// NewYgoEnv 有一个参数，.env文件所在的目录
-// example: NewYgoEnv("/envfolder/") 会读取文件: /envfolder/.env
-// .env的文件格式 FOO_ENV=BAR
+// NewYgoEnv 有一个参数，代表当前是否为测试环境
 func NewYgoEnv(params ...interface{}) (interface{}, error) {
 	if len(params) != 2 {
-		return nil, errors.New("NewHadeEnv param error")
+		return nil, errors.New("NewYgoEnv param error")
 	}
 
 	container := params[0].(framework.Container)
-	folder := params[1].(string)
-
-	if folder == "" {
-		app := container.MustMake(contract.AppKey).(contract.App)
-		folder = app.BaseFolder()
-	}
-
+	isTest := params[1].(bool)
+	app := container.MustMake(contract.AppKey).(contract.App)
 	// 实例化
 	ygoEnv := &YgoEnv{
-		folder: folder,
+		IsTest: isTest,
 		// 实例化环境变量，APP_ENV默认设置为开发环境
 		maps: map[string]string{"APP_ENV": contract.EnvDevelopment},
 	}
 
 	// 解析folder/.env文件
-	file := path.Join(folder, ".env")
+	file := path.Join(app.BaseFolder(), ".env")
 	// 读取.env文件, 不管任意失败，都不影响后续
 
 	// 打开文件.env
@@ -88,6 +81,9 @@ func NewYgoEnv(params ...interface{}) (interface{}, error) {
 
 // AppEnv 获取表示当前APP环境的变量APP_ENV
 func (en *YgoEnv) AppEnv() string {
+	if en.IsTest {
+		return "testing"
+	}
 	return en.Get("APP_ENV")
 }
 

@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	BasePath = "D:\\project\\ygo"
+	BasePath = "C:\\Users\\19608\\Desktop\\project\\ygo" // 自定义
 )
 
 func InitBaseContainer() framework.Container {
@@ -21,7 +21,7 @@ func InitBaseContainer() framework.Container {
 	fmt.Println(util.GetExecDirectory())
 	container.Bind(&app.YgoAppProvider{BaseFolder: BasePath})
 
-	container.Bind(&env.YgoTestingEnvProvider{})
+	container.Bind(&env.YgoEnvProvider{IsTest: true})
 	container.Bind(&config.YgoConfigProvider{})
 	container.Bind(&log.YgoLogServiceProvider{})
 	return container

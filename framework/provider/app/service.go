@@ -23,7 +23,7 @@ type YgoApp struct {
 
 // Version 实现版本
 func (app YgoApp) Version() string {
-	return "0.0.1"
+	return YgoVersion
 }
 
 // BaseFolder 表示基础目录，可以代表开发场景的目录，也可以代表运行时候的目录
@@ -153,5 +153,7 @@ func (app YgoApp) AppID() string {
 }
 
 func (app *YgoApp) LoadAppConfig(kv map[string]string) {
-	app.configMap = kv
+	for key, val := range kv {
+		app.configMap[key] = val
+	}
 }

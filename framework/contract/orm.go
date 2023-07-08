@@ -83,18 +83,19 @@ func (conf *DBConfig) FormatDsn() (string, error) {
 		return "", err
 	}
 	driverConf := &mysql.Config{
-		User:         conf.Username,
-		Passwd:       conf.Password,
-		Net:          conf.Protocol,
-		Addr:         net.JoinHostPort(conf.Host, port),
-		DBName:       conf.Database,
-		Collation:    conf.Collation,
-		Loc:          location,
-		Timeout:      timeout,
-		ReadTimeout:  readTimeout,
-		WriteTimeout: writeTimeout,
-		ParseTime:    conf.ParseTime,
+		User:                 conf.Username,
+		Passwd:               conf.Password,
+		Net:                  conf.Protocol,
+		Addr:                 net.JoinHostPort(conf.Host, port),
+		DBName:               conf.Database,
+		Collation:            conf.Collation,
+		Loc:                  location,
+		Timeout:              timeout,
+		ReadTimeout:          readTimeout,
+		WriteTimeout:         writeTimeout,
+		ParseTime:            conf.ParseTime,
 		AllowNativePasswords: true,
+		CheckConnLiveness:    true,
 	}
 	return driverConf.FormatDSN(), nil
 }

@@ -1,10 +1,6 @@
-swagger: true
+address: 8888
 
 domain: "http://47.92.132.42:8888/"
-
-path:
-#  log_folder: "/home/jianfengye/hade/log/" # 支持配置的方式指定路径
-#  runtime_folder: "/home/jianfengye/hade/runtime/"
 
 jwt:
     secret_signature: "ygo_secret"
@@ -14,8 +10,8 @@ jwt:
     session_key: "userId"
 
 smtp:
-    host: "smtp.126.com" # 需要开启smtp能力的邮箱服务
+    host: "smtp.163.com" # 需要开启smtp能力的邮箱服务
     port: 25
-    from: "jianfengye110@126.com"
-    username: "jianfengye110"
-    password: "123456"
+    from: "victor19941115@163.com"
+    username: "victor19941115@163.com"
+    password: env(SMTP_PASSWORD)

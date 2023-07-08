@@ -47,11 +47,34 @@ go install
 ## 运行
 
 ```
-go run main.go app start 
+go run main.go app start
 ```
-访问浏览器 `127.0.0.1:8888/swagger/index.html` 即可访问demo的接口文档：
+访问浏览器[127.0.0.1:8888/swagger/index.html](127.0.0.1:8888/swagger/index.html) 即可访问demo的接口文档：
 
 ![](framework/doc/demo2.png)
+
+## 运行测试用例
+
+编辑文件`test/env.go`，设置项目根路径地址`BasePath`
+
+```
+cd test
+
+go test -v
+```
+
+启动可视化测试页面
+1. 安装 goconvey 
+   `go install github.com/smartystreets/goconvey`
+2. 执行命令,启动可视化测试服务
+    ```
+    cd test
+
+    goconvey
+    ```
+3. 访问web服务:
+   [http://127.0.0.1:8080](http://127.0.0.1:8080/)
+![](framework/doc/demo3.png)
 
 ## 参与贡献
 

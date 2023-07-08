@@ -22,9 +22,6 @@ func Test_UserRegisterLogin(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := db.AutoMigrate(&provider.User{}); err != nil {
-		t.Fatal(err)
-	}
 
 	tmp, err := provider.NewUserService(container)
 	if err != nil {
@@ -34,7 +31,7 @@ func Test_UserRegisterLogin(t *testing.T) {
 	ctx := context.Background()
 
 	user1 := &provider.User{
-		UserName: "jianfengye",
+		UserName: "victor",
 		Password: "123456",
 		Email:    "1960892068@qq.com",
 	}
@@ -66,7 +63,6 @@ func Test_UserRegisterLogin(t *testing.T) {
 			userWithToken, err := us.Login(ctx, user1)
 			So(err, ShouldBeNil)
 			So(userWithToken, ShouldNotBeNil)
-			user1.Token = userWithToken.Token
 		})
 	})
 }

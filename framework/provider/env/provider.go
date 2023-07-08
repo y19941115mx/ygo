@@ -6,7 +6,7 @@ import (
 )
 
 type YgoEnvProvider struct {
-	Folder string
+	IsTest bool
 }
 
 // Register registe a new function for make a service instance
@@ -26,7 +26,7 @@ func (provider *YgoEnvProvider) IsDefer() bool {
 
 // Params define the necessary params for NewInstance
 func (provider *YgoEnvProvider) Params(c framework.Container) []interface{} {
-	return []interface{}{c, provider.Folder}
+	return []interface{}{c, provider.IsTest}
 }
 
 // / Name define the name for this service
