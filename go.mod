@@ -87,10 +87,14 @@ require (
 	go.opentelemetry.io/otel v1.10.0 // indirect
 	go.opentelemetry.io/otel/trace v1.10.0 // indirect
 	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
+	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
 	golang.org/x/term v0.3.0 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
+	gorm.io/datatypes v1.1.1-0.20230130040222-c43177d3cf8c // indirect
+	gorm.io/hints v1.1.0 // indirect
+	gorm.io/plugin/dbresolver v1.3.0 // indirect
 )
 
 require (
@@ -132,6 +136,7 @@ require (
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.6
+	github.com/dave/jennifer v1.6.1
 	github.com/go-git/go-git/v5 v5.5.2
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-sql-driver/mysql v1.7.0
@@ -152,5 +157,6 @@ require (
 	gorm.io/driver/postgres v1.4.6
 	gorm.io/driver/sqlite v1.4.4
 	gorm.io/driver/sqlserver v1.4.1
+	gorm.io/gen v0.3.22
 	gorm.io/gorm v1.24.3
 )

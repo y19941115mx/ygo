@@ -15,6 +15,8 @@ type App interface {
 	LogFolder() string
 	// HttpFolder 定义了业务自己的http路径
 	HttpFolder() string
+	// HttpFolder 定义了业务自己的http路径
+	HttpModuleFolder() string
 	// ProviderFolder 定义业务自己的服务提供者地址
 	ProviderFolder() string
 	// MiddlewareFolder 定义业务自己定义的中间件

@@ -10,8 +10,8 @@ default:
     driver: mysql
     host: localhost
     port: 3306
-    database: test
+    database: victor
     username: root
     password: "yy6689990"  # env(DB_PASSWORD) 支持使用环境变量
     charset: utf8mb4
-    collation: utf8mb4_unicode_ci
+    collation: utf8mb4_general_ci

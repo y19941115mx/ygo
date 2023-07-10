@@ -17,20 +17,19 @@ var table string
 func InitModelCommand() *cobra.Command {
 
 	// model test
-	modelTestCommand.Flags().StringVarP(&database, "database", "d", "database.default", "模型连接的数据库")
+	modelTestCommand.Flags().StringVarP(&database, "database", "d", "database.default", "模型连接的数据库配置")
 	modelCommand.AddCommand(modelTestCommand)
 
-	// // model gen
-	// modelGenCommand.Flags().StringVarP(&output, "output", "o", "", "模型输出地址")
-	// _ = modelGenCommand.MarkFlagRequired("output")
-	// modelGenCommand.Flags().StringVarP(&database, "database", "d", "database.default", "模型连接的数据库")
-	// modelCommand.AddCommand(modelGenCommand)
+	// model gen
+	modelGenCommand.Flags().StringVarP(&output, "output", "o", "app/model", "模型文件输出的文件夹位置")
+	modelGenCommand.Flags().StringVarP(&database, "database", "d", "database.default", "模型连接的数据库配置")
+	modelCommand.AddCommand(modelGenCommand)
 
-	// // model api
-	// modelApiCommand.Flags().StringVarP(&database, "database", "d", "database.default", "模型连接的数据库")
-	// modelApiCommand.Flags().StringVarP(&table, "table", "t", "default", "模型连接的数据表")
-	// modelApiCommand.Flags().StringVarP(&output, "output", "o", "", "模型输出地址, 文件夹地址")
-	// modelCommand.AddCommand(modelApiCommand)
+	// model api
+	modelApiCommand.Flags().StringVarP(&database, "database", "d", "database.default", "连接的数据库配置")
+	modelApiCommand.Flags().StringVarP(&output, "module", "m", "test", "模块名称")
+	modelApiCommand.Flags().StringVarP(&table, "table", "t", "default", "模块连接的数据表")
+	modelCommand.AddCommand(modelApiCommand)
 	return modelCommand
 }
 

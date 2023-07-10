@@ -62,6 +62,13 @@ func (app YgoApp) HttpFolder() string {
 	return filepath.Join(app.AppFolder(), "http")
 }
 
+func (app YgoApp) HttpModuleFolder() string {
+	if val, ok := app.configMap["http_module_folder"]; ok {
+		return val
+	}
+	return filepath.Join(app.HttpFolder(), "module")
+}
+
 func (app YgoApp) ConsoleFolder() string {
 	if val, ok := app.configMap["console_folder"]; ok {
 		return val

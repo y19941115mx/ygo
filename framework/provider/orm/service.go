@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/y19941115mx/ygo/framework"
 	"github.com/y19941115mx/ygo/framework/contract"
 	"gorm.io/driver/clickhouse"
@@ -32,6 +33,17 @@ func NewYgoGorm(params ...interface{}) (interface{}, error) {
 		dbs:       dbs,
 		lock:      lock,
 	}, nil
+}
+
+func (app *YgoGorm) CanConnect(ctx context.Context, db *gorm.DB) (bool, error) {
+	sqlDb, err := db.DB()
+	if err != nil {
+		return false, errors.Wrap(err, "CanConnect")
+	}
+	if err := sqlDb.Ping(); err != nil {
+		return false, errors.Wrap(err, "CanConnect Ping error")
+	}
+	return true, nil
 }
 
 // GetDB 获取DB实例
