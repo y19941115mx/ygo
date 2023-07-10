@@ -20,7 +20,7 @@ https://siage.yuque.com/vqda7p/imrgoz/fi2omculcg1np5gn?singleDoc# 《Ygo框架�
 
 # 快速入门
 
-## 编译安装
+## 框架安装
 
 编译环境依赖：
 1. go 开发环境
@@ -47,7 +47,7 @@ go install
 ## 运行
 
 ```
-go run main.go app start
+ygo app start
 ```
 访问浏览器[127.0.0.1:8888/swagger/index.html](127.0.0.1:8888/swagger/index.html) 即可访问demo的接口文档：
 
@@ -62,11 +62,10 @@ cd test
 
 go test -v
 ```
-
 启动可视化测试页面
 1. 安装 goconvey 
    `go install github.com/smartystreets/goconvey`
-2. 执行命令,启动可视化测试服务
+2. 执行命令,启动可视化测试web服务
     ```
     cd test
 

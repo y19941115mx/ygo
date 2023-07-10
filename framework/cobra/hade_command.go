@@ -42,17 +42,16 @@ func (c *Command) AddCronCommand(spec string, cmd *Command) {
 		Cmd:  cmd,
 		Spec: spec,
 	})
-
-	// 制作一个rootCommand
-	var cronCmd Command
-	ctx := root.Context()
-	cronCmd = *cmd
-	cronCmd.args = []string{}
-	cronCmd.SetParantNull()
-	cronCmd.SetContainer(root.GetContainer())
-
 	// 增加调用函数
 	root.Cron.AddFunc(spec, func() {
+		// 制作一个rootCommand，必须放在这个里面做复制，否则会产生竞态
+		var cronCmd Command
+		ctx := root.Context()
+		cronCmd = *cmd
+		cronCmd.args = []string{}
+		cronCmd.SetParantNull()
+		cronCmd.SetContainer(root.GetContainer())
+
 		// 如果后续的command出现panic，这里要捕获
 		defer func() {
 			if err := recover(); err != nil {

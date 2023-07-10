@@ -5,7 +5,7 @@ import (
 	"github.com/y19941115mx/ygo/framework/gin"
 )
 
-// recovery机制，将协程中的函数异常进行捕获
+// trace 机制，实现全链路日志
 func Trace() gin.HandlerFunc {
 	// 使用函数回调
 	return func(c *gin.Context) {
@@ -17,5 +17,10 @@ func Trace() gin.HandlerFunc {
 
 		// 使用next执行具体的业务逻辑
 		c.Next()
+
+		// 访问其他服务的接口时，需要将全链路字段加入request
+		// tc := tracer.StartSpan(c)
+		// tracer.InjectHTTP(c.Request, tc)
+
 	}
 }

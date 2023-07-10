@@ -94,7 +94,8 @@ func (t *YgoTraceService) ExtractHTTP(req *http.Request) *contract.TraceContext 
 }
 
 // ChildSpan instance a sub trace with new span id
-func (t *YgoTraceService) StartSpan(tc *contract.TraceContext) *contract.TraceContext {
+func (t *YgoTraceService) StartSpan(ctx context.Context) *contract.TraceContext {
+	tc := t.GetTrace(ctx)
 	var childSpanID string
 	if t.spanIDGenerator != nil {
 		childSpanID = t.spanIDGenerator.NewID()

@@ -5,8 +5,6 @@ const AppKey = "ygo:app"
 
 // App 定义接口
 type App interface {
-	// Version 定义当前版本
-	Version() string
 	// BaseFolder 定义项目基础地址
 	BaseFolder() string
 	// AppFolder 定义项目源码地址

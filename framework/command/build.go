@@ -5,11 +5,6 @@ import (
 	"github.com/y19941115mx/ygo/framework/util"
 )
 
-// build相关的命令
-func initBuildCommand() *cobra.Command {
-	return buildCommand
-}
-
 var buildCommand = &cobra.Command{
 	Use:   "build",
 	Short: "编译项目",

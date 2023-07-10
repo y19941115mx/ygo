@@ -1,26 +1,17 @@
-conn_max_idle: 10 # 通用配置，连接池最大空闲连接数
-conn_max_open: 100 # 通用配置，连接池最大连接数
-conn_max_lifetime: 1h # 通用配置，连接数最大生命周期
-protocol: tcp # 通用配置，传输协议
-loc: Local # 通用配置，时区
+# 通用配置
+conn_max_idle: 10 # 连接池最大空闲连接数
+conn_max_open: 100 # 连接池最大连接数
+conn_max_lifetime: 1h # 连接数最大生命周期
+protocol: tcp # 传输协议
+loc: Local # 时区
 
-driver: mysql
-host: localhost
-port: 3306
-database: test
-username: root
-password: "yy6689990"  # env(DB_PASSWORD) 支持使用环境变量
-charset: utf8mb4
-collation: utf8mb4_unicode_ci
-parse_time: true
-
-# 数据源配置 可以配置多个
-# default: 
-#     driver: mysql
-#     host: localhost
-#     port: 3306
-#     database: test
-#     username: root
-#     password: "yy6689990"  # env(DB_PASSWORD) 支持使用环境变量
-#     charset: utf8mb4
-#     collation: utf8mb4_unicode_ci
+# 默认数据源配置 支持配置多个数据源
+default: 
+    driver: mysql
+    host: localhost
+    port: 3306
+    database: test
+    username: root
+    password: "yy6689990"  # env(DB_PASSWORD) 支持使用环境变量
+    charset: utf8mb4
+    collation: utf8mb4_unicode_ci

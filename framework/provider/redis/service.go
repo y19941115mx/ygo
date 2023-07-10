@@ -8,7 +8,7 @@ import (
 	"github.com/y19941115mx/ygo/framework/contract"
 )
 
-// YgoRedis 代表hade框架的redis实现
+// YgoRedis 代表框架的redis实现
 type YgoRedis struct {
 	container framework.Container      // 服务容器
 	clients   map[string]*redis.Client // key为uniqKey, value为redis.Client (连接池）

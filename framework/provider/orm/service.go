@@ -39,7 +39,6 @@ func (app *YgoGorm) GetDB(option ...contract.DBOption) (*gorm.DB, error) {
 	logger := app.container.MustMake(contract.LogKey).(contract.Log)
 	// 读取默认 DB 配置
 	config := GetBaseConfig(app.container)
-
 	// 设置Logger
 	ormLogger := NewOrmLogger(logger)
 	config.Config = &gorm.Config{

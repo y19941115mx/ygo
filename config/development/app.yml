@@ -5,8 +5,8 @@ swagger: true
 domain: "http://47.92.132.42:8888/"
 
 path:
-#  log_folder: "/home/jianfengye/hade/log/" # 支持配置的方式指定路径
-#  runtime_folder: "/home/jianfengye/hade/runtime/"
+#  log_folder: "/home/jianfengye/ygo/log/" # 支持配置的方式指定路径
+#  runtime_folder: "/home/jianfengye/ygo/runtime/"
 
 jwt:
     secret_signature: "ygo_secret"

@@ -21,11 +21,6 @@ type YgoApp struct {
 	configMap  map[string]string   // 支持配置的方式修改默认设置
 }
 
-// Version 实现版本
-func (app YgoApp) Version() string {
-	return YgoVersion
-}
-
 // BaseFolder 表示基础目录，可以代表开发场景的目录，也可以代表运行时候的目录
 func (app YgoApp) BaseFolder() string {
 	if app.baseFolder != "" {
@@ -140,7 +135,7 @@ func NewYgoApp(params ...interface{}) (interface{}, error) {
 	return &YgoApp{baseFolder: baseFolder, container: container, appId: appId, configMap: configMap}, nil
 }
 
-// DeployFolder 定义测试需要的信息
+// DeployFolder 定义部署需要的信息
 func (app YgoApp) DeployFolder() string {
 	if val, ok := app.configMap["deploy_folder"]; ok {
 		return val
@@ -148,6 +143,7 @@ func (app YgoApp) DeployFolder() string {
 	return filepath.Join(app.BaseFolder(), "deploy")
 }
 
+// app的唯一标识符
 func (app YgoApp) AppID() string {
 	return app.appId
 }

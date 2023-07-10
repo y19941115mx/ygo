@@ -28,11 +28,6 @@ type TraceContext struct {
 }
 
 type Trace interface {
-	// // SetTraceIDService set TraceID generator, default hadeIDGenerator
-	// SetTraceIDService(IDService)
-	// // SetTraceIDService set SpanID generator, default hadeIDGenerator
-	// SetSpanIDService(IDService)
-
 	// WithContext register new trace to context
 	WithTrace(c context.Context, trace *TraceContext) context.Context
 	// GetTrace From trace context
@@ -40,7 +35,7 @@ type Trace interface {
 	// NewTrace generate a new trace
 	NewTrace() *TraceContext
 	// StartSpan generate cspan for child call
-	StartSpan(trace *TraceContext) *TraceContext
+	StartSpan(ctx context.Context) *TraceContext
 
 	// traceContext to map for logger
 	ToMap(trace *TraceContext) map[string]string

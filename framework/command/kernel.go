@@ -1,6 +1,9 @@
 package command
 
-import "github.com/y19941115mx/ygo/framework/cobra"
+import (
+	"github.com/y19941115mx/ygo/framework/cobra"
+	"github.com/y19941115mx/ygo/framework/command/model"
+)
 
 func AddKernelCommands(root *cobra.Command) {
 	// app
@@ -13,7 +16,7 @@ func AddKernelCommands(root *cobra.Command) {
 	root.AddCommand(initEnvCommand())
 
 	// build
-	root.AddCommand(initBuildCommand())
+	root.AddCommand(buildCommand)
 
 	// config
 	root.AddCommand(initConfigCommand())
@@ -35,4 +38,7 @@ func AddKernelCommands(root *cobra.Command) {
 
 	// deploy
 	root.AddCommand(initDeployCommand())
+
+	// model
+	root.AddCommand(model.InitModelCommand())
 }

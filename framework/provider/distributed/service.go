@@ -12,7 +12,7 @@ package distributed
 // 	"github.com/y19941115mx/ygo/framework/contract"
 // )
 
-// // LocalDistributedService 代表hade框架的App实现
+// // LocalDistributedService 代表框架的App实现
 // type LocalDistributedService struct {
 // 	container framework.Container // 服务容器
 // }

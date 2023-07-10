@@ -10,7 +10,7 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
-// HadeSSH 代表hade框架的ssh实现
+// HadeSSH 代表框架的ssh实现
 type HadeSSH struct {
 	container framework.Container    // 服务容器
 	clients   map[string]*ssh.Client // key为uniqKey, value为ssh.Client(连接池）

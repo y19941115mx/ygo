@@ -14,8 +14,9 @@ func GetBaseConfig(c framework.Container) *contract.DBConfig {
 	logService := c.MustMake(contract.LogKey).(contract.Log)
 	config := &contract.DBConfig{}
 	// 直接使用配置服务的load方法读取,yaml文件
-	err := configService.Load("database", config)
-	if err != nil {
+	err_base := configService.Load("database", config)
+	err := configService.Load("database.default", config)
+	if err_base != nil && err != nil {
 		// 直接使用logService来打印错误信息
 		logService.Error(context.Background(), "parse database config error", nil)
 		return nil
