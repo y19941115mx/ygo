@@ -27,3 +27,8 @@ func (ctx *Context) MustMake(key string) interface{} {
 func (ctx *Context) MakeNew(key string, params []interface{}) (interface{}, error) {
 	return ctx.container.MakeNew(key, params)
 }
+
+// IsBind 空实现
+func (ctx *Context) IsBind(key string) bool {
+	return ctx.container.IsBind(key)
+}
