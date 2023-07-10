@@ -31,10 +31,8 @@ func (gen *ApiGenerator) SetPackageName(packageName string) {
 func (gen *ApiGenerator) GenModelFile(ctx context.Context, file string) error {
 	// table lower case
 	tableLower := strings.ToLower(gen.table)
-	// table camel title case
-	tableCamel := strings.Title(tableLower)
 	// model struct
-	tableModel := tableCamel + "Model"
+	tableModel := util.ToTitleCamel(tableLower) + "Model"
 
 	f := jen.NewFile(gen.packageName)
 
@@ -53,7 +51,11 @@ func (gen *ApiGenerator) GenModelFile(ctx context.Context, file string) error {
 		case "char", "varchar", "tinytext", "text", "mediumtext", "longtext":
 			field.String()
 		case "date", "time", "datetime", "timestamp":
-			field.Qual("time", "Time")
+			if column.Field == "deleted_at" {
+				field.Qual("gorm.io/gorm", "DeletedAt")
+			} else {
+				field.Qual("time", "Time")
+			}
 		default:
 			field.String()
 		}
@@ -81,7 +83,7 @@ func (gen *ApiGenerator) GenRouterFile(ctx context.Context, file string) error {
 	// table lower case
 	tableLower := strings.ToLower(gen.table)
 	// table camel title case
-	tableCamel := strings.Title(tableLower)
+	tableCamel := util.ToTitleCamel(tableLower)
 	// Api struct
 	tableApi := tableCamel + "Api"
 
@@ -132,20 +134,20 @@ func (gen *ApiGenerator) GenApiCreateFile(ctx context.Context, file string) erro
 	table := gen.table
 	tableLower := strings.ToLower(gen.table)
 	// table camel title case
-	tableCamel := strings.Title(tableLower)
+	tableCamel := util.ToTitleCamel(tableLower)
 	// Api struct
 	tableApi := tableCamel + "Api"
 	tableModel := tableCamel + "Model"
 
-	comment := ` Create create ${table}
- @Summary create ${table}
- @Produce json
- @Tags ${table}
- @Param ${table} body ${tableModel} true "${tableModel}"
- @Success 200 {object} ${tableModel}
- @Failure 400 {object} gin.H
- @Failure 500 {object} gin.H
- @Router /${table}/create [post]`
+	comment := `// Create create ${table}
+// @Summary create ${table}
+// @Accept  json
+// @Produce json
+// @Tags ${table}
+// @Param ${table} body ${tableModel} true "${tableModel}"
+// @Success 200 {object} httputil.Response
+// @Failure 500  {object}  httputil.HTTPError
+// @Router /${table}/create [post]`
 	comment = strings.ReplaceAll(comment, "${tableModel}", tableModel)
 	comment = strings.ReplaceAll(comment, "${table}", tableLower)
 
@@ -162,39 +164,31 @@ func (gen *ApiGenerator) GenApiCreateFile(ctx context.Context, file string) erro
 		jen.Var().Id(table).Qual("", tableModel),
 
 		jen.If(
-			jen.Err().Op(":=").Id("c").Dot("BindJSON").Call(jen.Op("&").Id(table)),
-			jen.Err().Op("!=").Nil(),
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateBind").Call(jen.Id("c"), jen.Op("&").Id(table)),
+			jen.Op("!").Id("valid"),
 		).Block(
-			jen.Id("c").Dot("JSON").Call(jen.Lit(400), jen.Op("&").Qual("github.com/y19941115mx/ygo/framework/gin", "H").Values(jen.Dict{
-				jen.Lit("code"): jen.Lit("Invalid parameter"),
-			})),
 			jen.Return(),
 		),
-
-		jen.Var().Id("db").Op("*").Qual("gorm.io/gorm", "DB"),
-		jen.Var().Err().Error(),
 
 		// gormService := c.MustMake(contract.ORMKey).(contract.ORMService)
 		jen.Id("gormService").Op(":=").Id("c").Dot("MustMake").Call(jen.Qual("github."+
 			"com/y19941115mx/ygo/framework/contract", "ORMKey")).Assert(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMService")),
 		// db, err := gormService.GetDB(orm.WithConfigPath("database.default"))
-		jen.Id("db").Op(",").Id("err").Op("=").Id("gormService").Dot("GetDB").Call(jen.Qual("github.com/y19941115mx/ygo/framework/provider/orm", "WithConfigPath").Call(jen.Lit("database.default"))),
+		jen.Id("db").Op(",").Id("err").Op(":=").Id("gormService").Dot("GetDB").Call(),
 		jen.If(jen.Err().Op("!=").Nil().Block(
 			jen.Id("logger").Dot("Error").Call(jen.Id("c"), jen.Err().Dot("Error").Call(), jen.Nil()),
-			jen.Id("_").Op("=").Id("c").Dot("AbortWithError").Call(jen.Lit(50001), jen.Err()),
+			jen.Id("httputil").Dot("FailWithError").Call(jen.Id("c"), jen.Err()),
 			jen.Return(),
 		)),
 		jen.If(
 			jen.Err().Op(":=").Id("db").Dot("Create").Call(jen.Op("&").Id(table)).Dot("Error"),
 			jen.Err().Op("!=").Nil(),
 		).Block(
-			jen.Id("c").Dot("JSON").Call(jen.Lit(500), jen.Op("&").Qual("github.com/y19941115mx/ygo/framework/gin", "H").Values(jen.Dict{
-				jen.Lit("error"): jen.Lit("Server error"),
-			})),
+			jen.Id("httputil").Dot("FailWithError").Call(jen.Id("c"), jen.Err()),
 			jen.Return(),
 		),
 
-		jen.Id("c").Dot("JSON").Call(jen.Lit(200), jen.Op("&").Id(table)),
+		jen.Id("httputil").Dot("Ok").Call(jen.Id("c")),
 	)
 
 	fp, err := os.Create(file)
@@ -211,25 +205,23 @@ func (gen *ApiGenerator) GenApiDeleteFile(ctx context.Context, file string) erro
 	// table lower case
 	tableLower := strings.ToLower(gen.table)
 	// table camel title case
-	tableCamel := strings.Title(tableLower)
+	tableCamel := util.ToTitleCamel(tableLower)
 	// Api struct
 	tableApi := tableCamel + "Api"
 	tableModel := tableCamel + "Model"
 
 	f := jen.NewFile(gen.packageName)
 
-	comment := ` Delete godoc
- @Summary Delete a ${table} by ID
- @Description Delete a ${table} by ID
- @Tags ${table}
- @Accept  json
- @Produce  json
- @Param id query int true "ID"
- @Success 200 {string} string "success"
- @Failure 400 {object} ErrorResponse "Invalid parameter"
- @Failure 404 {object} ErrorResponse "Record not found"
- @Failure 500 {object} ErrorResponse "Server error"
- @Router /${table}/delete [post]`
+	comment := `// Delete record
+// @Summary Delete a ${table} by ID
+// @Description Delete a ${table} by ID
+// @Tags ${table}
+// @Accept  json
+// @Produce  json
+// @Param id query int true "ID"
+// @Success 200 {object} httputil.Response
+// @Failure 500  {object}  httputil.HTTPError
+// @Router /${table}/delete [post]`
 	comment = strings.ReplaceAll(comment, "${tableModel}", tableModel)
 	comment = strings.ReplaceAll(comment, "${table}", tableLower)
 
@@ -248,8 +240,7 @@ func (gen *ApiGenerator) GenApiDeleteFile(ctx context.Context, file string) erro
 		)),
 		jen.Id("logger").Op(":=").Id("c").Dot("MustMakeLog").Call(),
 		jen.Id("gormService").Op(":=").Id("c").Dot("MustMake").Call(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMKey")).Assert(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMService")),
-		jen.Id("db").Op(",").Id("err").Op(":=").Id("gormService").Dot("GetDB").Call(jen.Qual("github."+
-			"com/y19941115mx/ygo/framework/provider/orm", "WithConfigPath").Call(jen.Lit("database.default"))),
+		jen.Id("db").Op(",").Id("err").Op(":=").Id("gormService").Dot("GetDB").Call(),
 		jen.If(jen.Err().Op("!=").Nil().Block(
 			jen.Id("logger").Dot("Error").Call(jen.Id("c"), jen.Err().Dot("Error").Call(), jen.Nil()),
 			jen.Id("_").Op("=").Id("c").Dot("AbortWithError").Call(jen.Lit(50001), jen.Err()),
@@ -292,7 +283,7 @@ func (gen *ApiGenerator) GenApiListFile(ctx context.Context, file string) error 
 	// table lower case
 	tableLower := strings.ToLower(gen.table)
 	// table camel title case
-	tableCamel := strings.Title(tableLower)
+	tableCamel := util.ToTitleCamel(tableLower)
 	// Api struct
 	tableApi := tableCamel + "Api"
 	tableModel := tableCamel + "Model"
@@ -330,8 +321,7 @@ func (gen *ApiGenerator) GenApiListFile(ctx context.Context, file string) error 
 		),
 		jen.Id("logger").Op(":=").Id("c").Dot("MustMakeLog").Call(),
 		jen.Id("gormService").Op(":=").Id("c").Dot("MustMake").Call(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMKey")).Assert(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMService")),
-		jen.Id("db").Op(",").Id("err").Op(":=").Id("gormService").Dot("GetDB").Call(jen.Qual("github."+
-			"com/y19941115mx/ygo/framework/provider/orm", "WithConfigPath").Call(jen.Lit("database.default"))),
+		jen.Id("db").Op(",").Id("err").Op(":=").Id("gormService").Dot("GetDB").Call(),
 		jen.If(jen.Err().Op("!=").Nil().Block(
 			jen.Id("logger").Dot("Error").Call(jen.Id("c"), jen.Err().Dot("Error").Call(), jen.Nil()),
 			jen.Id("_").Op("=").Id("c").Dot("AbortWithError").Call(jen.Lit(50001), jen.Err()),
@@ -371,7 +361,7 @@ func (gen *ApiGenerator) GenApiShowFile(ctx context.Context, file string) error 
 	// table lower case
 	tableLower := strings.ToLower(gen.table)
 	// table camel title case
-	tableCamel := strings.Title(tableLower)
+	tableCamel := util.ToTitleCamel(tableLower)
 	// Api struct
 	tableApi := tableCamel + "Api"
 	tableModel := tableCamel + "Model"
@@ -404,8 +394,7 @@ func (gen *ApiGenerator) GenApiShowFile(ctx context.Context, file string) error 
 
 		jen.Id("logger").Op(":=").Id("c").Dot("MustMakeLog").Call(),
 		jen.Id("gormService").Op(":=").Id("c").Dot("MustMake").Call(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMKey")).Assert(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMService")),
-		jen.Id("db").Op(",").Id("err").Op(":=").Id("gormService").Dot("GetDB").Call(jen.Qual("github."+
-			"com/y19941115mx/ygo/framework/provider/orm", "WithConfigPath").Call(jen.Lit("database.default"))),
+		jen.Id("db").Op(",").Id("err").Op(":=").Id("gormService").Dot("GetDB").Call(),
 		jen.If(jen.Err().Op("!=").Nil().Block(
 			jen.Id("logger").Dot("Error").Call(jen.Id("c"), jen.Err().Dot("Error").Call(), jen.Nil()),
 			jen.Id("_").Op("=").Id("c").Dot("AbortWithError").Call(jen.Lit(50001), jen.Err()),
@@ -443,7 +432,7 @@ func (gen *ApiGenerator) GenApiUpdateFile(ctx context.Context, file string) erro
 	// table lower case
 	tableLower := strings.ToLower(gen.table)
 	// table camel title case
-	tableCamel := strings.Title(tableLower)
+	tableCamel := util.ToTitleCamel(tableLower)
 	// Api struct
 	tableApi := tableCamel + "Api"
 	tableModel := tableCamel + "Model"
@@ -475,8 +464,7 @@ func (gen *ApiGenerator) GenApiUpdateFile(ctx context.Context, file string) erro
 
 		jen.Id("logger").Op(":=").Id("c").Dot("MustMakeLog").Call(),
 		jen.Id("gormService").Op(":=").Id("c").Dot("MustMake").Call(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMKey")).Assert(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMService")),
-		jen.Id("db").Op(",").Id("err").Op(":=").Id("gormService").Dot("GetDB").Call(jen.Qual("github."+
-			"com/y19941115mx/ygo/framework/provider/orm", "WithConfigPath").Call(jen.Lit("database.default"))),
+		jen.Id("db").Op(",").Id("err").Op(":=").Id("gormService").Dot("GetDB").Call(),
 		jen.If(jen.Err().Op("!=").Nil().Block(
 			jen.Id("logger").Dot("Error").Call(jen.Id("c"), jen.Err().Dot("Error").Call(), jen.Nil()),
 			jen.Id("_").Op("=").Id("c").Dot("AbortWithError").Call(jen.Lit(50001), jen.Err()),

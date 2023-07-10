@@ -63,7 +63,9 @@ func FailWithError(c *gin.Context, err error) {
 
 // bind请求体并进行参数验证
 func ValidateBind(c *gin.Context, param interface{}) bool {
+	logger := c.MustMakeLog()
 	if err := c.ShouldBind(param); err != nil {
+		logger.Error(c, err.Error(), nil)
 		err = BusinessError{Code: ERROR_PARAMETER_VALIDATION}
 		FailWithError(c, err)
 		return false

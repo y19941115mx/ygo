@@ -209,7 +209,7 @@ var modelApiCommand = &cobra.Command{
 		}
 
 		fmt.Println("=======================")
-		tableTile := strings.Title(tableLower)
+		tableTile := util.ToTitleCamel(tableLower)
 		routerFuncStr := output + "." + tableTile + "ApiRegister(r)"
 		importStr := "\"github.com/y19941115mx/ygo/app/http/module/" + output + "\""
 		rootRouterFile := filepath.Join(app.HttpFolder(), "route.go")
@@ -219,7 +219,7 @@ var modelApiCommand = &cobra.Command{
 			return err
 		}
 		fmt.Println("路由挂载成功")
-		fmt.Println("代码生成结束，请自行检查代码逻辑")
+		fmt.Println("代码生成结束，请自行检查代码逻辑，如需生成接口文档请执行swagger gen命令")
 		fmt.Println("=======================")
 		return nil
 	},
