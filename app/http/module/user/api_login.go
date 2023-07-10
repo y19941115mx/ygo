@@ -11,19 +11,14 @@ type loginParam struct {
 	Password string `json:"password" binding:"required,gte=6"`
 }
 
-type LoginResponse struct {
-	httputil.Meta
-	Data string `json:"data" example:"token"`
-}
-
 // Login 代表登录
 // @Summary 用户登录
-// @Description 用户登录接口
+// @Description 用户登录接口, 使用 data 字段返回用户token
 // @Accept  json
 // @Produce  json
 // @Tags user
 // @Param loginParam body loginParam  true "login with param"
-// @Success 200 {object} LoginResponse
+// @Success 200 {object} httputil.Response{data=string}
 // @Failure 500  {object}  httputil.HTTPError
 // @Router /user/login [post]
 func (api *UserApi) Login(c *gin.Context) {

@@ -6,18 +6,13 @@ import (
 	"github.com/y19941115mx/ygo/framework/gin"
 )
 
-type UserResponse struct {
-	httputil.Meta
-	Data UserDTO
-}
-
 // UserInfo 获取登录用户信息
 // @Summary 登录用户信息
 // @Description 获取登录用户信息接口
 // @Accept  json
 // @Produce  json
 // @Tags user
-// @Success 200 {object} UserResponse
+// @Success 200 {object} httputil.Response{data=UserDTO}
 // @Failure 500  {object}  httputil.HTTPError
 // @Router /user/userinfo [get]
 func (api *UserApi) UserInfo(c *gin.Context) {

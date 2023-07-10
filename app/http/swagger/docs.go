@@ -52,7 +52,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.LoginResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/httputil.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "500": {
@@ -188,7 +200,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.UserResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/httputil.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/user.UserDTO"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "500": {
@@ -229,23 +253,6 @@ const docTemplate = `{
                 }
             }
         },
-        "user.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer",
-                    "example": 200
-                },
-                "data": {
-                    "type": "string",
-                    "example": "token"
-                },
-                "msg": {
-                    "type": "string",
-                    "example": "操作成功"
-                }
-            }
-        },
         "user.UserDTO": {
             "type": "object",
             "properties": {
@@ -257,22 +264,6 @@ const docTemplate = `{
                 },
                 "user_name": {
                     "type": "string"
-                }
-            }
-        },
-        "user.UserResponse": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer",
-                    "example": 200
-                },
-                "data": {
-                    "$ref": "#/definitions/user.UserDTO"
-                },
-                "msg": {
-                    "type": "string",
-                    "example": "操作成功"
                 }
             }
         },

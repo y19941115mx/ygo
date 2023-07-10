@@ -19,18 +19,6 @@ definitions:
         example: 操作成功
         type: string
     type: object
-  user.LoginResponse:
-    properties:
-      code:
-        example: 200
-        type: integer
-      data:
-        example: token
-        type: string
-      msg:
-        example: 操作成功
-        type: string
-    type: object
   user.UserDTO:
     properties:
       created_at:
@@ -38,17 +26,6 @@ definitions:
       id:
         type: integer
       user_name:
-        type: string
-    type: object
-  user.UserResponse:
-    properties:
-      code:
-        example: 200
-        type: integer
-      data:
-        $ref: '#/definitions/user.UserDTO'
-      msg:
-        example: 操作成功
         type: string
     type: object
   user.loginParam:
@@ -107,7 +84,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.LoginResponse'
+            allOf:
+            - $ref: '#/definitions/httputil.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
         "500":
           description: Internal Server Error
           schema:
@@ -196,7 +178,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.UserResponse'
+            allOf:
+            - $ref: '#/definitions/httputil.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/user.UserDTO'
+              type: object
         "500":
           description: Internal Server Error
           schema:
