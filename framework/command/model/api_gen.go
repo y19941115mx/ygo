@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/dave/jennifer/jen"
+	"github.com/jianfengye/collection"
+
 	"github.com/pkg/errors"
 	"github.com/y19941115mx/ygo/framework/contract"
 	"github.com/y19941115mx/ygo/framework/util"
@@ -29,6 +31,7 @@ func (gen *ApiGenerator) SetPackageName(packageName string) {
 }
 
 func (gen *ApiGenerator) GenModelFile(ctx context.Context, file string) error {
+
 	// table lower case
 	tableLower := strings.ToLower(gen.table)
 	// model struct
@@ -39,7 +42,7 @@ func (gen *ApiGenerator) GenModelFile(ctx context.Context, file string) error {
 	structs := make([]jen.Code, 0, len(gen.columns)+1)
 	for _, column := range gen.columns {
 		field := jen.Id(util.ToTitleCamel(column.Field))
-		switch column.Type {
+		switch strings.Split(column.Type, "(")[0] {
 		case "int", "tinyint", "smallint", "mediumint", "bigint":
 			field.Int64()
 		case "int unsigned", "tinyint unsigned", "smallint unsigned", "mediumint unsigned", "bigint unsigned":
@@ -59,7 +62,13 @@ func (gen *ApiGenerator) GenModelFile(ctx context.Context, file string) error {
 		default:
 			field.String()
 		}
-		field.Tag(map[string]string{"gorm": column.Field, "json": column.Field + ",omitempty"})
+		swaggerIgnoreColumns := []string{"deleted_at", "id", "created_at", "updated_at"}
+		swaggerIgnoreColumnsCollect := collection.NewStrCollection(swaggerIgnoreColumns)
+		if swaggerIgnoreColumnsCollect.Contains(column.Field) {
+			field.Tag(map[string]string{"gorm": column.Field, "json": column.Field + ",omitempty", "swaggerignore": "true"})
+		} else {
+			field.Tag(map[string]string{"gorm": column.Field, "json": column.Field + ",omitempty"})
+		}
 		structs = append(structs, field)
 	}
 
@@ -145,7 +154,7 @@ func (gen *ApiGenerator) GenApiCreateFile(ctx context.Context, file string) erro
 // @Produce json
 // @Tags ${table}
 // @Param ${table} body ${tableModel} true "${tableModel}"
-// @Success 200 {object} httputil.Response
+// @Success 200 {object} httputil.Response{data=${tableModel}}
 // @Failure 500  {object}  httputil.HTTPError
 // @Router /${table}/create [post]`
 	comment = strings.ReplaceAll(comment, "${tableModel}", tableModel)
@@ -188,7 +197,7 @@ func (gen *ApiGenerator) GenApiCreateFile(ctx context.Context, file string) erro
 			jen.Return(),
 		),
 
-		jen.Id("httputil").Dot("Ok").Call(jen.Id("c")),
+		jen.Id("httputil").Dot("OkWithData").Call(jen.Id("c"), jen.Op("&").Id(table)),
 	)
 
 	fp, err := os.Create(file)
