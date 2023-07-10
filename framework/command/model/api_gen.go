@@ -221,8 +221,8 @@ func (gen *ApiGenerator) GenApiDeleteFile(ctx context.Context, file string) erro
 
 	f := jen.NewFile(gen.packageName)
 
-	comment := `// Delete record
-// @Summary Delete a ${table} by ID
+	comment := `// Delete one record of ${table}
+// @Summary Delete one record by ID
 // @Description Delete a ${table} by ID
 // @Tags ${table}
 // @Accept  json
@@ -240,41 +240,33 @@ func (gen *ApiGenerator) GenApiDeleteFile(ctx context.Context, file string) erro
 	).Id("Delete").Params(
 		jen.Id("c").Op("*").Qual("github.com/y19941115mx/ygo/framework/gin", "Context"),
 	).Block(
-		jen.Id("id").Op(",").Id("err").Op(":=").Qual("strconv", "Atoi").Call(jen.Id("c").Dot("Query").Call(jen.Lit("id"))),
-		jen.If(jen.Err().Op("!=").Nil().Block(
-			jen.Id("c").Dot("JSON").Call(jen.Lit(400), jen.Op("&").Qual("github.com/y19941115mx/ygo/framework/gin", "H").Values(jen.Dict{
-				jen.Lit("error"): jen.Lit("Invalid parameter"),
-			})),
+		jen.Var().Id("id").Int(),
+
+		jen.If(
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("id"), jen.Op("&").Id("id")),
+			jen.Op("!").Id("valid"),
+		).Block(
 			jen.Return(),
-		)),
+		),
+
 		jen.Id("logger").Op(":=").Id("c").Dot("MustMakeLog").Call(),
 		jen.Id("gormService").Op(":=").Id("c").Dot("MustMake").Call(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMKey")).Assert(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMService")),
 		jen.Id("db").Op(",").Id("err").Op(":=").Id("gormService").Dot("GetDB").Call(),
 		jen.If(jen.Err().Op("!=").Nil().Block(
 			jen.Id("logger").Dot("Error").Call(jen.Id("c"), jen.Err().Dot("Error").Call(), jen.Nil()),
-			jen.Id("_").Op("=").Id("c").Dot("AbortWithError").Call(jen.Lit(50001), jen.Err()),
+			jen.Id("httputil").Dot("FailWithError").Call(jen.Id("c"), jen.Err()),
 			jen.Return(),
 		)),
+
 		jen.If(
 			jen.Err().Op(":=").Id("db").Dot("Delete").Call(jen.Op("&").Id(tableModel).Block(), jen.Id("id")).Dot("Error"),
 			jen.Err().Op("!=").Nil(),
 		).Block(
-			jen.If(
-				jen.Err().Op("==").Qual("gorm.io/gorm", "ErrRecordNotFound"),
-			).Block(
-				jen.Id("c").Dot("JSON").Call(jen.Lit(404), jen.Op("&").Qual("github.com/y19941115mx/ygo/framework/gin", "H").Values(jen.Dict{
-					jen.Lit("error"): jen.Lit("Record not found"),
-				})),
-				jen.Return(),
-			).Else().Block(
-				jen.Id("c").Dot("JSON").Call(jen.Lit(500), jen.Op("&").Qual("github.com/y19941115mx/ygo/framework/gin", "H").Values(jen.Dict{
-					jen.Lit("error"): jen.Lit("Server error"),
-				})),
-				jen.Return(),
-			),
+			jen.Id("httputil").Dot("FailWithError").Call(jen.Id("c"), jen.Err()),
+			jen.Return(),
 		),
 
-		jen.Id("c").Dot("Status").Call(jen.Lit(200)),
+		jen.Id("httputil").Dot("Ok").Call(jen.Id("c")),
 	)
 
 	// print generated code
@@ -299,60 +291,71 @@ func (gen *ApiGenerator) GenApiListFile(ctx context.Context, file string) error 
 
 	f := jen.NewFile(gen.packageName)
 
-	comment := ` List godoc
- @Summary Get a list of ${table}
- @Description Get a list of ${table} with pagination support
- @Tags ${table}
- @Accept json
- @Produce json
- @Param offset query integer true "offset"
- @Param size query integer true "size"
- @Success 200 {object} gin.H
- @Failure 400 {object} gin.H
- @Failure 500 {object} gin.H
- @Router /${table}/list [get]`
+	f.Type().Id("listPage").Struct(
+		jen.Id("Total").Int64(),
+		jen.Id("List").Index().Id(tableModel),
+	)
+
+	f.Line()
+
+	comment := `// List ${table}
+// @Summary Get a list of ${table}
+// @Description Get a list of ${table} with pagination support
+// @Tags ${table}
+// @Accept json
+// @Produce json
+// @Param offset query integer true "offset"
+// @Param size query integer true "size"
+// @Success 200 {object} httputil.Response{data=listPage}
+// @Failure 500  {object}  httputil.HTTPError
+// @Router /${table}/list [get]`
 	comment = strings.ReplaceAll(comment, "${tableModel}", tableModel)
 	comment = strings.ReplaceAll(comment, "${table}", tableLower)
 
 	f.Comment(comment)
 	f.Func().Params(jen.Id("api").Op("*").Id(tableApi)).Id("List").Params(jen.Id("c").Op("*").Qual("github.com/y19941115mx/ygo/framework/gin", "Context")).Block(
-		jen.List(jen.Id("offset"), jen.Id("err")).Op(":=").Qual("strconv",
-			"Atoi").Call(jen.Id("c").Dot("Query").Call(jen.Lit("offset"))),
-		jen.If(jen.Err().Op("!=").Nil()).Block(
-			jen.Id("c.JSON(400, gin.H{\"error\": \"Invalid parameter\"})"),
+		jen.Var().Id("offset").Int(),
+
+		jen.If(
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("offset"), jen.Op("&").Id("offset")),
+			jen.Op("!").Id("valid"),
+		).Block(
 			jen.Return(),
 		),
-		jen.List(jen.Id("size"), jen.Id("err")).Op(":=").Qual("strconv",
-			"Atoi").Call(jen.Id("c").Dot("Query").Call(jen.Lit("size"))),
-		jen.If(jen.Err().Op("!=").Nil()).Block(
-			jen.Id("c.JSON(400, gin.H{\"error\": \"Invalid parameter\"})"),
+
+		jen.Var().Id("size").Int(),
+		jen.If(
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("size"), jen.Op("&").Id("size")),
+			jen.Op("!").Id("valid"),
+		).Block(
 			jen.Return(),
 		),
+
 		jen.Id("logger").Op(":=").Id("c").Dot("MustMakeLog").Call(),
 		jen.Id("gormService").Op(":=").Id("c").Dot("MustMake").Call(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMKey")).Assert(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMService")),
 		jen.Id("db").Op(",").Id("err").Op(":=").Id("gormService").Dot("GetDB").Call(),
 		jen.If(jen.Err().Op("!=").Nil().Block(
 			jen.Id("logger").Dot("Error").Call(jen.Id("c"), jen.Err().Dot("Error").Call(), jen.Nil()),
-			jen.Id("_").Op("=").Id("c").Dot("AbortWithError").Call(jen.Lit(50001), jen.Err()),
+			jen.Id("httputil").Dot("FailWithError").Call(jen.Id("c"), jen.Err()),
 			jen.Return(),
 		)),
+
 		jen.Id("var total int64"),
 		jen.If(jen.Err().Op(":=").Id("db").Dot("Model").Call(jen.Op("&").Id(tableModel).Block()).Dot("Count").Call(jen.Op("&").Id("total")).Dot("Error"),
 			jen.Err().Op("!=").Nil(),
 		).Block(
-			jen.Id("c.JSON(500, gin.H{\"error\": \"Server error\"})"),
+			jen.Id("httputil").Dot("FailWithError").Call(jen.Id("c"), jen.Err()),
 			jen.Return(),
 		),
 		jen.Id("var "+tableLower+"s []"+tableModel),
 		jen.If(jen.Err().Op(":=").Id("db").Dot("Offset").Call(jen.Id("offset")).Dot("Limit").Call(jen.Id("size")).Dot("Find").Call(jen.Op("&").Id(tableLower+"s")).Dot("Error"),
 			jen.Err().Op("!=").Nil(),
 		).Block(
-			jen.Id("c.JSON(500, gin.H{\"error\": \"Server error\"})"),
+			jen.Id("httputil").Dot("FailWithError").Call(jen.Id("c"), jen.Err()),
 			jen.Return(),
 		),
 
-		jen.Comment("Return result"),
-		jen.Id("c.JSON(200, gin.H{\"total\": total, \"data\": "+tableLower+"s})"),
+		jen.Id("httputil").Dot("OkWithData").Call(jen.Id("c"), jen.Id("listPage {"+"total, "+tableLower+"s }")),
 	)
 
 	// print generated code
@@ -377,56 +380,53 @@ func (gen *ApiGenerator) GenApiShowFile(ctx context.Context, file string) error 
 
 	f := jen.NewFile(gen.packageName)
 
-	comment := ` Show godoc
- @Summary Get a ${table} by ID
- @Description Get a ${table} by ID
- @Tags ${table}
- @Accept json
- @Produce json
- @Param id query integer true "${table} ID"
- @Success 200 {object} ${tableModel}
- @Failure 400 {object} gin.H
- @Failure 404 {object} gin.H
- @Failure 500 {object} gin.H
- @Router /${table}/{id} [get]`
+	comment := `//Show record
+// @Summary Get a ${table} by ID
+// @Description Get a ${table} by ID
+// @Tags ${table}
+// @Accept json
+// @Produce json
+// @Param id query integer true "${table} ID"
+// @Success 200 {object} ${tableModel}
+// @Failure 500  {object}  httputil.HTTPError
+// @Router /${table}/{id} [get]`
 	comment = strings.ReplaceAll(comment, "${tableModel}", tableModel)
 	comment = strings.ReplaceAll(comment, "${table}", tableLower)
 
 	f.Comment(comment)
 	f.Func().Params(jen.Id("api").Op("*").Id(tableApi)).Id("Show").Params(jen.Id("c").Op("*").Qual("github.com/y19941115mx/ygo/framework/gin", "Context")).Block(
+		jen.Var().Id("id").Int(),
 
-		jen.List(jen.Id("id"), jen.Id("err")).Op(":=").Qual("strconv", "Atoi").Call(jen.Id("c").Dot("Query").Call(jen.Lit("id"))),
-		jen.If(jen.Err().Op("!=").Nil()).Block(
-			jen.Id("c.JSON(400, gin.H{\"error\": \"Invalid parameter\"})"),
+		jen.If(
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("id"), jen.Op("&").Id("id")),
+			jen.Op("!").Id("valid"),
+		).Block(
 			jen.Return(),
 		),
 
 		jen.Id("logger").Op(":=").Id("c").Dot("MustMakeLog").Call(),
 		jen.Id("gormService").Op(":=").Id("c").Dot("MustMake").Call(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMKey")).Assert(jen.Qual("github.com/y19941115mx/ygo/framework/contract", "ORMService")),
 		jen.Id("db").Op(",").Id("err").Op(":=").Id("gormService").Dot("GetDB").Call(),
-		jen.If(jen.Err().Op("!=").Nil().Block(
+
+		jen.If(jen.Err().Op("!=").Nil()).Block(
 			jen.Id("logger").Dot("Error").Call(jen.Id("c"), jen.Err().Dot("Error").Call(), jen.Nil()),
-			jen.Id("_").Op("=").Id("c").Dot("AbortWithError").Call(jen.Lit(50001), jen.Err()),
+			jen.Id("httputil").Dot("FailWithError").Call(jen.Id("c"), jen.Err()),
 			jen.Return(),
-		)),
+		),
 
 		// var student StudentModel
 		jen.Id("var "+tableLower+" "+tableModel),
-		jen.If(jen.Err().Op(":=").Id("db").Dot("First").Call(jen.Op("&").Id(tableLower),
-			jen.Id("id")).Dot("Error"), jen.Err().Op("!=").Nil()).Block(
-			jen.If(jen.Err().Op("==").Qual("gorm.io/gorm", "ErrRecordNotFound")).Block(
-				jen.Id("c.JSON(404, gin.H{\"error\": \"Record not found\"})"),
-				jen.Return(),
-			).Else().Block(
-				jen.Id("c.JSON(500, gin.H{\"error\": \"Server error\"})"),
-				jen.Return(),
-			),
+
+		jen.If(
+			jen.Err().Op(":=").Id("db").Dot("First").Call(jen.Op("&").Id(tableLower)).Dot("Error"),
+			jen.Err().Op("!=").Nil(),
+		).Block(
+			jen.Id("httputil").Dot("FailWithError").Call(jen.Id("c"), jen.Err()),
 		),
 
-		jen.Id("c.JSON(200, "+tableLower+")"),
+		jen.Id("httputil").Dot("OkWithData").Call(jen.Id("c"), jen.Op("&").Id(tableLower)),
 	)
 
-	// print generated code
 	fp, err := os.Create(file)
 	if err != nil {
 		return errors.Wrap(err, "create file error")
@@ -447,27 +447,28 @@ func (gen *ApiGenerator) GenApiUpdateFile(ctx context.Context, file string) erro
 	tableModel := tableCamel + "Model"
 
 	f := jen.NewFile(gen.packageName)
-	comment := ` Update godoc
- @Summary Update a ${table} by ID
- @Description Update a ${table} by ID
- @Tags ${table}
- @Accept  json
- @Produce  json
- @Param id query int true "ID of the ${table} to update"
- @Param student body ${tableModel} true "${table} information to update"
- @Success 200 {object} ${tableModel}
- @Failure 400 {object} gin.H
- @Failure 404 {object} gin.H
- @Failure 500 {object} gin.H
- @Router /${table}/update [post]`
+	comment := `// Update ${table} record
+// @Summary Update a ${table} by ID
+// @Description Update a ${table} by ID
+// @Tags ${table}
+// @Accept  json
+// @Produce  json
+// @Param id query int true "ID of the ${table} to update"
+// @Param student body ${tableModel} true "${table} information to update"
+// @Success 200 {object} httputil.Response{data=${tableModel}}
+// @Failure 500  {object}  httputil.HTTPError
+// @Router /${table}/update [post]`
 	comment = strings.ReplaceAll(comment, "${tableModel}", tableModel)
 	comment = strings.ReplaceAll(comment, "${table}", tableLower)
 
 	f.Comment(comment)
 	f.Func().Params(jen.Id("api").Op("*").Id(tableApi)).Id("Update").Params(jen.Id("c").Op("*").Qual("github.com/y19941115mx/ygo/framework/gin", "Context")).Block(
-		jen.List(jen.Id("id"), jen.Id("err")).Op(":=").Qual("strconv", "Atoi").Call(jen.Id("c").Dot("Query").Call(jen.Lit("id"))),
-		jen.If(jen.Err().Op("!=").Nil()).Block(
-			jen.Id("c.JSON(400, gin.H{\"error\": \"Invalid parameter\"})"),
+		jen.Var().Id("id").Int(),
+
+		jen.If(
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("id"), jen.Op("&").Id("id")),
+			jen.Op("!").Id("valid"),
+		).Block(
 			jen.Return(),
 		),
 
@@ -476,34 +477,32 @@ func (gen *ApiGenerator) GenApiUpdateFile(ctx context.Context, file string) erro
 		jen.Id("db").Op(",").Id("err").Op(":=").Id("gormService").Dot("GetDB").Call(),
 		jen.If(jen.Err().Op("!=").Nil().Block(
 			jen.Id("logger").Dot("Error").Call(jen.Id("c"), jen.Err().Dot("Error").Call(), jen.Nil()),
-			jen.Id("_").Op("=").Id("c").Dot("AbortWithError").Call(jen.Lit(50001), jen.Err()),
+			jen.Id("httputil").Dot("FailWithError").Call(jen.Id("c"), jen.Err()),
 			jen.Return(),
 		)),
 		// var student StudentModel
 		jen.Id("var "+tableLower+" "+tableModel),
-		jen.If(jen.Err().Op(":=").Id("db").Dot("First").Call(jen.Op("&").Id(tableLower),
-			jen.Id("id")).Dot("Error"), jen.Err().Op("!=").Nil()).Block(
-			jen.If(jen.Err().Op("==").Qual("gorm.io/gorm", "ErrRecordNotFound")).Block(
-				jen.Id("c.JSON(404, gin.H{\"error\": \"Record not found\"})"),
-				jen.Return(),
-			).Else().Block(
-				jen.Id("c.JSON(500, gin.H{\"error\": \"Server error\"})"),
-				jen.Return(),
-			),
+		jen.If(jen.Err().Op(":=").Id("db").Dot("First").Call(jen.Op("&").Id(tableLower)).Dot("Error"), jen.Err().Op("!=").Nil()).Block(
+			jen.Id("httputil").Dot("FailWithError").Call(jen.Id("c"), jen.Err()),
 		),
+
 		jen.Comment("Bind request body"),
-		jen.If(jen.Err().Op(":=").Id("c").Dot("BindJSON").Call(jen.Op("&").Id(tableLower)),
-			jen.Err().Op("!=").Nil()).Block(
-			jen.Id("c.JSON(400, gin.H{\"error\": \"Invalid JSON\"})"),
+		jen.If(
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateBind").Call(jen.Id("c"), jen.Op("&").Id(tableLower)),
+			jen.Op("!").Id("valid"),
+		).Block(
 			jen.Return(),
 		),
-		jen.If(jen.Err().Op(":=").Id("db").Dot("Save").Call(jen.Op("&").Id(tableLower)).Dot("Error"),
-			jen.Err().Op("!=").Nil()).Block(
-			jen.Id("c.JSON(500, gin.H{\"error\": \"Server error\"})"),
+
+		jen.If(
+			jen.Err().Op(":=").Id("db").Dot("Save").Call(jen.Op("&").Id(tableLower)).Dot("Error"),
+			jen.Err().Op("!=").Nil(),
+		).Block(
+			jen.Id("httputil").Dot("FailWithError").Call(jen.Id("c"), jen.Err()),
 			jen.Return(),
 		),
 		// c.JSON(200, student)
-		jen.Id("c.JSON(200, "+tableLower+")"),
+		jen.Id("httputil").Dot("OkWithData").Call(jen.Id("c"), jen.Op("&").Id(tableLower)),
 	)
 
 	// print generated code

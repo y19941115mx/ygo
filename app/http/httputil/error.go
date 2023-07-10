@@ -21,6 +21,7 @@ const (
 
 	// code= 300x... 参数验证错误
 	ERROR_PARAMETER_VALIDATION = 3001
+	ERROR_QUERY_NOT_EXIST      = 3002
 
 	// code= xxx... 其他业务模块的错误
 
@@ -34,7 +35,8 @@ var codeMsg = map[int]string{
 	ERROR_TOKEN_NOT_EXIST:      "TOKEN不存在",
 	ERROR_TOKEN_WRONG:          "TOKEN不正确,请重新登陆",
 	ERROR_TOKEN_EXPIRE:         "TOKEN已过期,请重新登陆",
-	ERROR_PARAMETER_VALIDATION: "参数验证错误",
+	ERROR_PARAMETER_VALIDATION: "参数格式验证错误",
+	ERROR_QUERY_NOT_EXIST:      "Query参数不存在",
 }
 
 func getErrMsg(code int) string {

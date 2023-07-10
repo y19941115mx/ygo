@@ -1,6 +1,8 @@
 package httputil
 
 import (
+	"strconv"
+
 	"github.com/y19941115mx/ygo/framework/gin"
 )
 
@@ -70,5 +72,34 @@ func ValidateBind(c *gin.Context, param interface{}) bool {
 		FailWithError(c, err)
 		return false
 	}
+	return true
+}
+
+// query 参数验证
+func ValidateQuery(c *gin.Context, query string) bool {
+	if id := c.Query(query); id == "" {
+		err := BusinessError{Code: ERROR_QUERY_NOT_EXIST}
+		FailWithError(c, err)
+		return false
+	}
+	return true
+}
+
+// query 参数验证
+func ValidateIntQuery(c *gin.Context, query string, result *int) bool {
+	var id int
+	var err error
+
+	if !ValidateQuery(c, query) {
+		return false
+	}
+
+	if id, err = strconv.Atoi(c.Query(query)); err != nil {
+		err := BusinessError{Code: ERROR_PARAMETER_VALIDATION}
+		FailWithError(c, err)
+		return false
+	}
+
+	*result = id
 	return true
 }
