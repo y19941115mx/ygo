@@ -355,7 +355,7 @@ func (gen *ApiGenerator) GenApiListFile(ctx context.Context, file string) error 
 			jen.Return(),
 		),
 
-		jen.Id("httputil").Dot("OkWithData").Call(jen.Id("c"), jen.Id("listPage {"+"total, "+tableLower+"s }")),
+		jen.Id("httputil").Dot("OkWithData").Call(jen.Id("c"), jen.Id("listPage").Values(jen.Id("total"), jen.Id(tableLower+"s"))),
 	)
 
 	// print generated code
