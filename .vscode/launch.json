@@ -8,11 +8,12 @@
             "name": "app dev",
             "type": "go",
             "request": "launch",
+            "console": "integratedTerminal",
             "mode": "debug",
             "program": "${workspaceFolder}",
             "args": [
-                "app",
-                "dev"
+                "model",
+                "api"
             ]
         },
         {
