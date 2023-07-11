@@ -389,7 +389,7 @@ func (gen *ApiGenerator) GenApiShowFile(ctx context.Context, file string) error 
 // @Param id query integer true "${table} ID"
 // @Success 200 {object} ${tableModel}
 // @Failure 500  {object}  httputil.HTTPError
-// @Router /${table}/{id} [get]`
+// @Router /${table}/show [get]`
 	comment = strings.ReplaceAll(comment, "${tableModel}", tableModel)
 	comment = strings.ReplaceAll(comment, "${table}", tableLower)
 
