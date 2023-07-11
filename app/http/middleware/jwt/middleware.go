@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/y19941115mx/ygo/app/http/httputil"
 	"github.com/y19941115mx/ygo/framework/gin"
-	"github.com/y19941115mx/ygo/framework/util/httputil"
 )
 
 type MyClaims struct {
