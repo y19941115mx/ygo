@@ -16,7 +16,7 @@
 
 # 使用文档
 
-https://siage.yuque.com/vqda7p/imrgoz/fi2omculcg1np5gn?singleDoc# 《Ygo框架使用文档》
+[《Ygo框架使用文档》](https://y19941115mx.netlify.app/)
 
 # 快速入门
 
