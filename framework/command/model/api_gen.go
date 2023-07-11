@@ -173,7 +173,7 @@ func (gen *ApiGenerator) GenApiCreateFile(ctx context.Context, file string) erro
 		jen.Var().Id(table).Qual("", tableModel),
 
 		jen.If(
-			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateBind").Call(jen.Id("c"), jen.Op("&").Id(table)),
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/framework/util/httputil", "ValidateBind").Call(jen.Id("c"), jen.Op("&").Id(table)),
 			jen.Op("!").Id("valid"),
 		).Block(
 			jen.Return(),
@@ -243,7 +243,7 @@ func (gen *ApiGenerator) GenApiDeleteFile(ctx context.Context, file string) erro
 		jen.Var().Id("id").Int(),
 
 		jen.If(
-			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("id"), jen.Op("&").Id("id")),
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/framework/util/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("id"), jen.Op("&").Id("id")),
 			jen.Op("!").Id("valid"),
 		).Block(
 			jen.Return(),
@@ -317,7 +317,7 @@ func (gen *ApiGenerator) GenApiListFile(ctx context.Context, file string) error 
 		jen.Var().Id("offset").Int(),
 
 		jen.If(
-			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("offset"), jen.Op("&").Id("offset")),
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/framework/util/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("offset"), jen.Op("&").Id("offset")),
 			jen.Op("!").Id("valid"),
 		).Block(
 			jen.Return(),
@@ -325,7 +325,7 @@ func (gen *ApiGenerator) GenApiListFile(ctx context.Context, file string) error 
 
 		jen.Var().Id("size").Int(),
 		jen.If(
-			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("size"), jen.Op("&").Id("size")),
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/framework/util/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("size"), jen.Op("&").Id("size")),
 			jen.Op("!").Id("valid"),
 		).Block(
 			jen.Return(),
@@ -398,7 +398,7 @@ func (gen *ApiGenerator) GenApiShowFile(ctx context.Context, file string) error 
 		jen.Var().Id("id").Int(),
 
 		jen.If(
-			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("id"), jen.Op("&").Id("id")),
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/framework/util/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("id"), jen.Op("&").Id("id")),
 			jen.Op("!").Id("valid"),
 		).Block(
 			jen.Return(),
@@ -466,7 +466,7 @@ func (gen *ApiGenerator) GenApiUpdateFile(ctx context.Context, file string) erro
 		jen.Var().Id("id").Int(),
 
 		jen.If(
-			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("id"), jen.Op("&").Id("id")),
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/framework/util/httputil", "ValidateIntQuery").Call(jen.Id("c"), jen.Lit("id"), jen.Op("&").Id("id")),
 			jen.Op("!").Id("valid"),
 		).Block(
 			jen.Return(),
@@ -488,7 +488,7 @@ func (gen *ApiGenerator) GenApiUpdateFile(ctx context.Context, file string) erro
 
 		jen.Comment("Bind request body"),
 		jen.If(
-			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/app/http/httputil", "ValidateBind").Call(jen.Id("c"), jen.Op("&").Id(tableLower)),
+			jen.Id("valid").Op(":=").Qual("github.com/y19941115mx/ygo/framework/util/httputil", "ValidateBind").Call(jen.Id("c"), jen.Op("&").Id(tableLower)),
 			jen.Op("!").Id("valid"),
 		).Block(
 			jen.Return(),
