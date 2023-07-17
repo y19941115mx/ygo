@@ -5,5 +5,7 @@ services:
     image: ygo:latest
     container_name: ygo
     build: .
+    environment:
+      - APP_ENV=production
     ports:
      - "8888:8888"
