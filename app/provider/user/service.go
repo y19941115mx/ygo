@@ -2,11 +2,11 @@ package user
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math/rand"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/y19941115mx/ygo/app/http/middleware/jwt"
 	"github.com/y19941115mx/ygo/framework"
 	"github.com/y19941115mx/ygo/framework/contract"

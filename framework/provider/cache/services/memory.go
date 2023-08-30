@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 	"encoding/json"
-	"errors"
+	"github.com/pkg/errors"
 
 	"strings"
 	"sync"

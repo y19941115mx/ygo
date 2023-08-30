@@ -1,7 +1,7 @@
 package model
 
 import (
-	"errors"
+	"github.com/pkg/errors"
 	"fmt"
 	"path/filepath"
 

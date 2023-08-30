@@ -64,6 +64,21 @@ func mountRouterFunc(filePath string, funcStr string, importstr string) error {
 	return nil
 }
 
+func getModName(modFilePath string) (string, error) {
+	file, err := os.Open(modFilePath)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	if scanner.Scan() {
+		modNameList := strings.Split(scanner.Text(), " ")
+		return strings.TrimSpace(modNameList[1]), nil
+	}
+	return "github.com/y19941115mx/ygo", nil
+}
+
 var modelApiCommand = &cobra.Command{
 	Use:          "api",
 	Short:        "通过数据库生成api",
@@ -93,9 +108,22 @@ var modelApiCommand = &cobra.Command{
 			return errors.Wrap(err, "获取数据库表格失败")
 		}
 
+		moduleName := ""
+		{
+			// 第一步是指定api的模块名
+			prompt := &survey.Input{
+				Message: "请输入模块名(默认为test)",
+			}
+			survey.AskOne(prompt, &moduleName)
+		}
+
+		if moduleName == "" {
+			moduleName = "test"
+		}
+
 		table := ""
 		{
-			// 第一步是一个交互命令行工具，首先展示要生成的表列表选择：
+			// 第二步是展示要生成的表列表选择：
 			prompt := &survey.Select{
 				Message: "请选择要生成模型的表格：",
 				Options: tables,
@@ -122,7 +150,7 @@ var modelApiCommand = &cobra.Command{
 
 		// 生成接口代码
 		app := container.MustMake(contract.AppKey).(contract.App)
-		folder := filepath.Join(app.HttpModuleFolder(), output)
+		folder := filepath.Join(app.HttpModuleFolder(), moduleName)
 
 		modelFile := filepath.Join(folder, fmt.Sprintf("gen_%s_model.go", tableLower))
 		routerFile := filepath.Join(folder, fmt.Sprintf("gen_%s_router.go", tableLower))
@@ -210,8 +238,16 @@ var modelApiCommand = &cobra.Command{
 
 		fmt.Println("=======================")
 		tableTile := util.ToTitleCamel(tableLower)
-		routerFuncStr := output + "." + tableTile + "ApiRegister(r)"
-		importStr := "\"github.com/y19941115mx/ygo/app/http/module/" + output + "\""
+		routerFuncStr := moduleName + "." + tableTile + "ApiRegister(r)"
+
+		modFile := filepath.Join(app.BaseFolder(), "go.mod")
+		modName := ""
+		modName, err = getModName(modFile)
+		if err != nil {
+			return err
+		}
+
+		importStr := "\"" + modName + "/app/http/module/" + moduleName + "\""
 		rootRouterFile := filepath.Join(app.HttpFolder(), "route.go")
 
 		err = mountRouterFunc(rootRouterFile, routerFuncStr, importStr)

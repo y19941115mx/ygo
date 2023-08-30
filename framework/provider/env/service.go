@@ -3,7 +3,7 @@ package env
 import (
 	"bufio"
 	"bytes"
-	"errors"
+	"github.com/pkg/errors"
 	"io"
 	"os"
 	"path"

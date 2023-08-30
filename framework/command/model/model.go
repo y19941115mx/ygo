@@ -27,7 +27,6 @@ func InitModelCommand() *cobra.Command {
 
 	// model api
 	modelApiCommand.Flags().StringVarP(&database, "database", "d", "database.default", "连接的数据库配置")
-	modelApiCommand.Flags().StringVarP(&output, "module", "m", "test", "模块名称")
 	modelApiCommand.Flags().StringVarP(&table, "table", "t", "default", "模块连接的数据表")
 	modelCommand.AddCommand(modelApiCommand)
 	return modelCommand

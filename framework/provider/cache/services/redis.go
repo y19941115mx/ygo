@@ -2,9 +2,10 @@ package services
 
 import (
 	"context"
-	"errors"
 	"sync"
 	"time"
+
+	"github.com/pkg/errors"
 
 	redisv8 "github.com/go-redis/redis/v8"
 	"github.com/y19941115mx/ygo/framework"

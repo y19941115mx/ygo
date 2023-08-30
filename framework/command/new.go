@@ -3,7 +3,6 @@ package command
 import (
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -12,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/google/go-github/v39/github"
 	"github.com/spf13/cast"

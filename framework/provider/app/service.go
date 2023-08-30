@@ -1,7 +1,7 @@
 package app
 
 import (
-	"errors"
+	"github.com/pkg/errors"
 	"flag"
 	"path/filepath"
 
